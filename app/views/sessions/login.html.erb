@@ -1,0 +1,31 @@
+<div class="col-sm-2 ">
+	<center><div class="panel panel-default">
+		<%= form_tag(:action => 'login_attempt') do %>
+			<div class="panel-body">
+				<h1>Log in</h1><hr>
+
+				<div class="form-group">
+					<%= label_tag "Username" %><br>
+					<%= text_field_tag :username %>
+				</div>
+
+				<div class="form-group">
+					<%= label_tag "Password" %><br>
+					<%= password_field_tag :login_password %>
+				</div>
+				<% if flash[:notice] %>
+					<div class="alert alert-warning">
+					    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+					</div>
+				<% end %>
+
+			</div>
+ 			
+ 			<div class="panel-footer clearfix ">
+				<p>
+					<%= submit_tag "Log In", class: "btn btn-primary btn-lg" %>
+				</p>
+			</div>
+		<% end %>
+	</div></center>
+</div>
