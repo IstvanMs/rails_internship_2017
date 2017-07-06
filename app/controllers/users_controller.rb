@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user, :only => [:new, :create, :show, :edit, :update, :index]
-
+  before_action :admin_user, :only => [:new, :create, :edit, :update, :index]
+  before_action :authenticate_user, :only => [:show]
+  
   def index
   	@users = User.all
     @user = User.new
@@ -22,9 +23,7 @@ class UsersController < ApplicationController
   	@user = User.find(params[:id])
 
   	if @user.update(user_params)
-      flash[:notice] = "Saved succesfully!"
-      flash[:color] = "valid"
-  		redirect_to user_path
+  		#redirect
   	else
   		render 'edit'
   	end
