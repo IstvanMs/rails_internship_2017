@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_action :authenticate_user, :only => [:home, :profile, :setting]
+  before_action :authenticate_user, :only => [:home, :profile, :setting, :logout]
   before_action :save_login_state, :only => [:login, :login_attempt]
 
   def login
@@ -16,7 +16,6 @@ class SessionsController < ApplicationController
 
   def logout
   	session[:user_id] = nil
-    flash[:notice] = ""
   	redirect_to :action => 'login'
   end
 
