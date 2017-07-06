@@ -1,41 +1,43 @@
-<div class="col-sm-2 ">
-	<center><div class="panel panel-default">
-		<%= form_for @user do |f| %>
-			<div class="panel-body">
-				<p>
-					<%= f.label "Username" %><br>
-					<%= f.text_field :username %>
-				</p>
+<center><div class="panel panel-default">
+	<%= form_for @user do |f| %>
+		<div class="panel-body">
+			<p>
+				<%= f.label "Username" %><br>
+				<span class="form-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+				<%= f.text_field :username %>
+			</p>
 
-				<p>
-					<%= f.label "Password" %><br>
-					<%= f.password_field :password %>
-				</p>
+			<p>
+				<%= f.label "Password" %><br>
+				<span class="form-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+				<%= f.password_field :password %>
+			</p>
 
-				<p>
-					<%= f.label "Password Confirmation" %><br>
-					<%= f.password_field :password_confirmation %>
-				</p>
+			<p>
+				<%= f.label "Password Confirmation" %><br>
+				<span class="form-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+				<%= f.password_field :password_confirmation %>
+			</p>
 
-				<p>
-					<%= f.label "Role" %><br>
-					<%= f.select(:role, ['Employee', 'Manager', 'Admin'] ) %>
-				</p>
+			<p>
+				<%= f.label "Role" %><br>
+				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
+				<%= f.select(:role, ['Employee', 'Manager', 'Admin'] ) %>
+			</p>
+		</div>
+
+		<div class="panel-footer clearfix ">
+				<button type="submit" class="btn btn-lg btn-primary btn-block">
+					<i class="glyphicon glyphicon-save"></i> Save
+				</button>
 			</div>
+	<% end %>
 
-			<div class="panel-footer clearfix ">
-					<p>
-						<%= submit_tag "Sign Up", class: "btn btn-primary btn-md pull-right" %>
-					</p>
-				</div>
-		<% end %>
-
-		<% if @user.errors.any? %>
-		    <ul class="Signup_Errors">
-		    <% for message_error in @user.errors.full_messages %>
-		      <li>* <%= message_error %></li>
-		    <% end %>
-		    </ul>
-		<% end %>
-	</div>
+	<% if @user.errors.any? %>
+	    <ul class="Signup_Errors">
+	    <% for message_error in @user.errors.full_messages %>
+	      <li>* <%= message_error %></li>
+	    <% end %>
+	    </ul>
+	<% end %>
 </div>
