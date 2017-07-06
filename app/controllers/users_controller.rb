@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def index
   	@users = User.all
+    @user = User.new
   end
 
   def new
@@ -40,11 +41,11 @@ class UsersController < ApplicationController
   	if @user.save 
   		flash[:notice] = "You signed up succesfully!"
   		flash[:color] = "valid"
-  		#redirect to mainpage
+  		redirect_to users_path
   	else
   		flash[:notice] = "Invalid form!"
   		flash[:color] = "invalid"
-  		render "new"
+  		render "index"
   	end
   end
 
