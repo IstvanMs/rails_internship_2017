@@ -13,7 +13,7 @@
             <ul class="nav navbar-nav">
                 <li><%= link_to 'Dashboard', :controller => 'dashboards', :action => 'index' %></li>
                 <li><a href="#">Projects</a></li>
-                <li><a href="#">Tasks</a></li>
+                <li><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
                 <li><a href="#">Comments</a></li>
                 <% if @current_user.role == 'Admin' %>
                     <li><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
@@ -29,3 +29,5 @@
         </div>
     </div>
 </nav>
+
+        

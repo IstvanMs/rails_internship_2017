@@ -25,6 +25,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def manager_user
+    if authenticate_user
+      if @current_user.role == 'Manager'
+        return true
+      else
+        redirect_to(:controller => 'sessions', :action => 'home')
+        return false
+      end
+    else 
+      return false
+    end
+  end
+
   def save_login_state
   	if session[:user_id]
   		redirect_to(:controller => 'sessions', :action => 'home')

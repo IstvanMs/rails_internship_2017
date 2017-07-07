@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-	before_action :authenticate_user, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
+	before_action :manager_user, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
 	
 	def index
 		@projects = Project.all
@@ -7,6 +7,7 @@ class ProjectsController < ApplicationController
 
 	def show
 		@project = Project.find(params[:id])
+		@users = User.where.not(:role => 'Client')
 	end	
 
 	def new
@@ -15,6 +16,7 @@ class ProjectsController < ApplicationController
 
 	def edit
 		@project = Project.find(params[:id])
+		@users = User.where.not(:role => 'Client')
 	end
 
 	def create
@@ -29,6 +31,7 @@ class ProjectsController < ApplicationController
 
 	def update
 		@project = Project.find(params[:id]) 
+		@users = User.where.not(:role => 'Client')
 
 		if @project.update(project_params)
 			redirect_to @project
@@ -40,6 +43,7 @@ class ProjectsController < ApplicationController
 	def destroy
 		@project = Project.find(params[:id])
 		@project.destroy
+		@users = User.where.not(:role => 'Client')
  
 		redirect_to projects_path
 	end
