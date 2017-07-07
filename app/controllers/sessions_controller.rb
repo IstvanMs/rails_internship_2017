@@ -6,9 +6,12 @@ class SessionsController < ApplicationController
   end
 
   def home
+    redirect_to dashboards_index_path
   end
 
   def profile
+    @user = User.find(@current_user.id)
+    render 'users/show'
   end
 
   def setting

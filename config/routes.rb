@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'dashboards/index'
+
   resources :users
 
   root :to => "sessions#login"

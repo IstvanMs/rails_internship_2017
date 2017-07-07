@@ -22,7 +22,7 @@
 			<p>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-				<%= f.select(:role, ['Employee', 'Manager', 'Admin'] ) %>
+				<%= f.select(:role, ['Employee', 'Manager', 'Admin', 'Client'] ) %>
 			</p>
 		</div>
 
@@ -31,6 +31,12 @@
 					<i class="glyphicon glyphicon-save"></i> Save
 				</button>
 			</div>
+	<% end %>
+
+	<% if flash[:notice] %>
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
 	<% end %>
 
 	<% if @user.errors.any? %>
