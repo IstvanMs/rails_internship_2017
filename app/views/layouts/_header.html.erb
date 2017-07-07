@@ -1,0 +1,31 @@
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><%= link_to 'Dashboard', :controller => 'dashboards', :action => 'index' %></li>
+                <li><a href="#">Projects</a></li>
+                <li><a href="#">Tasks</a></li>
+                <li><a href="#">Comments</a></li>
+                <% if @current_user.role == 'Admin' %>
+                    <li><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
+                <% end %>
+                <li><%= link_to 'Profile', :controller => 'sessions', :action => 'profile' %></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a style=" pointer-events: none; cursor: default;"> Hello <%= @current_user.username %>!</a>
+                <li><a>|</a></li>
+                <li><%= link_to 'Log Out', :controller => 'sessions', :action => 'logout' %></li>
+            </ul>
+        </div>
+    </div>
+</nav>
