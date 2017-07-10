@@ -15,6 +15,7 @@
                 <li><a href="#">Projects</a></li>
                 <li><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
                 <li><a href="#">Comments</a></li>
+                <li><a href="#">Reports</a></li>
                 <% if @current_user.role == 'Admin' %>
                     <li><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
                 <% end %>
@@ -22,7 +23,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a style=" pointer-events: none; cursor: default;"> Hello <%= @current_user.username %>!</a>
+                <li><%= link_to 'Hello '+@current_user.username+'!', user_path(@current_user) %></a>
                 <li><a>|</a></li>
                 <li><%= link_to 'Log Out', :controller => 'sessions', :action => 'logout' %></li>
             </ul>

@@ -2,17 +2,14 @@
 <div class="col-md-2">
 	<div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Add task</h3>
+            <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Add task to project:</h3>
         </div>
         <div class="panel-body">
-        	<div class="dropdown">
-		        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Select Project <b class="caret"></b></a>
-		        <ul class="dropdown-menu">
-		            <% @projects.each do |project| %>
-		            	<li><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></li>
-		            <% end %>
-		        </ul>
-		    </div>
+	        <ul class="list-unstyled">
+	            <% @projects.each do |project| %>
+	            	<li><h5><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></h5></li>
+	            <% end %>
+	        </ul>
 		</div>
     </div>
 	
@@ -20,62 +17,6 @@
 
 <% end %>
 
-<% @tasks.each do |task| %>
-	<div class="col-md-4 col-sm-4 col-lg-4">
-		<div class="panel panel-primary" style="margin: 1cm 1cm 1cm 1cm;">
-			<div class="panel-heading">
-				<p> Task information </p>
-			</div>
-			<div class="panel-body">
-				<p>
-				  <strong>Title:</strong>
-				  <%= task.title %>
-				</p>
-				 
-				<p>
-				  <strong>Requirement:</strong>
-				  <%= task.requirement %>
-				</p>
-
-				<p>
-				  <strong>Assigned User:</strong>
-				  <%= task.assigned_user %>
-				</p>
-
-				<p>
-				  <strong>Type:</strong>
-				  <%= task.task_type %>
-				</p>
-
-				<p>
-				  <strong>Status:</strong>
-				  <%= task.status %>
-				</p>
-				<% if @current_user.role == 'Manager' %>
-					<hr>
-					<h4 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
-			               method: :delete,
-			               data: { confirm: 'Are you sure?' } %></h4>
-				<% end %>
-				
-				<% if @current_user.role != "Client" && @current_user.id == task.assigned_user%>
-					<hr>
-					<div class="row pull-right">
-						<div class="col-md-4" >
-							<%= button_to "Start", {:controller => 'tasks', :action => 'start_task', :task => task}, {:class => 'btn btn-lg btn-success glyphicon glyphicon-play', :disabled => task.status == 'Started' || task.status == 'Finished'}%>
-						</div>
-
-						<div class="col-md-4" >
-							<%= button_to "Pause", {:controller => 'tasks', :action => 'pause_task', :task => task}, {:class => 'btn btn-lg btn-warning glyphicon glyphicon-pause', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == nil}%>
-						</div>
-
-						<div class="col-md-4" >
-							<%= button_to "Finish", {:controller => 'tasks', :action => 'finish_task', :task => task}, {:class => 'btn btn-lg btn-danger glyphicon glyphicon-stop', :disabled => task.status == 'Finished'}%>
-						</div>
-					</div>
-
-				<% end %>
-			</div>
-		</div>
-	</div>	
-<% end %>
+<div class="col-md-8 col-sm-8 col-lg-8" style="float: none; margin: 0 auto;">
+	<%= render 'all_tasks' %>
+</div>	

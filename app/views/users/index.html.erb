@@ -1,35 +1,18 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-7" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
-      <div class="col-sm-12" style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
-      <center><h1> Users </h1></center>
-        <table class="table table-condensed">
-          <thead>  
-            <tr>
-              <th>Username</th>
-              <th>Role</th>
-              <th colspan="2"></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @users.each do |user| %>
-              <tr>
-                <td><%= user.username %></td>
-                <td><%= user.role %></td>
-                <td><%= link_to 'Show', user_path(user) %></td>
-                <td><%= link_to 'Edit', edit_user_path(user) %></td>
-                <td><%= link_to 'Destroy', user_path(user),
-                        method: :delete,
-                        data: { confirm: 'Are you sure?' } %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+      <%= render 'panel_users' %>
     </div>
-
+    
     <div class="col-sm-4" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm;"><br>
+      
+        <% if @user.username == nil %>
+        <center><h2>New User</h1></center>
+        <% else %>
+        <center><h2>Edit User</h2></center>
+        <%= button_to "New User", {:controller => 'users', :action => 'reset'}, {:class => 'btn btn-sm btn-primary pull-right'}%>
+        <% end %>
+
         <%= render 'form' %>
     </div>
   </div>

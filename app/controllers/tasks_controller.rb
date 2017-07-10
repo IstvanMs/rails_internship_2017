@@ -4,7 +4,12 @@ class TasksController < ApplicationController
 	def create
 		@project = Project.find(params[:project_id])
 		@task = @project.tasks.create(task_params)
-		redirect_to :controller => 'tasks' , :action => 'index'
+		if @task.save
+			redirect_to :controller => 'tasks' , :action => 'index'
+		else
+			@users = User.where.not(:role => 'Client')
+			render 'add_task'
+		end
 	end
 
 	def destroy
@@ -22,9 +27,9 @@ class TasksController < ApplicationController
 	def index
 		@projects = Project.all
 		if @current_user.role == 'Manager'
-			@tasks = Task.all
+			@tasks = Task.all.order(status: :desc, title: :asc)
 		else
-			@tasks= Task.where(:assigned_user => @current_user.id)
+			@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
 		end
 	end
 

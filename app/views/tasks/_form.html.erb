@@ -1,5 +1,4 @@
 <div class="row"> 
-  <div class="col-md-4">
     <center><div class="panel panel-default">
       <%= form_for([@project, @project.tasks.build]) do |f| %>
         <div class="panel-body">
@@ -37,6 +36,15 @@
             <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
         </div>
       <% end %>
+
+      <% if @task != nil %>
+        <% if @task.errors.any? %>
+            <ul class="Signup_Errors">
+            <% for message_error in @task.errors.full_messages %>
+              <li>* <%= message_error %></li>
+            <% end %>
+            </ul>
+        <% end %>
+      <% end %>
     </div>
-  </div>
 </div>

@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   def manager_user
     if authenticate_user
       if @current_user.role == 'Manager'
-        return true
+        return true 
       else
         redirect_to(:controller => 'sessions', :action => 'home')
         return false
