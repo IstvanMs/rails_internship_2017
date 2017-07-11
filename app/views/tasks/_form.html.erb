@@ -1,0 +1,66 @@
+<<<<<<< HEAD
+<%= form_for([@project, @project.tasks.build]) do |f| %>
+  <p>
+    <center><%= f.label :title %><br>
+    <%= f.text_field :title %></center>
+  </p>
+  <p>
+    <center><%= f.label :requirement %><br>
+    <%= f.text_area :requirement %></center>
+  </p>
+  <p>
+    <center><%= f.submit %></center>
+  </p>
+<% end %>
+=======
+<div class="row"> 
+    <center><div class="panel panel-default">
+      <%= form_for([@project, @project.tasks.build]) do |f| %>
+        <div class="panel-body">
+          <p>
+            <%= f.label :title %><br>
+            <%= f.text_field :title %>
+          </p>
+          <p>
+            <%= f.label :requirement %><br>
+            <%= f.text_area :requirement %>
+          </p>
+
+          <p>
+            <%= f.label "Role" %><br>
+            <%= f.select(:task_type, ['Feature', 'Bug'] ) %>
+          </p>
+
+          <p>
+            <%= f.label "Assigned User" %><br>
+            <%= f.select :assigned_user, options_for_select(@users.map{ |u| [u.username, u.id] }, selected_key = f.object.assigned_user) %>
+          </p>
+            <%= f.hidden_field :intervals, :value => "[]" %>
+
+        </div>
+
+        <div class="panel-footer clearfix ">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">
+              <i class="glyphicon glyphicon-save"></i> Save
+            </button>
+          </div>
+      <% end %>
+
+      <% if flash[:notice] %>
+        <div class="alert alert-warning">
+            <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+        </div>
+      <% end %>
+
+      <% if @task != nil %>
+        <% if @task.errors.any? %>
+            <ul class="Signup_Errors">
+            <% for message_error in @task.errors.full_messages %>
+              <li>* <%= message_error %></li>
+            <% end %>
+            </ul>
+        <% end %>
+      <% end %>
+    </div>
+</div>
+>>>>>>> 39b13829158c7932e8f5bfb9f3178ad8410aabd1

@@ -2,6 +2,7 @@ class DashboardsController < ApplicationController
   before_action :authenticate_user, :only => [:index]
 
   def index
+    @notes=Notes.all
     @projects = Project.all
     @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
   	case @current_user.role
