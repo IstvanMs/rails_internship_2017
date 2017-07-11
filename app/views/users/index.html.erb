@@ -5,15 +5,20 @@
     </div>
     
     <div class="col-sm-4" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm;"><br>
-      
-        <% if @user.username == nil %>
-        <center><h2>New User</h1></center>
-        <% else %>
-        <center><h2>Edit User</h2></center>
-        <%= button_to "New User", {:controller => 'users', :action => 'reset'}, {:class => 'btn btn-sm btn-primary pull-right'}%>
-        <% end %>
+      <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
+        <div class="panel-heading">
+          <% if @user.username == nil %>
+          <center><h2>New User</h1></center>
+          <% else %>
+          <center><h2>Edit User</h2></center>
+          <div class='row'>
+            <%= button_to "New User", {:controller => 'users', :action => 'reset'}, {:class => 'btn btn-sm btn-primary pull-right'}%>
+          </div>
+          <% end %>
+        </div>
 
         <%= render 'form' %>
+      </div>
     </div>
   </div>
 </div>
