@@ -1,0 +1,18 @@
+	<div class='container'>
+	<center><h2>Project: <%= @project.title %></h2></center>
+	<div class='col-md-5 col-lg-5'>
+		<div class="panel panel-primary" style="margin: 1cm 1cm 1cm 1cm;">
+			<div class="panel-heading">
+				<center><h3>Add new task</h3></center>
+			</div>
+			<div class="panel-body">
+				<div class='col-md-24'>
+					<%= render 'form' %>
+				</div>
+				<div class='row'>
+				  <%= button_to "Back", tasks_index_path, {:class => 'btn btn-md btn-primary pull-right'}%>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

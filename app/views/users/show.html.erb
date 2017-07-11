@@ -1,18 +1,26 @@
-<div class="col-sm-2 ">
-	<div class="panel panel-primary" style="margin: 1cm 1cm 1cm 1cm;">
-		<div class="panel-heading">
-			<p> User information </p>
-		</div>
-		<div class="panel-body">
-			<p>
-				<strong>Username</strong>
-				<%= @user.username %>
-			</p>
+<div class="jumbotron	">
+	<div class='row'>
+		<div class="col-sm-2 ">
+			<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
+				<div class="panel-heading">
+					<h3> User information </h3>
+				</div>
+				<div class="panel-body">
+					<h4>
+						<strong>Username</strong>
+						<%= @user.username %>
+					</h4>
 
-			<p>
-				<strong>Role</strong>
-				<%= @user.role %>
-			</p>
+					<h4>
+						<strong>Role</strong>
+						<%= @user.role %>
+					</h4>
+				</div>
+			</div>
 		</div>
+		
+		<span class="bottomleft">
+			<%= button_to "Back", {:controller => 'users', :action => 'reset'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
+		</span>
 	</div>
 </div>

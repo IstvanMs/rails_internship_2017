@@ -1,29 +1,29 @@
 <center><div class="panel panel-default">
 	<%= form_for @user do |f| %>
 		<div class="panel-body">
-			<p>
+			<h4>
 				<%= f.label "Username" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 				<%= f.text_field :username %>
-			</p>
+			</h4>
 
-			<p>
+			<h4>
 				<%= f.label "Password" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
 				<%= f.password_field :password %>
-			</p>
+			</h4>
 
-			<p>
+			<h4>
 				<%= f.label "Password Confirmation" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
 				<%= f.password_field :password_confirmation %>
-			</p>
+			</h4>
 
-			<p>
+			<h4>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-				<%= f.select(:role, ['Employee', 'Manager', 'Admin'] ) %>
-			</p>
+				<%= f.select(:role, ['Admin', 'Client', 'Employee', 'Manager'] ) %>
+			</h4>
 		</div>
 
 		<div class="panel-footer clearfix ">
@@ -31,6 +31,12 @@
 					<i class="glyphicon glyphicon-save"></i> Save
 				</button>
 			</div>
+	<% end %>
+
+	<% if flash[:notice] %>
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
 	<% end %>
 
 	<% if @user.errors.any? %>

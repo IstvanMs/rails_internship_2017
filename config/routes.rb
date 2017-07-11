@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  get 'dashboards/index'
+
+  match 'users/index', :to => 'users#index' , :via => [:get, :post]
+
+  match 'tasks/index', :to => 'tasks#index' , :via => [:get, :post]
+
+  match 'tasks/start_task', :to => 'tasks#start_task' , :via => [:get, :post]
+
+  match 'tasks/pause_task', :to => 'tasks#pause_task' , :via => [:get, :post]
+
+  match 'tasks/finish_task', :to => 'tasks#finish_task' , :via => [:get, :post]
+
   resources :users
 
   root :to => "sessions#login"

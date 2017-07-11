@@ -1,0 +1,22 @@
+<% if @current_user.role == 'Manager' %>
+<div class="col-md-2">
+	<div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Add task to project:</h3>
+        </div>
+        <div class="panel-body">
+	        <ul class="list-unstyled">
+	            <% @projects.each do |project| %>
+	            	<li><h5><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></h5></li>
+	            <% end %>
+	        </ul>
+		</div>
+    </div>
+	
+</div>
+
+<% end %>
+
+<div class="col-md-8 col-sm-8 col-lg-8" style="float: none; margin: 0 auto;">
+	<%= render 'all_tasks' %>
+</div>	

@@ -1,14 +1,17 @@
 class SessionsController < ApplicationController
-  before_action :authenticate_user, :only => [:home, :profile, :setting]
+  before_action :authenticate_user, :only => [:home, :profile, :setting, :logout]
   before_action :save_login_state, :only => [:login, :login_attempt]
 
   def login
   end
 
   def home
+    redirect_to dashboards_index_path
   end
 
   def profile
+    @user = User.find(@current_user.id)
+    render 'users/show'
   end
 
   def setting
@@ -16,7 +19,6 @@ class SessionsController < ApplicationController
 
   def logout
   	session[:user_id] = nil
-    flash[:notice] = ""
   	redirect_to :action => 'login'
   end
 

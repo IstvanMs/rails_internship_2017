@@ -1,13 +1,18 @@
 class UsersController < ApplicationController
-  before_action :save_login_state, :only => [:new, :create]
-
+  before_action :admin_user, :only => [:new, :create, :edit, :update, :index]
+  before_action :authenticate_user, :only => [:show]
+  
   def index
-  	@users = User.all
+  	@users = User.all.order(:role,:username)
     @user = User.new
   end
 
   def new
   	@user = User.new
+  end
+
+  def reset
+    redirect_to index
   end
 
   def show
@@ -16,13 +21,15 @@ class UsersController < ApplicationController
 
   def edit
   	@user = User.find(params[:id])
+    @users = User.all.order(:role,:username)
+    render 'index'
   end
 
   def update 
   	@user = User.find(params[:id])
 
   	if @user.update(user_params)
-  		#redirect
+  	  redirect_to users_path
   	else
   		render 'edit'
   	end
@@ -37,9 +44,10 @@ class UsersController < ApplicationController
 
   def create
   	@user = User.new(user_params)
+    @users = User.all.order(:role,:username)
 
   	if @user.save 
-  		flash[:notice] = "You signed up succesfully!"
+  		flash[:notice] = "Saved!"
   		flash[:color] = "valid"
   		redirect_to users_path
   	else
