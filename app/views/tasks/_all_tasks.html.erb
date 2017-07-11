@@ -34,13 +34,8 @@
           <% if @label != task.status %>
           <thead class="thead-default">
     		    <tr>
-    		      <th><% if task.status != nil %>
-              				<%= task.status %>
-              			<% else %>
-              				<%= 'Not started yet' %>
-              			<% end %>:
-
-              			<% @label = task.status %></th>
+    		      <th><%= task.status %>
+              		<% @label = task.status %></th>
     		    </tr>
     		  </thead>
           <% end %>
@@ -59,27 +54,27 @@
 			<% end %>
 			
             <% if @current_user.role != "Client" && @current_user.id == task.assigned_user%>
-			<td><div class="row pull-right">
-				<div class="col-md-4" >
-					<%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
-					<i class="glyphicon glyphicon-play"></i>
-					<% end %>
-				</div>
+      			<td><div class="row pull-right">
+      				<div class="col-md-4" >
+      					<%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
+      					<i class="glyphicon glyphicon-play"></i>
+      					<% end %>
+      				</div>
 
-				<div class="col-md-4" >
-					<%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == nil} do%>
-					<i class="glyphicon glyphicon-pause"></i>
-					<% end %>
-				</div>
+      				<div class="col-md-4" >
+      					<%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == 'Not-started'} do%>
+      					<i class="glyphicon glyphicon-pause"></i>
+      					<% end %>
+      				</div>
 
-				<div class="col-md-4" >
-					<%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == nil} do%>
-					<i class="glyphicon glyphicon-stop"></i>
-					<% end %>
-				</div>
-			</div>
-		</td>
-		<% end %>
+      				<div class="col-md-4" >
+      					<%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == 'Not-started'} do%>
+      					<i class="glyphicon glyphicon-stop"></i>
+      					<% end %>
+      				</div>
+      			</div>
+      		</td>
+      		<% end %>
 
         </tr>
         <% end %>

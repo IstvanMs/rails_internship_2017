@@ -7,7 +7,7 @@ class TasksController < ApplicationController
 		if @task.save
 			redirect_to :controller => 'tasks' , :action => 'index'
 		else
-			@users = User.where.not(:role => 'Client')
+			@users = User.where('role != ? and role != ?', 'Client', 'Manager')
 			render 'add_task'
 		end
 	end
@@ -21,7 +21,7 @@ class TasksController < ApplicationController
 
 	def add_task
 		@project = Project.find(params[:id])
-		@users = User.where.not(:role => 'Client')
+		@users = User.where('role != ? and role != ?', 'Client', 'Manager')
 	end
 
 	def index
