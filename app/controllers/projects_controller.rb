@@ -3,7 +3,18 @@ class ProjectsController < ApplicationController
 	before_action :authenticate_user, :only => [:index, :show]
 	
 	def index
-		@projects = Project.all
+		case @current_user.role
+		when 'Manager'
+			@projects = Project.all.order(:title).first(6)
+		when 'Employee'
+			@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+		when 'Admin'
+			@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+		when 'Client'
+			@projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
+		else
+			puts 'Role error!'
+		end
 	end	
 
 	def show
@@ -12,6 +23,7 @@ class ProjectsController < ApplicationController
 	end	
 
 	def new
+		@clients = User.where(:role => 'Client')
 		@project = Project.new
 	end
 
@@ -21,10 +33,20 @@ class ProjectsController < ApplicationController
 	end
 
 	def create
+		@clients = User.where(:role => 'Client')
 		@project = Project.new(project_params)
  
 		if @project.save
-			redirect_to @project
+			@project_user = ProjectUser.new do |u|
+			  u.user = User.find(params[:client])
+			  u.project = @project
+			end
+
+			if @project_user.save
+				redirect_to projects_path
+			else
+				puts 'error'
+			end
 		else
 			render 'new'
 		end

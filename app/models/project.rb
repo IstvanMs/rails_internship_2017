@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
 
 
-	has_many :projectUsers
+	has_many :projectUsers, dependent: :destroy
 	has_many :users, through: :projectUsers
 
 

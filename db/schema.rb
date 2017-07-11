@@ -10,14 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707074226) do
+ActiveRecord::Schema.define(version: 20170711074551) do
 
-  create_table "projectUsers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.bigint "user_id"
-    t.bigint "projects_id"
+  create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.text "text"
+    t.string "visibility"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["projects_id"], name: "index_projectUsers_on_projects_id"
+  end
+
+  create_table "project_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_projectUsers_on_projects_id"
     t.index ["user_id"], name: "index_projectUsers_on_user_id"
   end
 
@@ -50,7 +57,7 @@ ActiveRecord::Schema.define(version: 20170707074226) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "projectUsers", "projects", column: "projects_id"
-  add_foreign_key "projectUsers", "users"
+  add_foreign_key "project_users", "projects"
+  add_foreign_key "project_users", "users"
   add_foreign_key "tasks", "projects"
 end

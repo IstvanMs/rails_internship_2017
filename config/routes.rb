@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   match 'tasks/index', :to => 'tasks#index' , :via => [:get, :post]
 
+  match 'projects/index', :to => 'projects#index' , :via => [:get, :post]
+
   match 'tasks/start_task', :to => 'tasks#start_task' , :via => [:get, :post]
 
   match 'tasks/pause_task', :to => 'tasks#pause_task' , :via => [:get, :post]

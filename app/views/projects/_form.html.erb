@@ -1,41 +1,35 @@
 <center><div class="panel panel-default">
-<%= form_for @project do |f| %>
-  
-<% if @project.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:
-      </h2>
-      <ul>
-        <% @project.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
+  <%= form_for @project do |f| %>
+    <div class="panel-body">
+      <h4>
+        <%= f.label :title %><br>
+        <span class="form-group-addon"><span class="glyphicon glyphicon-tag"></span></span>
+        <%= f.text_field :title %>
+      </h4>
+
+      <h4>
+        <%= f.label :text %><br>
+        <span class="form-group-addon"><span class="glyphicon glyphicon-list-alt"></span></span>
+        <%= f.text_area :text %>
+      </h4>
+
+      <label>Client</label><br>
+      <span class="glyphicon glyphicon-user"></span>
+      <%= select_tag "client", options_from_collection_for_select(@clients, "id", "username") %>
+    </div>
+
+    <div class="panel-footer clearfix ">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </div>
+  <% end %>
+
+  <% if @project.errors.any? %>
+      <ul class="Signup_Errors">
+      <% for message_error in @project.errors.full_messages %>
+        <li>* <%= message_error %></li>
+      <% end %>
       </ul>
-    </div>
-<% end %>
-
-  <div class="col-md-4 ">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <center><h><%= f.label :title %></h></center>
-      </div><br>
-      <div>
-        <center><p><%= f.text_field :title %></p></center>
-      </div><br>
-    </div>
-    <center><p><%= f.submit %></p></center>
-    <center><%= link_to 'Back', projects_path %></center>
-  </div>
-  <div class="col-md-5 ">
-    <div class="panel panel-primary">
-      <div class="panel-heading">    
-        <center><h><%= f.label :text %></h></center>
-      </div><br>
-      <div>
-        <center><%= f.text_area :text %></center>
-      </div><br>
-    </div>
-  </div>
- 
-
-<% end %>
+  <% end %>
+</div>
