@@ -1,19 +1,46 @@
-<p>
-  <strong>Title:</strong>
-  <%= @project.title %>
-</p>
- 
-<p>
-  <strong>Text:</strong>
-  <%= @project.text %>
-</p>
+<center><h1> Project </h1></center>
 
-<%= link_to 'Edit', edit_project_path(@project) %>
+<div class="col-md-4 ">
+	<div class="panel panel-primary" style="margin: 1cm 1cm 1cm 1cm;">
+		<div class="panel-heading">
+			<h2> Project informations </h2>
+		</div>
+		<div>		
+			<p><strong>Title:</strong>
+  			<%= @project.title %>
+			</p>
  
-<h2>Tasks</h2>
-<%= render @project.tasks %>
+			<p>
+  			<strong>Text:</strong>
+  			<%= @project.text %>
+			</p>
+
+			<center><%= link_to 'Edit', edit_project_path(@project) %></center>
+		</div>
+	</div>
+</div>
+
  
-<h2>Add a task:</h2>
-<%= render 'tasks/form' %>
- 
-<%= link_to 'Back', projects_path %>
+<div class="col-md-4 ">
+	<div class="panel panel-primary" style="margin: 1cm 1cm 1cm 1cm;">
+		<div class="panel-heading">
+			<center><h2>Tasks</h2></center>
+		</div>
+		<div>
+			<%= render @project.tasks %>
+		</div>
+	</div>
+</div>
+
+
+<div class="col-lg-4 ">
+	<div class="panel panel-primary" style="margin: 1cm 1cm 1cm 1cm;">
+		<div class="panel-heading"> 
+			<center><h2>Add a task:</h2></center>
+		</div>
+		<div>
+			<%= render 'tasks/form' %>
+		</div>
+	</div>
+</div>
+<center><%= link_to 'Back', projects_path %></center>

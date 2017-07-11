@@ -1,13 +1,13 @@
 <%= form_for([@project, @project.tasks.build]) do |f| %>
   <p>
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
+    <center><%= f.label :title %><br>
+    <%= f.text_field :title %></center>
   </p>
   <p>
-    <%= f.label :requirement %><br>
-    <%= f.text_area :requirement %>
+    <center><%= f.label :requirement %><br>
+    <%= f.text_area :requirement %></center>
   </p>
   <p>
-    <%= f.submit %>
+    <center><%= f.submit %></center>
   </p>
 <% end %>

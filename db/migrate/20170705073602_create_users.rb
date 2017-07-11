@@ -5,6 +5,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :encrypted_password
       t.string :salt
       t.string :role
+      t.integer :id
       
       t.timestamps
     end
