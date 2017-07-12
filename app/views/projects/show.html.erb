@@ -1,0 +1,35 @@
+<div class='row'>
+	<div class="col-md-2" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
+	  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
+	    <div class="panel-heading">
+	      <center><h2>Project(<%= @project.title %>)</h1></center>
+	    </div>
+
+	    <div class="panel-body">
+			<h4>
+				<strong>Title</strong>
+				<%= @project.title %>
+			</h4>
+
+			<h4>
+				<strong>Text</strong>
+				<%= @project.text %>
+			</h4>
+
+			<h4>
+				<strong>Client</strong>
+				<%= @project_infos['client_name'] %>
+			</h4>
+
+			<h4>
+				<strong>Project Date</strong>
+				<%= @project_infos['created_at'] %>
+			</h4>
+		</div>
+	  </div>
+	</div>
+
+	<span class="bottomleft">
+		<%= button_to "Back", {:controller => 'projects', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
+	</span>
+</div>
