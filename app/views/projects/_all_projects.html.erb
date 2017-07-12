@@ -16,16 +16,24 @@
       <thead>  
         <tr>
           <th>Title</th>
-          <th>Text</th>
+          <% if current_page?(controller: 'projects', action: 'index')%>
+            <th>Text</th>
+          <% end %>
           <th>Client</th>
+          <th>Duration</th>
+          <th>Project Date</th>
         </tr>
       </thead>
       <tbody>
           <% @projects.each do |project| %>
             <tr>
             <td><%= project.title %></td>
-            <td><%= project.text %></td>
-            <td><%= @clients[project.id] %></td>
+            <% if current_page?(controller: 'projects', action: 'index')%>
+              <td><%= project.text %></td>
+            <% end %>
+            <td><%= @project_infos[project.id]['client_name'] %></td>
+            <td><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></td>
+            <td><%= @project_infos[project.id]['created_at'] %></td>
             
             <% if @current_user.role == 'Manager' %>
         			<td><%= link_to 'Show', project_path(project) %> |

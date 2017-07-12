@@ -11,7 +11,7 @@
   <body style="background: #e8f2ef;">
   	<div class="jumbotron" style="background: #e8f2ef;">
 	  	<div class="row">
-	  		<%= image_tag("logo.png", :class => "pull-left", :style => 'margin: 0px 0px 0px 5px;', :alt => "Logo") %>
+	  		<%= link_to image_tag("logo.png", :class => "pull-left", :style => 'margin: 0px 0px 0px 5px;', :alt => "Logo"), :controller => 'dashboards', :action => 'index' %>
 	  	</div>
 
 	  	<div class="row">

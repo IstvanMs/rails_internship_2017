@@ -36,11 +36,21 @@ class TasksController < ApplicationController
 				@tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id})
 			end
 		end
-		@assigneds = Hash.new
-		@clients_tasks = Hash.new 
+
+		@task_infos = Hash.new
 		@tasks.each do |t|
-			@assigneds[t.id] = User.find(t.assigned_user).username
-			@clients_tasks[t.id] = ProjectUser.find_by(:project => t.project).user.username
+			@intervals = JSON.parse(t.intervals)
+			@time = 0
+			@intervals.each do |i|
+				if i['start_time'] != nil && i['end_time'] != nil
+					@time += (Time.parse(i['end_time']) - Time.parse(i['start_time']))/60
+				end
+			end
+			if @time != 0
+				@time = @time.truncate + 1
+			end
+
+			@task_infos[t.id] = {'client_name' => ProjectUser.find_by(:project => t.project).user.username,'assigned' => User.find(t.assigned_user).username,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => Project.find(t.project.id).title}
 		end
 	end
 

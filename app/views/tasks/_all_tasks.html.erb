@@ -21,11 +21,18 @@
       <thead>  
         <tr>
           <th>Title</th>
-          <th>Requirement</th>
+          <% if current_page?(controller: 'tasks', action: 'index')%>
+            <th>Requirement</th>
+          <% end %>
           <th>Client</th>
+          <th>Project</th>
           <th>Assigned User</th>
           <th>Type</th>
+          <th>Duration</th>
           <th>Status</th>
+          <% if current_page?(controller: 'tasks', action: 'index')%>
+            <th>Last Update</th>
+          <% end %>
         </tr>
       </thead>
       <% @label = '' %>
@@ -42,11 +49,18 @@
 
           <tr>
             <td><%= task.title %></td>
-            <td><%= task.requirement %></td>
-            <td><%= @clients_tasks[task.id] %></td>
-            <td><%= @assigneds[task.id] %></td>
+            <% if current_page?(controller: 'tasks', action: 'index')%>
+              <td><%= task.requirement %></td>
+            <% end %>
+            <td><%= @task_infos[task.id]['client_name'] %></td>
+            <td><%= @task_infos[task.id]['project_name'] %></td>
+            <td><%= @task_infos[task.id]['assigned'] %></td>
             <td><%= task.task_type %></td>
+            <td><%= @task_infos[task.id]['duration'] %> <%= 'minute'.pluralize(@task_infos[task.id]['duration']) %></td>
             <td><%= task.status %></td>
+            <% if current_page?(controller: 'tasks', action: 'index')%>
+              <td><%= @task_infos[task.id]['last_update'] %></td>
+            <% end %>
             
             <% if @current_user.role == 'Manager' %>
 			<td><h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],

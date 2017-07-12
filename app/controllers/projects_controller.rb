@@ -15,15 +15,33 @@ class ProjectsController < ApplicationController
 		else
 			puts 'Role error!'
 		end
-		@clients = Hash.new
+		@project_infos = Hash.new
 		@projects.each do |p|
-			@clients[p.id] = ProjectUser.find_by(:project => p).user.username
+			@project_infos[p.id] = {'client_name' => ProjectUser.find_by(:project => p).user.username,'created_at' => p.created_at.strftime("%F %I:%M%p")}
+			@tasks = Task.where(:project => p.id)
+			@duration = 0
+			@tasks.each do |t|
+				@intervals = JSON.parse(t.intervals)
+				@time = 0
+				@intervals.each do |i|
+					if i['start_time'] != nil && i['end_time'] != nil
+						@time += (Time.parse(i['end_time']) - Time.parse(i['start_time']))/60
+					end
+				end
+				if @time != 0
+					@time = @time.truncate + 1
+				end
+				@duration += @time
+			end
+			@project_infos[p.id] = {'client_name' => ProjectUser.find_by(:project => p).user.username,'created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
 		end
 	end	
 
 	def show
+		@clients = User.where(:role => 'Client')
 		@project = Project.find(params[:id])
 		@users = User.where.not(:role => 'Client')
+		@project_infos = {'client_name' => ProjectUser.find_by(:project => @project).user.username,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
 	end	
 
 	def new
@@ -32,6 +50,7 @@ class ProjectsController < ApplicationController
 	end
 
 	def edit
+		@clients = User.where(:role => 'Client')
 		@project = Project.find(params[:id])
 		@users = User.where.not(:role => 'Client')
 	end

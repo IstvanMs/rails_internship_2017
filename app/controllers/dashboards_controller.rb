@@ -2,73 +2,97 @@ class DashboardsController < ApplicationController
   before_action :authenticate_user, :only => [:index]
 
   def index
-    #default
     @notes=Note.all
     @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
   	case @current_user.role
+      #Admin
       when "Admin"
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
         @users = User.all.order(:role, :username).first(10)
-        @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
-        @clients = Hash.new
-        @projects.each do |p|
-          @clients[p.id] = ProjectUser.find_by(:project => p).user.username
-        end
-        @assigneds = Hash.new
-        @clients_tasks = Hash.new 
-        @tasks.each do |t|
-          @assigneds[t.id] = User.find(t.assigned_user).username
-          @clients_tasks[t.id] = ProjectUser.find_by(:project => t.project).user.username
-        end
         
+        @project_infos = create_project_infos(@projects)
+
+        @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
+
+        @task_infos = create_task_infos(@tasks)
         render '/layouts/_index_admin'
+
+      #employee
       when 'Employee'
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
-        @clients = Hash.new
-        @projects.each do |p|
-          @clients[p.id] = ProjectUser.find_by(:project => p).user.username
-        end
+        @users = User.all.order(:role, :username).first(10)
+        
+        @project_infos = create_project_infos(@projects)
+        
         @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
-        @clients = Hash.new
-        @projects.each do |p|
-          @clients[p.id] = ProjectUser.find_by(:project => p).user.username
-        end
-        @assigneds = Hash.new
-        @clients_tasks = Hash.new 
-        @tasks.each do |t|
-          @assigneds[t.id] = User.find(t.assigned_user).username
-          @clients_tasks[t.id] = ProjectUser.find_by(:project => t.project).user.username
-        end
+
+        @task_infos = create_task_infos(@tasks)
         render '/layouts/_index_employee'
+
+      #manager
       when 'Manager'
         @projects = Project.all.order(:title).first(6)
-        @clients = Hash.new
-        @projects.each do |p|
-          @clients[p.id] = ProjectUser.find_by(:project => p).user.username
-        end
+        
+        @project_infos = create_project_infos(@projects)
+        
         @tasks = Task.all.order(status: :desc, title: :asc).first(6)
-        @assigneds = Hash.new
-        @clients_tasks = Hash.new 
-        @tasks.each do |t|
-          @assigneds[t.id] = User.find(t.assigned_user).username
-          @clients_tasks[t.id] = ProjectUser.find_by(:project => t.project).user.username
-        end
+
+        @task_infos = create_task_infos(@tasks)
         render '/layouts/_index_manager'
+
+      #client
       when 'Client'
         @projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
-        @clients = Hash.new
-        @projects.each do |p|
-          @clients[p.id] = ProjectUser.find_by(:project => p).user.username
-        end
-        @tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id})
-        @assigneds = Hash.new
-        @clients_tasks = Hash.new 
-        @tasks.each do |t|
-          @assigneds[t.id] = User.find(t.assigned_user).username
-          @clients_tasks[t.id] = ProjectUser.find_by(:project => t.project).user.username
-        end
-        render '/layouts/_index_client'
+        
+        @project_infos = create_project_infos(@projects)
+
+        @tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc).first(6)
+        
+        @task_infos = create_task_infos(@tasks)
       else puts 'Role error!'
       end
+  end
+
+  def create_task_infos(tasks)
+    @task_infos = Hash.new
+    tasks.each do |t|
+      @intervals = JSON.parse(t.intervals)
+      @time = 0
+      @intervals.each do |i|
+        if i['start_time'] != nil && i['end_time'] != nil
+          @time += (Time.parse(i['end_time']) - Time.parse(i['start_time']))/60
+        end
+      end
+      if @time != 0
+        @time = @time.truncate + 1
+      end
+
+      @task_infos[t.id] = {'client_name' => ProjectUser.find_by(:project => t.project).user.username,'assigned' => User.find(t.assigned_user).username,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => Project.find(t.project.id).title}
+    end
+    return @task_infos
+  end
+
+  def create_project_infos(projects)
+    @project_infos = Hash.new
+    projects.each do |p|
+      @project_infos[p.id] = {'client_name' => ProjectUser.find_by(:project => p).user.username,'created_at' => p.created_at.strftime("%F %I:%M%p")}
+      @tasks = Task.where(:project => p.id)
+      @duration = 0
+      @tasks.each do |t|
+        @intervals = JSON.parse(t.intervals)
+        @time = 0
+        @intervals.each do |i|
+          if i['start_time'] != nil && i['end_time'] != nil
+            @time += (Time.parse(i['end_time']) - Time.parse(i['start_time']))/60
+          end
+        end
+        if @time != 0
+          @time = @time.truncate + 1
+        end
+        @duration += @time
+      end
+      @project_infos[p.id] = {'client_name' => ProjectUser.find_by(:project => p).user.username,'created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
+    end
+    return @project_infos
   end
 end
