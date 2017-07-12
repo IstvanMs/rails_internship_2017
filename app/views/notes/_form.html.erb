@@ -1,11 +1,29 @@
-<%= form_for(@note) do |f| %>
- 
-  <% if @note.errors.any? %>
+<center><div class="panel panel-default">
+  <%= form_for @note do |f| %>
+    <div class="panel-body">
+      <h4>
+        <%= f.label :text %><br>
+        <%= f.text_area :text %>
+      </h4>
+      <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Action <span class="caret"></span></button>
+       
+
+
+    </div>
+
+    <div class="panel-footer clearfix ">
+      <button type="submit" class="btn btn-lg btn-primary btn-block">
+        <i class="glyphicon glyphicon-save"></i> Save
+      </button>
+    </div>
+  <% end %>
+
+ <% if @note.errors.any? %>
     <div id="error_explanation">
-      <h2>
+      <h4>
         <%= pluralize(@note.errors.count, "error") %> prohibited
         this note from being saved:
-      </h2>
+      </h4>
       <ul>
         <% @note.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -13,20 +31,4 @@
       </ul>
     </div>
   <% end %>
- 
-  <p>
-    <%= f.label :text %><br>
-    <%= f.text_area :text %>
-  </p>
- 
-
-  <p>
-    <%= f.label :visibility %><br>
-    <%= f.text_field :visibility %>
-  </p>
- 
-  <p>
-    <%= f.submit %>
-  </p>
- 
-<% end %>
+</div>
