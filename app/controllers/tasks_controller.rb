@@ -36,6 +36,12 @@ class TasksController < ApplicationController
 				@tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id})
 			end
 		end
+		@assigneds = Hash.new
+		@clients_tasks = Hash.new 
+		@tasks.each do |t|
+			@assigneds[t.id] = User.find(t.assigned_user).username
+			@clients_tasks[t.id] = ProjectUser.find_by(:project => t.project).user.username
+		end
 	end
 
 	def start_task

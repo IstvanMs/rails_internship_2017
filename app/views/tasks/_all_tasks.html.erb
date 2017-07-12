@@ -22,6 +22,7 @@
         <tr>
           <th>Title</th>
           <th>Requirement</th>
+          <th>Client</th>
           <th>Assigned User</th>
           <th>Type</th>
           <th>Status</th>
@@ -42,7 +43,8 @@
           <tr>
             <td><%= task.title %></td>
             <td><%= task.requirement %></td>
-            <td><%= task.assigned_user %></td>
+            <td><%= @clients_tasks[task.id] %></td>
+            <td><%= @assigneds[task.id] %></td>
             <td><%= task.task_type %></td>
             <td><%= task.status %></td>
             

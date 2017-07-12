@@ -17,6 +17,7 @@
         <tr>
           <th>Title</th>
           <th>Text</th>
+          <th>Client</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,7 @@
             <tr>
             <td><%= project.title %></td>
             <td><%= project.text %></td>
+            <td><%= @clients[project.id] %></td>
             
             <% if @current_user.role == 'Manager' %>
         			<td><%= link_to 'Show', project_path(project) %> |

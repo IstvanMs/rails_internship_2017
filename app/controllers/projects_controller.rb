@@ -15,6 +15,10 @@ class ProjectsController < ApplicationController
 		else
 			puts 'Role error!'
 		end
+		@clients = Hash.new
+		@projects.each do |p|
+			@clients[p.id] = ProjectUser.find_by(:project => p).user.username
+		end
 	end	
 
 	def show
