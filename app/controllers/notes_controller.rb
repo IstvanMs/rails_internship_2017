@@ -3,11 +3,19 @@ class NotesController < ApplicationController
   before_action :authenticate_user, :only => [:show, :index]
 	
 	def index
-    if @current_user.role == 'Manager'
-  	  @notes = Note.all
+    case @current_user.role
+    when 'Manager'
+      @notes = Note.all
+    when 'Client'
+      @notes = Note.where(:visibility => 'general')
+      @notes += Note.where(:visibility => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| 'project-' + p.id.to_s})
+      @notes += Note.where(:visibility => Task.where(:project => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| p.id}).collect{|t| 'task-' + t.id.to_s})
+      @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     else
       @notes = Note.where(:visibility => 'general')
-      @notes += Note.where(:visibility => 'user-'+session[:user_id].to_s)
+      @notes += Note.where(:visibility => Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).collect{|p| 'project-' + p.id.to_s})
+      @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
+      @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     end
 	end
 
@@ -16,14 +24,14 @@ class NotesController < ApplicationController
 	end
 
 	def new
-    @users = User.where.not(:id => session[:user_id])
+    @users = User.where.not(:id => @current_user.id)
     @projects = Project.all
     @tasks = Task.all
 		@note = Note.new
 	end
 
 	def edit
-    @users = User.where.not(:id => session[:user_id])
+    @users = User.where.not(:id => @current_user.id)
     @projects = Project.all
     @tasks = Task.all
 		@note = Note.find(params[:id])

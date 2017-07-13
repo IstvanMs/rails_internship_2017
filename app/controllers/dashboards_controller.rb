@@ -2,11 +2,16 @@ class DashboardsController < ApplicationController
   before_action :authenticate_user, :only => [:index]
 
   def index
-    @notes=Note.all
     @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
   	case @current_user.role
       #Admin
       when "Admin"
+        @notes = Note.where(:visibility => 'general')
+        @notes += Note.where(:visibility => Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).collect{|p| 'project-' + p.id.to_s})
+        @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
+        @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
+        @notes = @notes.first(7)
+
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
         @users = User.all.order(:role, :username).first(10)
         
@@ -19,6 +24,12 @@ class DashboardsController < ApplicationController
 
       #employee
       when 'Employee'
+        @notes = Note.where(:visibility => 'general')
+        @notes += Note.where(:visibility => Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).collect{|p| 'project-' + p.id.to_s})
+        @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
+        @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
+        @notes = @notes.first(7)
+
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
         @users = User.all.order(:role, :username).first(10)
         
@@ -31,6 +42,9 @@ class DashboardsController < ApplicationController
 
       #manager
       when 'Manager'
+        @notes=Note.all
+        @notes = @notes.first(7)
+
         @projects = Project.all.order(:title).first(6)
         
         @project_infos = create_project_infos(@projects)
@@ -42,6 +56,12 @@ class DashboardsController < ApplicationController
 
       #client
       when 'Client'
+        @notes = Note.where(:visibility => 'general')
+        @notes += Note.where(:visibility => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| 'project-' + p.id.to_s})
+        @notes += Note.where(:visibility => Task.where(:project => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| p.id}).collect{|t| 'task-' + t.id.to_s})
+        @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
+        @notes = @notes.first(7)
+
         @projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
         
         @project_infos = create_project_infos(@projects)
@@ -49,6 +69,7 @@ class DashboardsController < ApplicationController
         @tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc).first(6)
         
         @task_infos = create_task_infos(@tasks)
+        render '/layouts/_index_client'
       else puts 'Role error!'
       end
   end

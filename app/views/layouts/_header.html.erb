@@ -14,7 +14,7 @@
                 <li><%= link_to 'Dashboard', :controller => 'dashboards', :action => 'index' %></li>
                 <li><%= link_to 'Projects', :controller => 'projects', :action => 'index' %></li>
                 <li><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
-                <li><a href="#">Comments</a></li>
+                <li><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
                 <li><a href="#">Reports</a></li>
                 <% if @current_user.role == 'Admin' %>
                     <li><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
