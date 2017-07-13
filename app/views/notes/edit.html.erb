@@ -1,5 +1,18 @@
-<h1>Edit note</h1>
-
-<%= render 'form' %>
- 
-<%= link_to 'Back', note_path %>
+<div class='container'>
+	<div class='col-md-5 col-lg-5' style="float: none; margin: 0 auto;">
+		<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
+			<div class="panel-heading">
+				<center><h3>Edit note</h3></center>
+			</div>
+			<div class="panel-body">
+				<div class='col-md-24'>
+					<%= render 'form' %>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<span class="bottomleft">
+		<%= button_to "Back", {:controller => 'notes', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
+	</span>
+</div>

@@ -1,12 +1,27 @@
-<p>
-  <strong>Text:</strong>
-  <%= @note.text %>
-</p>
-
-<p>
-  <strong>Visibility:</strong>
-  <%= @note.visibility %>
-</p>
-
-<%= link_to 'Edit', edit_note_path(@note) %>
-<%= link_to 'Back', notes_path %>
+<div class="jumbotron" style="background: #e8f2ef;">
+	<div class='row'>
+		<div class="col-sm-4 ">
+			<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
+				<div class="panel-heading">
+					<h3> Note information </h3>
+				</div>
+				<div class="panel-body">
+					<h4>
+						<strong>Text:</strong>
+  						<%= @note.text %>
+					</h4>
+					<% if @current_user.role == 'Manager' %>
+					<h4>
+						<strong>Visibility:</strong>
+  						<%= @note.visibility %>
+					</h4>
+					<% end %>
+				</div>
+			</div>
+		</div>
+		
+		<span class="bottomleft">
+			<%= button_to "Back", {:controller => 'notes', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
+		</span>
+	</div>
+</div>

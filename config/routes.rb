@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get 'dashboards/index'
 
+  match 'notes/index', :to => 'notes#index' , :via => [:get, :post]
+
   match 'users/index', :to => 'users#index' , :via => [:get, :post]
 
   match 'tasks/index', :to => 'tasks#index' , :via => [:get, :post]
