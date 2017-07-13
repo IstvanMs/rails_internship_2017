@@ -10,7 +10,7 @@ class NotesController < ApplicationController
 	end
 
 	def new
-    @users = User.all
+    @users = User.where.not(:id => @current_user.id)
     @projects = Project.all
     @tasks = Task.all
 		@note = Note.new
@@ -21,7 +21,10 @@ class NotesController < ApplicationController
 	end
 
 	def create
-	 @note = Note.new(note_params) 
+    @users = User.all
+    @projects = Project.all
+    @tasks = Task.all
+	  @note = Note.new(note_params) 
 		if @note.save
   		redirect_to @note
 		else

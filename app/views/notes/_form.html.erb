@@ -5,14 +5,15 @@
         <%= f.label :text %><br>
         <%= f.text_area :text %>
       </h4>
-
+      <label>To</label><br>
       <select id='note_type' name='note_type' onchange='create_second_select();'>
           <option value='1'>General</option>
           <option value='2'>Project</option>
           <option value='3'>Task</option>
           <option value='4'>User</option>
       </select>
-
+      <br>
+      <div id='second_select'></div>
     </div>
 
     <div class="panel-footer clearfix ">
@@ -39,23 +40,38 @@
 
 <script type="text/javascript">
   function create_second_select(){
+    document.getElementById('second_select').innerHTML = '';
     var type = document.getElementById('note_type').value;
     var id;
     var name;
-    switch(type){
-        case '2':
-          id = '<%= @projects.collect{|p| p.id} %>';
-          name = '<%= @projects.collect{|p| p.title} %>';
-        break;
-        case '3':
-          id = '<%= @tasks.collect{|t| t.id} %>';
-          name = '<%= @tasks.collect{|t| t.title} %>';
-        break;
-        case '4':
-          id = '<%= @users.collect{|u| u.id} %>';
-          name = '<%= @users.collect{|u| u.username} %>';
-        break;
+    if(type != '1'){
+      switch(type){
+          case '2':
+            id = '<%= @projects.collect{|p| p.id} %>';
+            name = '<%= @projects.collect{|p| p.title} %>';
+          break;
+          case '3':
+            id = '<%= @tasks.collect{|t| t.id} %>';
+            name = '<%= @tasks.collect{|t| t.title} %>';
+          break;
+          case '4':
+            id = '<%= @users.collect{|u| u.id} %>';
+            name = '<%= @users.collect{|u| u.username} %>';
+          break;
+      }
+      id = id.substr(1,id.length - 2);
+      name = name.substr(1,name.length - 2);
+      id = id.split(',');
+      name = name.split(',');
+      var newDiv = document.createElement('div');
+      var selectHTML = "";
+      selectHTML="<select id=\"selected_id\" name=\"selected_id\">";
+      for(var i = 0; i < id.length; i = i + 1) {
+          selectHTML += "<option value='" + id[i].trim() + "'>" + name[i].trim().substr(6,name[i].trim().length - 12) + "</option>";
+      }
+      selectHTML += "</select>";
+      newDiv.innerHTML = selectHTML;
+      document.getElementById('second_select').appendChild(newDiv);
     }
-    
   }
 </script>
