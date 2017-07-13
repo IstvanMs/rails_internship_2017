@@ -1,5 +1,5 @@
 <% if @current_user.role == 'Manager' %>
-<div class="col-md-2">
+<div class="col-md-1">
 	<div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Add task to project:</h3>
@@ -17,6 +17,6 @@
 
 <% end %>
 
-<div class="col-md-10 col-sm-10 col-lg-10" style="float: none; margin: 0 auto;">
+<div class="col-md-9 col-sm-9 col-lg-9" style="float: none; margin: 0 auto;">
 	<%= render 'all_tasks' %>
 </div>	
