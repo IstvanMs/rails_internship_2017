@@ -10,6 +10,9 @@ class NotesController < ApplicationController
 	end
 
 	def new
+    @users = User.all
+    @projects = Project.all
+    @tasks = Task.all
 		@note = Note.new
 	end
 
