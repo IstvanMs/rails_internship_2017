@@ -17,85 +17,91 @@
       </div>  
       <% end %>
 	</div>
-  <font aling='right'>
-	<table class="table table-striped">
-      <thead>  
-        <tr>
-          <th>Title</th>
-          <% if current_page?(controller: 'tasks', action: 'index')%>
-            <th>Requirement</th>
-          <% end %>
-          <th>Client</th>
-          <th>Project</th>
-          <th>Assigned User</th>
-          <th>Type</th>
-          <th>Duration</th>
-          <th>Status</th>
-          <% if current_page?(controller: 'tasks', action: 'index')%>
-            <th>Last Update</th>
-          <% end %>
-        </tr>
-      </thead>
-      <% @label = '' %>
-      <tbody>
-        <% @tasks.each do |task| %>
-          <% if @label != task.status %>
-          <thead class="thead-default">
-    		    <tr>
-    		      <th><%= task.status %>
-              		<% @label = task.status %></th>
-    		    </tr>
-    		  </thead>
-          <% end %>
-
-          <tr>
-            <td><%= task.title %></td>
+  
+  <div class="table-responsive">
+  	<table class="table table-striped">
+        <thead>  
+          <tr  bgcolor="#55b25d">
+            <th>Title</th>
             <% if current_page?(controller: 'tasks', action: 'index')%>
-              <td><%= task.requirement %></td>
+              <th>Requirement</th>
             <% end %>
-            <td><%= @task_infos[task.id]['client_name'] %></td>
-            <td><%= @task_infos[task.id]['project_name'] %></td>
-            <td><%= @task_infos[task.id]['assigned'] %></td>
-            <td><%= task.task_type %></td>
-            <td><%= @task_infos[task.id]['duration'] %> <%= 'minute'.pluralize(@task_infos[task.id]['duration']) %></td>
-            <td><%= task.status %></td>
+            <th>Client</th>
+            <th>Project</th>
+            <th>Assigned User</th>
+            <th>Type</th>
+            <th>Duration</th>
+            <th>Status</th>
             <% if current_page?(controller: 'tasks', action: 'index')%>
-              <td><%= @task_infos[task.id]['last_update'] %></td>
+              <th>Last Update</th>
             <% end %>
-            
-            <% if @current_user.role == 'Manager' %>
-			<td><h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
-	               method: :delete,
-	               data: { confirm: 'Are you sure?' } %></h5></td>
-			<% end %>
-			
-            <% if @current_user.role != "Client" && @current_user.id == task.assigned_user%>
-      			<td><div class="row pull-right">
-      				<div class="col-md-4" >
-      					<%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
-      					<i class="glyphicon glyphicon-play"></i>
-      					<% end %>
-      				</div>
+            <th></th>
+          </tr>
+        </thead>
+        <% @label = '' %>
+        <tbody>
+          <% @tasks.each do |task| %>
+            <% if @label != task.status %>
+            <thead class="thead-default">
+      		    <tr>
+      		      <th><%= task.status %>
+                		<% @label = task.status %></th>
+      		    </tr>
+      		  </thead>
+            <% end %>
 
-      				<div class="col-md-4" >
-      					<%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == 'Not-started'} do%>
-      					<i class="glyphicon glyphicon-pause"></i>
-      					<% end %>
-      				</div>
+            <tr class=<% if @label == 'Started' %>"success"<%end%>
+                      <% if @label == 'Paused' %>"warning"<%end%>
+                      <% if @label == 'Finished' %>"danger"<%end%>
+                      <% if @label == 'Not-tarted' %>"info"<%end%>>
+              <td style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= task.title %></td>
+              <% if current_page?(controller: 'tasks', action: 'index')%>
+                <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><%= task.requirement %></td>
+              <% end %>
+              <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @task_infos[task.id]['client_name'] %></td>
+              <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @task_infos[task.id]['project_name'] %></td>
+              <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @task_infos[task.id]['assigned'] %></td>
+              <td><%= task.task_type %></td>
+              <td><%= @task_infos[task.id]['duration'] %> <%= 'minute'.pluralize(@task_infos[task.id]['duration']) %></td>
+              <td><%= task.status %></td>
+              <% if current_page?(controller: 'tasks', action: 'index')%>
+                <td><%= @task_infos[task.id]['last_update'] %></td>
+              <% end %>
+              
+              <% if @current_user.role == 'Manager' %>
+        			<td><h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
+        	               method: :delete,
+        	               data: { confirm: 'Are you sure?' } %></h5></td>
+        			<% end %>
+  			
+              <% if @current_user.role != "Client" && @current_user.id == task.assigned_user%>
+        			<td><div class="row pull-right">
+        				<div class="col-md-4" >
+        					<%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
+        					<i class="glyphicon glyphicon-play"></i>
+        					<% end %>
+        				</div>
 
-      				<div class="col-md-4" >
-      					<%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == 'Not-started'} do%>
-      					<i class="glyphicon glyphicon-stop"></i>
-      					<% end %>
-      				</div>
-      			</div>
-      		</td>
-      		<% end %>
+        				<div class="col-md-4" >
+        					<%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == 'Not-started'} do%>
+        					<i class="glyphicon glyphicon-pause"></i>
+        					<% end %>
+        				</div>
 
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-    </font>
-	
+        				<div class="col-md-4" >
+        					<%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == 'Not-started'} do%>
+        					<i class="glyphicon glyphicon-stop"></i>
+        					<% end %>
+        				</div>
+        			</div>
+        		</td>
+        		<% end %>
+
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+       </div>
+
 </div>

@@ -11,19 +11,19 @@
 
         <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><%= link_to 'Dashboard', :controller => 'dashboards', :action => 'index' %></li>
-                <li><%= link_to 'Projects', :controller => 'projects', :action => 'index' %></li>
-                <li><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
-                <li><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
-                <li><a href="#">Reports</a></li>
+                <li <% if current_page?(:controller => 'dashboards') %> class='active' <% end %>><%= link_to 'Dashboard', :controller => 'dashboards', :action => 'index' %></li>
+                <li <% if current_page?(:controller => 'projects') %> class='active' <% end %>><%= link_to 'Projects', :controller => 'projects', :action => 'index' %></li>
+                <li <% if current_page?(:controller => 'tasks') %> class='active' <% end %>><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
+                <li <% if current_page?(:controller => 'notes') %> class='active' <% end %>><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
+                <li ><a href="#">Reports</a></li>
                 <% if @current_user.role == 'Admin' %>
-                    <li><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
+                    <li <% if current_page?(:controller => 'users') %> class='active' <% end %>><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
                 <% end %>
-                <li><%= link_to 'Profile', :controller => 'sessions', :action => 'profile' %></li>
+                <li <% if current_page?(:controller => 'sessions', :action => 'profile') %> class='active' <% end %>><%= link_to 'Profile', :controller => 'sessions', :action => 'profile' %></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><%= link_to 'Hello '+@current_user.username+'!', user_path(@current_user) %></a>
+                <li><%= link_to 'Hello '+@current_user.username+'!', :controller => 'sessions', :action => 'profile' %></a>
                 <li><a>|</a></li>
                 <li><%= link_to 'Log Out', :controller => 'sessions', :action => 'logout' %></li>
             </ul>

@@ -12,9 +12,10 @@
       </div>
       <% end %>
 	</div>
+  <div class="table-responsive">
 	<table class="table table-striped">
       <thead>  
-        <tr>
+        <tr bgcolor="#55b25d">
           <th>Title</th>
           <% if current_page?(controller: 'projects', action: 'index')%>
             <th>Text</th>
@@ -22,18 +23,19 @@
           <th>Client</th>
           <th>Duration</th>
           <th>Project Date</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
           <% @projects.each do |project| %>
             <tr>
-            <td><%= project.title %></td>
+            <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= project.title %></td>
             <% if current_page?(controller: 'projects', action: 'index')%>
-              <td><%= project.text %></td>
+              <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><%= project.text %></td>
             <% end %>
-            <td><%= @project_infos[project.id]['client_name'] %></td>
-            <td><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></td>
-            <td><%= @project_infos[project.id]['created_at'] %></td>
+            <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['client_name'] %></td>
+            <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></td>
+            <td style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['created_at'] %></td>
             
             <% if @current_user.role == 'Manager' %>
         			<td><%= link_to 'Show', project_path(project) %> |
@@ -47,5 +49,6 @@
         <% end %>
       </tbody>
     </table>
+  </div>
 	
 </div>

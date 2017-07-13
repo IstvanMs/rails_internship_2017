@@ -68,7 +68,7 @@ class ProjectsController < ApplicationController
 			if @project_user.save
 				redirect_to projects_path
 			else
-				puts 'error'
+				@project.destroy
 			end
 		else
 			render 'new'

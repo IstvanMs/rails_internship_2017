@@ -13,7 +13,7 @@ class DashboardsController < ApplicationController
         @notes = @notes.first(7)
 
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
-        @users = User.all.order(:role, :username).first(10)
+        @users = User.all.order(:role, :username).first(7)
         
         @project_infos = create_project_infos(@projects)
 
@@ -31,7 +31,6 @@ class DashboardsController < ApplicationController
         @notes = @notes.first(7)
 
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
-        @users = User.all.order(:role, :username).first(10)
         
         @project_infos = create_project_infos(@projects)
         
