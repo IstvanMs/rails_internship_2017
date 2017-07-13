@@ -22,18 +22,18 @@
   	<table class="table table-striped">
         <thead>  
           <tr  bgcolor="#55b25d">
-            <th>Title</th>
+            <th class="text-center">Title</th>
             <% if current_page?(controller: 'tasks', action: 'index')%>
-              <th>Requirement</th>
+              <th class="text-center">Requirement</th>
             <% end %>
-            <th>Client</th>
-            <th>Project</th>
-            <th>Assigned User</th>
-            <th>Type</th>
-            <th>Duration</th>
-            <th>Status</th>
+            <th class="text-center">Client</th>
+            <th class="text-center">Project</th>
+            <th class="text-center">Assigned User</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Duration</th>
+            <th class="text-center">Status</th>
             <% if current_page?(controller: 'tasks', action: 'index')%>
-              <th>Last Update</th>
+              <th class="text-center">Last Update</th>
             <% end %>
             <th></th>
           </tr>

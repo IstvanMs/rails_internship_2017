@@ -17,13 +17,13 @@
   	<table class='table table-striped'>
         <thead>  
           <tr bgcolor="#55b25d">
-            <th>Type</th>
-            <th>Text</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Text</th>
             <% if current_page?(:controller => 'notes', :action => 'index') %>
-              <th>Created</th>
+              <th class="text-center">Created</th>
             <% end %>
             <% if @current_user.role == 'Manager' %>
-              <th>Visibility</th>
+              <th class="text-center">Visibility</th>
             <% end %>
             <th>
           </tr>
