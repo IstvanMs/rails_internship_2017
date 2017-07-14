@@ -44,14 +44,12 @@
                       <% if @label == 'task'%>'warning'<% end %>
                       <% if @label == 'user'%>'danger'<% end %>>
               <td class="text-center" style="word-wrap: break-word;min-width: 70;max-width: 70px;"><%= note.visibility.split('-')[0] %></td>
-              <td class="text-center" style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><%= note.text %></td>
-              <td style="word-wrap: break-word;min-width: 70px;max-width: 70px;"><%= note.visibility.split('-')[0] %></td>
               <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= note.text %></td>
               <% if current_page?(:controller => 'notes', :action => 'index') %>
                 <td class="text-center" style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= note.created_at %></td>
               <% end %>
               <% if @current_user.role == 'Manager' %>
-                <td class="text-center"><%= note.visibility %></td>
+                <td class="text-center"><%= note.visibility.split('-')[0] %></td>
               <% end %>
               <td class="text-center" style="word-wrap: break-word;min-width: 130px;max-width: 130px;"><%= link_to 'Show', note_path(note) %>
               <% if @current_user.role == 'Manager' %>
