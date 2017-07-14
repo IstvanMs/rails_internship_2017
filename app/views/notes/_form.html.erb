@@ -25,15 +25,12 @@
 
  <% if @note.errors.any? %>
     <div id="error_explanation">
-      <h4>
-        <%= pluralize(@note.errors.count, "error") %> prohibited
-        this note from being saved:
-      </h4>
-      <ul>
+
+      <div class="alert alert-warning">
         <% @note.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
+          <font color="red"><div class="notice"><li><%= msg %></li></div></font>
         <% end %>
-      </ul>
+      </div>
     </div>
   <% end %>
 </div>

@@ -26,10 +26,10 @@
   <% end %>
 
   <% if @project.errors.any? %>
-      <ul class="Signup_Errors">
+      <div class="alert alert-warning" class="Signup_Errors">
       <% for message_error in @project.errors.full_messages %>
-        <li>* <%= message_error %></li>
+        <font color="red"><div class="notice"><li><%= message_error %></li></div></font>
       <% end %>
-      </ul>
+      </div>
   <% end %>
 </div>

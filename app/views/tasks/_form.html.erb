@@ -32,19 +32,20 @@
           </div>
       <% end %>
 
-      <% if flash[:notice] %>
+      <!--"INVALID FORM" BEFORE ERRORS-->
+      <!--<% if flash[:notice] %>
         <div class="alert alert-warning">
             <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
         </div>
-      <% end %>
+      <% end %>-->
 
       <% if @task != nil %>
         <% if @task.errors.any? %>
-            <ul class="Signup_Errors">
+            <div class="alert alert-warning" class="Signup_Errors">
             <% for message_error in @task.errors.full_messages %>
-              <li>* <%= message_error %></li>
+              <font color="red"><div class="notice"><li> <%= message_error %></li></div></font>
             <% end %>
-            </ul>
+            </div>
         <% end %>
       <% end %>
     </div>
