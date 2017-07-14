@@ -18,7 +18,11 @@
       <% end %>
 	</div>
   
-  <div class="table-responsive">
+   <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
+      'height: 400px; margin-bottom: 15px; overflow-y: auto;'
+    <% else %>
+      'height: 500px; margin-bottom: 15px; overflow-y: auto;'
+    <% end %>>
   	<table class="table table-striped">
         <thead>  
           <tr  bgcolor="#55b25d">
@@ -35,7 +39,12 @@
             <% if current_page?(controller: 'tasks', action: 'index')%>
               <th class="text-center">Last Update</th>
             <% end %>
+            <% if @current_user.role != 'Client' %>
             <th></th>
+            <% end %>
+            <% if @current_user.role == 'Admin' || @current_user.role == 'Employee' %>
+            <th></th>
+            <% end %>
           </tr>
         </thead>
         <% @label = '' %>
@@ -95,6 +104,7 @@
         				</div>
         			</div>
         		</td>
+            <td></td>
         		<% end %>
 
           </tr>

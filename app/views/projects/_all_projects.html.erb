@@ -12,7 +12,11 @@
       </div>
       <% end %>
 	</div>
-  <div class="table-responsive">
+   <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
+      'height: 400px; margin-bottom: 15px; overflow-y: auto;'
+    <% else %>
+      'height: 500px; margin-bottom: 15px; overflow-y: auto;'
+    <% end %>>
 	<table class="table table-striped">
       <thead>  
         <tr bgcolor="#55b25d">
@@ -23,7 +27,9 @@
           <th class="text-center">Client</th>
           <th class="text-center">Duration</th>
           <th class="text-center">Project Date</th>
+          <% if @current_user.role == 'Manager' %>
           <th></th>
+          <% end %>
         </tr>
       </thead>
       <tbody>

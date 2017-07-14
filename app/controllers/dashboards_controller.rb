@@ -10,11 +10,11 @@ class DashboardsController < ApplicationController
         @notes += Note.where(:visibility => Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).collect{|p| 'project-' + p.id.to_s})
         @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
         @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
-        @notes = @notes.first(7)
+        @notes = @notes.first(6)
         @notes = @notes.sort_by{|n| n.visibility}
 
-        @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
-        @users = User.all.order(:role, :username).first(7)
+        @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(9)
+        @users = User.all.order(:role, :username).first(6)
         
         @project_infos = create_project_infos(@projects)
 
@@ -29,10 +29,10 @@ class DashboardsController < ApplicationController
         @notes += Note.where(:visibility => Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).collect{|p| 'project-' + p.id.to_s})
         @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
         @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
-        @notes = @notes.first(7)
+        @notes = @notes.first(6)
         @notes = @notes.sort_by{|n| n.visibility}
 
-        @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+        @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(9)
         
         @project_infos = create_project_infos(@projects)
         
@@ -44,10 +44,10 @@ class DashboardsController < ApplicationController
       #manager
       when 'Manager'
         @notes=Note.all
-        @notes = @notes.first(7)
+        @notes = @notes.first(6)
         @notes = @notes.sort_by{|n| n.visibility}
 
-        @projects = Project.all.order(:title).first(6)
+        @projects = Project.all.order(:title).first(9)
         
         @project_infos = create_project_infos(@projects)
         
@@ -62,10 +62,10 @@ class DashboardsController < ApplicationController
         @notes += Note.where(:visibility => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| 'project-' + p.id.to_s})
         @notes += Note.where(:visibility => Task.where(:project => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| p.id}).collect{|t| 'task-' + t.id.to_s})
         @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
-        @notes = @notes.first(7)
+        @notes = @notes.first(6)
         @notes = @notes.sort_by{|n| n.visibility}
 
-        @projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
+        @projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(9)
         
         @project_infos = create_project_infos(@projects)
 
