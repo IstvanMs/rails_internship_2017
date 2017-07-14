@@ -14,8 +14,8 @@
     <table class="table table-striped table-responsive">
       <thead>  
         <tr bgcolor="#55b25d">
-          <th>Username</th>
-          <th>Role</th>
+          <th class="text-center">Username</th>
+          <th class="text-center">Role</th>
           <th></th>
           <th></th>
           <th></th>
@@ -37,8 +37,8 @@
                     <% if user.role == 'Manager'%>'info'<% end %>
                     <% if user.role == 'Employee'%>'warning'<% end %>
                     <% if user.role == 'Client'%>'active'<% end %>>
-            <td><%= user.username %></td>
-            <td><%= user.role %></td>
+            <td class="text-center"><%= user.username %></td>
+            <td class="text-center"><%= user.role %></td>
             <td><%= link_to 'Show', user_path(user) %></td>
             <td><%= link_to 'Edit', edit_user_path(user) %></td>
             <td><%= link_to 'Destroy', user_path(user),

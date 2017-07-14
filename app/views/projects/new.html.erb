@@ -10,9 +10,11 @@
 					<%= render 'form' %>
 				</div>
 				<div class='row'>
-				  <%= button_to "Back", projects_index_path, {:class => 'btn btn-md btn-primary pull-right'}%>
 				</div>
 			</div>
 		</div>
 	</div>
+	<span class="bottomleft">
+		<%= button_to "Back", {:controller => 'projects', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
+	</span>
 </div>
