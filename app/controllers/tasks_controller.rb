@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
-	before_action :authenticate_user, :only => [:create, :destroy, :index, :add_task, :start_task, :pause_task, :finish_task]
+	before_action :authenticate_user, :only => [:index, :start_task, :pause_task, :finish_task]
+	before_action :manager_user, :only => [:create, :destroy, :add_task]
 
 	def create
 		@project = Project.find(params[:project_id])

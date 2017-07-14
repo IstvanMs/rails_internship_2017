@@ -12,7 +12,6 @@
       </div>  
       <% end %>
 	</div>
-  <font aling='right'>
   <div class="table-responsive">
   	<table class='table table-striped'>
         <thead>  
@@ -44,8 +43,13 @@
                       <% if @label == 'project'%>'info'<% end %>
                       <% if @label == 'task'%>'warning'<% end %>
                       <% if @label == 'user'%>'danger'<% end %>>
+<<<<<<< HEAD
               <td class="text-center" style="word-wrap: break-word;min-width: 70;max-width: 70px;"><%= note.visibility.split('-')[0] %></td>
               <td class="text-center" style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><%= note.text %></td>
+=======
+              <td style="word-wrap: break-word;min-width: 70px;max-width: 70px;"><%= note.visibility.split('-')[0] %></td>
+              <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= note.text %></td>
+>>>>>>> 806b3cddbeaa32c16a4a39f6269e0ace0ca39a9a
               <% if current_page?(:controller => 'notes', :action => 'index') %>
                 <td class="text-center" style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= note.created_at %></td>
               <% end %>
@@ -65,6 +69,5 @@
         </tbody>
       </table>
     </div>
-    </font>
 	
 </div>
