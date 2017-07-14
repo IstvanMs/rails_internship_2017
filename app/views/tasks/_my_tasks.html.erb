@@ -1,15 +1,18 @@
 <% if @current_user.role == 'Manager' %>
-<center><div class="col-md-1">
+<center><div class="col-md-2">
 	<div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Add task to project:</h3>
+            <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Create new task:</h3>
         </div>
         <div class="panel-body">
-	        <ul class="list-unstyled">
-	            <% @projects.each do |project| %>
-	            	<li><h5><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></h5></li>
-	            <% end %>
-	        </ul>
+	        <div class="dropdown">
+            <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle"><i class="glyphicon glyphicon-plus"></i>Add task to project<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <% @projects.each do |project| %>
+                  <li><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></li>
+                <% end %>
+            </ul>
+        </div>
 		</div>
     </div>
 	
@@ -17,6 +20,6 @@
 
 <% end %>
 
-<div class="col-md-9 col-sm-9 col-lg-9" style="float: none; margin: 0 auto;">
+<div class="col-md-8 col-sm-8 col-lg-8" style="float: none; margin: 0 auto;">
 	<%= render 'all_tasks' %>
 </div>	

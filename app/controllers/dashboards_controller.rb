@@ -11,6 +11,7 @@ class DashboardsController < ApplicationController
         @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
         @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
         @notes = @notes.first(7)
+        @notes = @notes.sort_by{|n| n.visibility}
 
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
         @users = User.all.order(:role, :username).first(7)
@@ -29,6 +30,7 @@ class DashboardsController < ApplicationController
         @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
         @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
         @notes = @notes.first(7)
+        @notes = @notes.sort_by{|n| n.visibility}
 
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
         
@@ -43,6 +45,7 @@ class DashboardsController < ApplicationController
       when 'Manager'
         @notes=Note.all
         @notes = @notes.first(7)
+        @notes = @notes.sort_by{|n| n.visibility}
 
         @projects = Project.all.order(:title).first(6)
         
@@ -60,6 +63,7 @@ class DashboardsController < ApplicationController
         @notes += Note.where(:visibility => Task.where(:project => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| p.id}).collect{|t| 'task-' + t.id.to_s})
         @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
         @notes = @notes.first(7)
+        @notes = @notes.sort_by{|n| n.visibility}
 
         @projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
         

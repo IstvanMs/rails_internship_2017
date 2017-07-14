@@ -17,7 +17,8 @@ class NotesController < ApplicationController
       @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     end
-	end
+    @notes = @notes.sort_by{|n| n.visibility}
+  end
 
 	def show
   	@note = Note.find(params[:id])
