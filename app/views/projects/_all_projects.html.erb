@@ -31,11 +31,8 @@
             <tr>
             <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= project.title %></td>
             <% if current_page?(controller: 'projects', action: 'index')%>
-<<<<<<< HEAD
               <td class="text-center" style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><%= project.text %></td>
-=======
               <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= project.text %></td>
->>>>>>> 806b3cddbeaa32c16a4a39f6269e0ace0ca39a9a
             <% end %>
             <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['client_name'] %></td>
             <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></td>
