@@ -14,7 +14,7 @@ class DashboardsController < ApplicationController
         @notes = @notes.sort_by{|n| n.visibility}
 
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(9)
-        @users = User.all.order(:role, :username).first(6)
+        @users = User.all.order(:role, :username).first(10)
         
         @project_infos = create_project_infos(@projects)
 

@@ -19,44 +19,46 @@
 	</div>
   
    <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-      'height: 400px; margin-bottom: 15px; overflow-y: auto;'
+      'height: 400px; margin-bottom: 15px; overflow-y: auto; '
     <% else %>
       'height: 500px; margin-bottom: 15px; overflow-y: auto;'
     <% end %>>
-  	<table class="table table-striped">
-        <thead>  
-          <tr  bgcolor="#55b25d">
-            <th class="text-center">Title</th>
-            <% if current_page?(controller: 'tasks', action: 'index')%>
-              <th class="text-center">Requirement</th>
-            <% end %>
-            <th class="text-center">Client</th>
-            <th class="text-center">Project</th>
-            <th class="text-center">Assigned User</th>
-            <th class="text-center">Type</th>
-            <th class="text-center">Duration</th>
-            <th class="text-center">Status</th>
-            <% if current_page?(controller: 'tasks', action: 'index')%>
-              <th class="text-center">Last Update</th>
-            <% end %>
-            <% if @current_user.role != 'Client' %>
+    <table class="table table-striped">
+      <thead>  
+        <tr bgcolor="#55b25d">
+          <th class="text-center">Title</th>
+          <% if current_page?(controller: 'tasks', action: 'index')%>
+            <th class="text-center">Requirement</th>
+          <% end %>
+          <th class="text-center">Client</th>
+          <th class="text-center">Project</th>
+          <th class="text-center">Assigned User</th>
+          <th class="text-center">Type</th>
+          <th class="text-center">Duration</th>
+          <th class="text-center">Status</th>
+          <% if current_page?(controller: 'tasks', action: 'index')%>
+            <th class="text-center">Last Update</th>
+          <% end %>
+          <% if @current_user.role != 'Client' %>
             <th></th>
-            <% end %>
-            <% if @current_user.role == 'Admin' || @current_user.role == 'Employee' %>
+          <% end %>
+          <% if @current_user.role == 'Admin' || @current_user.role == 'Employee' %>
             <th></th>
-            <% end %>
-          </tr>
-        </thead>
-        <% @label = '' %>
-        <tbody>
-          <% @tasks.each do |task| %>
+          <% end %>
+        </tr>
+      </thead>
+      <% @label = '' %>
+      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
+            'height: 362px;'
+          <% else %>
+            'height: 462px;'
+          <% end %>>
+         <% @tasks.each do |task| %>
             <% if @label != task.status %>
-            <thead class="thead-default">
-      		    <tr>
-      		      <th><%= task.status %>
-                		<% @label = task.status %></th>
-      		    </tr>
-      		  </thead>
+            <tr>
+              <th><%= task.status %>
+                  <% @label = task.status %></th>
+            </tr>
             <% end %>
 
             <tr class=<% if @label == 'Started' %>"success"<%end%>
@@ -78,40 +80,39 @@
               <% end %>
               
               <% if @current_user.role == 'Manager' %>
-        			<td><h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
-        	               method: :delete,
-        	               data: { confirm: 'Are you sure?' } %></h5></td>
-        			<% end %>
-  			
+              <td><h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
+                         method: :delete,
+                         data: { confirm: 'Are you sure?' } %></h5></td>
+              <% end %>
+        
               <% if @current_user.role != "Client" && @current_user.id == task.assigned_user%>
-        			<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><div class="row pull-right">
-        				<div class="col-md-4" >
-        					<%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
-        					<i class="glyphicon glyphicon-play"></i>
-        					<% end %>
-        				</div>
+              <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;"><div class="row pull-right">
+                <div class="col-md-4" >
+                  <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
+                  <i class="glyphicon glyphicon-play"></i>
+                  <% end %>
+                </div>
 
-        				<div class="col-md-4" >
-        					<%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == 'Not-started'} do%>
-        					<i class="glyphicon glyphicon-pause"></i>
-        					<% end %>
-        				</div>
+                <div class="col-md-4" >
+                  <%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == 'Not-started'} do%>
+                  <i class="glyphicon glyphicon-pause"></i>
+                  <% end %>
+                </div>
 
-        				<div class="col-md-4" >
-        					<%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == 'Not-started'} do%>
-        					<i class="glyphicon glyphicon-stop"></i>
-        					<% end %>
-        				</div>
-        			</div>
-        		</td>
+                <div class="col-md-4" >
+                  <%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == 'Not-started'} do%>
+                  <i class="glyphicon glyphicon-stop"></i>
+                  <% end %>
+                </div>
+              </div>
+            </td>
             <td></td>
-        		<% end %>
+            <% end %>
 
           </tr>
-          <% end %>
-        </tbody>
-      </table>
-
-       </div>
+         <% end %>
+      </tbody>
+    </table>
+    </div>
 
 </div>

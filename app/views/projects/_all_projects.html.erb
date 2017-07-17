@@ -13,11 +13,11 @@
       <% end %>
 	</div>
    <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-      'height: 400px; margin-bottom: 15px; overflow-y: auto;'
+      'height: 400px; margin-bottom: 15px; overflow-y: auto; '
     <% else %>
       'height: 500px; margin-bottom: 15px; overflow-y: auto;'
     <% end %>>
-	<table class="table table-striped">
+    <table class="table table-striped">
       <thead>  
         <tr bgcolor="#55b25d">
           <th class="text-center">Title</th>
@@ -32,7 +32,12 @@
           <% end %>
         </tr>
       </thead>
-      <tbody>
+      <% @label = '' %>
+      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
+            'height: 362px;'
+          <% else %>
+            'height: 462px;'
+          <% end %>>
           <% @projects.each do |project| %>
             <tr>
             <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= project.title %></td>
@@ -44,17 +49,18 @@
             <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['created_at'] %></td>
             
             <% if @current_user.role == 'Manager' %>
-        			<td><%= link_to 'Show', project_path(project) %> |
+              <td><%= link_to 'Show', project_path(project) %> |
               <%= link_to 'Edit', edit_project_path(project) %> |
               <%= link_to 'Destroy', project_path(project),
                           method: :delete,
                           data: { confirm: 'Are you sure?' } %></td>
-        		<% end %>
+            <% end %>
 
         </tr>
         <% end %>
       </tbody>
     </table>
-  </div>
-	
+    </div>
+  
 </div>
+

@@ -1,6 +1,6 @@
 <div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey;">
-	<div class="panel-heading">
-		<center><h3> Note information </h3>
+  <div class="panel-heading">
+    <center><h3> Note information </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(view all notes)',{ :controller => 'notes', :action => 'index'} %></center>
       <% end %>
@@ -11,49 +11,50 @@
           <% end %>
       </div>  
       <% end %>
-	</div>
+  </div>
    <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
       'height: 400px; margin-bottom: 15px; overflow-y: auto; '
     <% else %>
       'height: 500px; margin-bottom: 15px; overflow-y: auto;'
     <% end %>>
-  	<table class='table table-striped'>
-        <thead>  
-          <tr bgcolor="#55b25d">
-            <th class="text-center">Type</th>
-            <th class="text-center">Text</th>
-            <% if current_page?(:controller => 'notes', :action => 'index') %>
-              <th class="text-center">Created</th>
-            <% end %>
-            <% if @current_user.role == 'Manager' %>
-              <th class="text-center">Visibility</th>
-            <% end %>
-            <th>
-          </tr>
-        </thead>
-        <% @label = '' %>
-        <tbody>
-          <% @notes.each do |note| %>
-            <% if @label != note.visibility.split('-')[0] %>
-            <thead class="thead-default">
-      		    <tr>
-      		      <th><%= note.visibility.split('-')[0].titleize %>
-                		<% @label = note.visibility.split('-')[0] %></th>
-      		    </tr>
-      		  </thead>
-            <% end %>
-
-            <tr class=<% if @label == 'general'%>'active'<% end %>
-                      <% if @label == 'project'%>'info'<% end %>
-                      <% if @label == 'task'%>'warning'<% end %>
-                      <% if @label == 'user'%>'danger'<% end %>>
+    <table class="table table-striped">
+      <thead>  
+        <tr bgcolor="#55b25d">
+          <th class="text-center">Type</th>
+          <th class="text-center">Text</th>
+          <% if current_page?(:controller => 'notes', :action => 'index') %>
+            <th class="text-center">Created</th>
+          <% end %>
+          <% if @current_user.role == 'Manager' %>
+            <th class="text-center">Visibility</th>
+          <% end %>
+          <th></th>
+        </tr>
+      </thead>
+      <% @label = '' %>
+      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
+            'height: 362px;'
+          <% else %>
+            'height: 462px;'
+          <% end %>>
+        <% @notes.each do |note| %>
+          <% if @label != note.visibility.split('-')[0] %>
+            <tr>
+              <th><%= note.visibility.split('-')[0].titleize %>
+                  <% @label = note.visibility.split('-')[0] %></th>
+            </tr>
+          <% end %>
+          <tr class=<% if @label == 'general'%>'active'<% end %>
+                    <% if @label == 'project'%>'info'<% end %>
+                    <% if @label == 'task'%>'warning'<% end %>
+                    <% if @label == 'user'%>'danger'<% end %>>
               <td class="text-center" style="word-wrap: break-word;min-width: 70;max-width: 70px;"><%= note.visibility.split('-')[0] %></td>
               <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= note.text %></td>
               <% if current_page?(:controller => 'notes', :action => 'index') %>
                 <td class="text-center" style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= note.created_at %></td>
               <% end %>
-              <% if @current_user.role == 'Manager' %>
-                <td class="text-center"><%= note.visibility.split('-')[0] %></td>
+               <% if @current_user.role == 'Manager' %>
+                <td class="text-center"><%= note.visibility %></td>
               <% end %>
               <td class="text-center" style="word-wrap: break-word;min-width: 130px;max-width: 130px;"><%= link_to 'Show', note_path(note) %>
               <% if @current_user.role == 'Manager' %>
@@ -61,12 +62,13 @@
                 <%= link_to 'Edit', edit_note_path(note) %> |
                 <%= link_to 'Destroy', note_path(note),
                             method: :delete,
-                            data: { confirm: 'Are you sure?' } %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+                            data: { confirm: 'Are you sure?' } %>   
+              <% end %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
     </div>
-	
+  
 </div>
+

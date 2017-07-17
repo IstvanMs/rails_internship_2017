@@ -11,7 +11,7 @@
     <% end %></center>
   </div>
   <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-      'height: 400px; margin-bottom: 15px; overflow-y: auto;'
+      'height: 400px; margin-bottom: 15px; overflow-y: auto; '
     <% else %>
       'height: 500px; margin-bottom: 15px; overflow-y: auto;'
     <% end %>>
@@ -25,17 +25,19 @@
           <th></th>
         </tr>
       </thead>
-
-      <tbody>
+      <% @label = '' %>
+      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
+            'height: 362px;'
+          <% else %>
+            'height: 462px;'
+          <% end %>>
         <% @label = '' %>
         <% @users.each do |user| %>
           <% if @label != user.role %>
-          <thead class="thead-default">
             <tr>
               <th><%= user.role %></th>
               <% @label = user.role %>
             </tr>
-          </thead>
           <% end %>
           <tr class=<% if user.role == 'Admin'%>'success'<% end %>
                     <% if user.role == 'Manager'%>'info'<% end %>
@@ -52,5 +54,7 @@
         <% end %>
       </tbody>
     </table>
-  </div>
+    </div>
+  
 </div>
+
