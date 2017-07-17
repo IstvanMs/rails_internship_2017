@@ -34,7 +34,7 @@ class TasksController < ApplicationController
 			if @current_user.role != 'Client'
 				@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
 			else
-				@tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id})
+				@tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc)
 			end
 		end
 

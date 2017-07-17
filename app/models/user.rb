@@ -1,9 +1,7 @@
 class User < ApplicationRecord
 
-
 	has_many :projectUsers
 	has_many :projects, through: :projectUsers
-
 
 	attr_accessor :password
 	USERNAME_REGEX = /\w\z/i
