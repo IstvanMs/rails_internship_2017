@@ -34,4 +34,5 @@ class SessionsController < ApplicationController
   		render 'login'
   	end
   end
+
 end
