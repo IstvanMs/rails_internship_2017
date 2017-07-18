@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711074551) do
+ActiveRecord::Schema.define(version: 20170718131337) do
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.text "text"
@@ -45,6 +45,9 @@ ActiveRecord::Schema.define(version: 20170711074551) do
     t.string "task_type"
     t.text "intervals"
     t.string "status"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.integer "time_worked"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
