@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-	before_action :authenticate_user, :only => [:index, :start_task, :pause_task, :finish_task]
+	before_action :authenticate_user, :only => [:index, :start_task, :pause_task, :finish_task, :search]
 	before_action :manager_user, :only => [:create, :destroy, :add_task]
 
 	def create
@@ -11,6 +11,10 @@ class TasksController < ApplicationController
 			@users = User.where('role != ? and role != ?', 'Client', 'Manager')
 			render 'add_task'
 		end
+	end
+
+	def search
+		redirect_to tasks_index_path(:search => params[:search])
 	end
 
 	def destroy
@@ -27,14 +31,28 @@ class TasksController < ApplicationController
 
 	def index
 		@projects = Project.all
+
+		@search_par = params[:search]
 		
 		if @current_user.role == 'Manager'
-			@tasks = Task.all.order(status: :desc, title: :asc)
+			if @search_par == nil || @search_par == ''
+				@tasks = Task.all.order(status: :desc, title: :asc)
+			else
+				@tasks = Task.where('title like ?', '%' + @search_par + '%').order(status: :desc, title: :asc)
+			end
 		else
 			if @current_user.role != 'Client'
-				@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
+				if @search_par == nil || @search_par == ''
+					@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
+				else
+					@tasks= Task.where('assigned_user = ? and title like ?', @current_user.id, '%' + @search_par + '%').order(status: :desc, title: :asc)
+				end
 			else
-				@tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc)
+				if @search_par == nil || @search_par == ''
+					@tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc)
+				else
+					@tasks= Task.where('project_id in (?) and title like ?', ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}, '%' + @search_par + '%').order(status: :desc, title: :asc)
+				end
 			end
 		end
 

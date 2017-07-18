@@ -3,8 +3,18 @@ class UsersController < ApplicationController
   before_action :authenticate_user, :only => [:show]
   
   def index
-  	@users = User.all.order(:role,:username)
+    @search_par = params[:search]
+
+    if @search_par == nil || @search_par == ''
+  	  @users = User.all.order(:role,:username)
+    else
+      @users = User.where('username like ?', '%' + @search_par + '%').order(:role,:username)
+    end
     @user = User.new
+  end
+
+  def search
+    redirect_to users_index_path(:search => params[:search])
   end
 
   def new

@@ -3,15 +3,31 @@ class ProjectsController < ApplicationController
 	before_action :authenticate_user, :only => [:index, :show]
 	
 	def index
+		@search_par = params[:search]
 		case @current_user.role
 		when 'Manager'
-			@projects = Project.all.order(:title).first(6)
+			if @search_par == nil || @search_par == ''
+				@projects = Project.all.order(:title).first(6)
+			else
+				@projects = Project.where('title like ?', '%' + @search_par + '%').order(:title).first(6)
+			end
 		when 'Employee'
-			@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+			if @search_par == nil || @search_par == ''
+				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+			else
+			end
 		when 'Admin'
-			@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+			if @search_par == nil || @search_par == ''
+				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+			else
+				@projects = Project.where('id in (?) and title like ?', Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}, '%' + @search_par + '%').order(:title).first(6)
+			end
 		when 'Client'
-			@projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
+			if @search_par == nil || @search_par == ''
+				@projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
+			else
+				@projects = Project.where('id in(?) and title like ?', ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}, '%' + @search_par + '%').order(:title).first(6)
+			end
 		else
 			puts 'Role error!'
 		end
@@ -36,6 +52,10 @@ class ProjectsController < ApplicationController
 			@project_infos[p.id] = {'client_name' => ProjectUser.find_by(:project => p).user.username,'created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
 		end
 	end	
+
+	def search
+		redirect_to projects_index_path(:search => params[:search])
+	end
 
 	def show
 		@clients = User.where(:role => 'Client')

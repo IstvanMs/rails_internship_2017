@@ -3,6 +3,12 @@ Rails.application.routes.draw do
 
   match 'notes/index', :to => 'notes#index' , :via => [:get, :post]
 
+  match 'tasks/search', :to => 'tasks#search' , :via => [:get, :post]
+  
+  match 'projects/search', :to => 'projects#search' , :via => [:get, :post]
+
+  match 'users/search', :to => 'users#search' , :via => [:get, :post]
+
   match 'users/index', :to => 'users#index' , :via => [:get, :post]
 
   match 'tasks/index', :to => 'tasks#index' , :via => [:get, :post]

@@ -16,6 +16,23 @@
         </div>
       </div>  
       <% end %>
+      <% if current_page?(controller: 'tasks', action: 'index') %>
+        <div class='row'>
+          <div class='col-xs-2'>
+            <%= form_tag :action => 'search' do%>
+              <div class="input-group">
+                <%= text_field_tag 'search', nil, placeholder: 'Search term...' %>
+  
+                <span class="input-group-btn">
+                  <%= button_tag(type: "submit", class: "btn btn-default") do %>
+                      <i class="glyphicon glyphicon-search"></i>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
   </div>
   
    <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
