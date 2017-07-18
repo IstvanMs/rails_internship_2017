@@ -56,9 +56,6 @@ class DashboardsController < ApplicationController
         @task_infos = create_task_infos(@tasks)
         render '/layouts/_index_manager'
 
-        t = Time.now
-t.strftime("%I:%M%p")
-
       #client
       when 'Client'
         @notes = Note.where(:visibility => 'general')
