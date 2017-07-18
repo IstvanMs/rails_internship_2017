@@ -56,59 +56,25 @@ class TasksController < ApplicationController
 			end
 		end
 
-		@task_infos = Hash.new
-		@tasks.each do |t|
-			@intervals = JSON.parse(t.intervals)
-			@time = 0
-			@intervals.each do |i|
-				if i['start_time'] != nil && i['end_time'] != nil
-					@time += (Time.parse(i['end_time']) - Time.parse(i['start_time']))/60
-				end
-			end
-			if @time != 0
-				@time = @time.truncate + 1
-			end
-
-			@task_infos[t.id] = {'client_name' => ProjectUser.find_by(:project => t.project).user.username,'assigned' => User.find(t.assigned_user).username,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => Project.find(t.project.id).title}
-		end
+		@task_infos = Task.create_task_infos(@tasks)
 	end
 
 	def start_task
-		@task = Task.find(params[:task])
-		if @task.status != "Started"
-			@intervals = JSON.parse(@task.intervals)
-			@intervals.push(start_time: Time.now, end_time: nil)
-			@task.intervals = JSON.generate(@intervals)
-			@task.status = "Started"
-			@task.save
+		@task = Task.find_by(:status => 'Started')
+		if @task != nil
+			Task.pause(@task)
 		end
+		Task.start(Task.find(params[:task]))
 		redirect_to :controller => 'tasks' , :action => 'index'
 	end
 
 	def pause_task
-		@task = Task.find(params[:task])
-		if @task.status != "Paused"
-			@intervals = JSON.parse(@task.intervals)
-			@intervals.last["end_time"] = Time.now
-		    @task.intervals = JSON.generate(@intervals)
-		    @task.status = "Paused"
-		    @task.save
-		end
+		Task.pause(Task.find(params[:task]))
 		redirect_to :controller => 'tasks' , :action => 'index'
 	end
 
 	def finish_task
-		@task = Task.find(params[:task])
-		if @task.status != "Finished"
-			@intervals = JSON.parse(@task.intervals)
-
-			unless @task.status == 'Paused'
-				@intervals.last["end_time"] = Time.now
-			end
-			@task.intervals = JSON.generate(@intervals)
-			@task.status = "Finished"
-			@task.save
-		end
+		Task.finish(Task.find(params[:task]))
 		redirect_to :controller => 'tasks' , :action => 'index'	
 	end
 
