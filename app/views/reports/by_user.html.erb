@@ -1,0 +1,174 @@
+<div class='container'>
+	<div class='row'>
+		<div class='panel panel-default'>
+			<div class='panel-body'>
+				<div class='row'>
+					<div class='col-xs-2'>
+					<%= form_tag :action => 'by_user' do%>
+						<div class='row' style="white-space: nowrap">
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;Year:&nbsp;</label>
+							<%= select_tag 'year', options_for_select(@years, @current_filter['year']) %>
+
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;Month:&nbsp;</label>
+							<%= select_tag 'month', options_for_select(@months, @current_filter['month']) %>
+
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;User:&nbsp;</label>
+							<%= select_tag "user", options_from_collection_for_select(@users, "id", "username", @current_filter['user'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							<%= button_tag(type: "submit", class: "btn btn-success") do %>
+		                        <i class="glyphicon glyphicon-arrow-right"></i>
+		                    <% end %>
+						</div>
+					<% end %>
+					</div>
+	        	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class='row'>
+		<div class='panel panel-success'>
+			<div class="panel-heading">
+				<center><h3>Reports</h3></center>
+				<div class='row' style="white-space: nowrap">
+					<center>
+						<div class='col-xs-4'>
+							<h4>User: <%=@current_filter['user'].username %></h4>
+						</div>
+						<div class='col-xs-4'>
+							<h4>Year: <%=@current_filter['year'] %></h4>
+						</div>
+						<div class='col-xs-4'>
+							<h4>Month: <%=@current_filter['month'] %></h4>
+						</div>
+					</center>
+				</div>
+			</div>
+
+			<div class="container">
+    			<div class='row' align='center' style="background-color: #55b25d;">
+    				<div class='col-xs-1'>
+    					<h4>Day</h4>
+    				</div>
+    				<div class='col-xs-4'>
+    					<div class='row'>
+    						<h4>Task Info</h4>
+    					</div>
+    					<div class='row'>
+    						<div class='col-xs-6'>
+    							<h5>Title</h5>
+    						</div>
+    						<div class='col-xs-6'>
+    							<h5>Requirement</h5>
+    						</div>
+    					</div>
+    				</div>
+    				<div class='col-xs-3'>
+    					<div class='row'>
+    						<h4>Worked Time</h4>
+    					</div>
+    					<div class='row'>
+    						<div class='col-xs-6'>
+    							<h5>Total</h5>
+    						</div>
+    						<div class='col-xs-6'>
+    							<h5>Day</h5>
+    						</div>
+    					</div>
+    				</div>
+    				<div class='col-xs-2'>
+    					<h4>Total Task Time</h4>
+    				</div>
+    				<div class='col-xs-1'>
+    					<h4>Status</h4>
+    				</div>
+    				<div class='col-xs-1'>
+    					<h4>Gantt</h4>
+    				</div>
+    			</div>
+    			<div class='row' style='height: 700px; overflow-y: auto; overflow-x:hidden;'>
+    			<% for i in 1..@current_filter['len'] %>
+	    			<div class='row' style="background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>" align='center'>
+	    				<% if @data[i]['tasks'].length == 0 %>
+		    				<div class='col-xs-1'>
+		    					<h5><%= @data[i]['day'] %></h5>
+		    				</div>
+		    				<div class='col-xs-4'>
+		    					<div class='row'>
+		    						<div class='col-xs-6'>
+		    							<h5>-</h5>
+		    						</div>
+		    						<div class='col-xs-6'>
+		    							<h5>-</h5>
+		    						</div>
+		    					</div>
+		    				</div>
+		    				<div class='col-xs-3'>
+		    					<div class='row'>
+		    						<div class='col-xs-6'>
+		    							<h5>-</h5>
+		    						</div>
+		    						<div class='col-xs-6'>
+		    							<h5>-</h5>
+		    						</div>
+		    					</div>
+		    				</div>
+		    				<div class='col-xs-2'>
+		    					<h5>-</h5>
+		    				</div>
+		    				<div class='col-xs-1'>
+		    					<h5>-</h5>
+		    				</div>
+		    				<div class='col-xs-1'>
+		    					<h5>-</h5>
+		    				</div>
+		    			<% else %>
+		    				<% for j in 0..@data[i]['tasks'].length - 1 %>
+		    					<div class='col-xs-1'>
+			    					<h5><% if j == 0 %><%= @data[i]['day'] %><% end %></h5>
+			    				</div>
+			    				<div class='col-xs-4'>
+			    					<div class='row'>
+			    						<div class='col-xs-6'>
+			    							<h5><%= @data[i]['tasks'][j].title %></h5>
+			    						</div>
+			    						<div class='col-xs-6'>
+			    							<h5><%= @data[i]['tasks'][j].requirement %></h5>
+			    						</div>
+			    					</div>
+			    				</div>
+			    				<div class='col-xs-3'>
+			    					<div class='row'>
+			    						<div class='col-xs-6'>
+			    							<h5><% time = number_with_precision( @data[i]['task_infos'][@data[i]['tasks'][j].id]['duration'], precision: 1)%>
+			    								<%= time.to_s + ' minute'.pluralize(time) %></h5>
+			    						</div>
+			    						<div class='col-xs-6'>
+			    							<h5><% time = number_with_precision( @data[i]['task_infos'][@data[i]['tasks'][j].id]['duration_day'], precision: 1)%>
+			    								<%= time.to_s + ' minute'.pluralize(time) %></h5>
+			    						</div>
+		    						</div>
+			    				</div>
+			    				<div class='col-xs-2'>
+			    					<h5><% if @data[i]['tasks'][j].finished_at == nil %>
+			    							<% time = number_with_precision( (Time.now - @data[i]['tasks'][j].started_at)/60, precision: 1) %>
+			    						<% else %>
+			    							<% time = number_with_precision( (@data[i]['tasks'][j].finished_at - @data[i]['tasks'][j].started_at)/60, precision: 1) %>
+			    						<% end %>
+			    						<%= time.to_s + ' minute'.pluralize(time) %>
+			    					</h5>
+			    				</div>
+			    				<div class='col-xs-1'>
+			    					<h5><%= @data[i]['tasks'][j].status %></h5>
+			    				</div>
+			    				<div class='col-xs-1'>
+			    					<h5><% if j == 0 %><%= link_to 'Day'+@data[i]['day'].to_s, reports_get_gant_path(:tasks => @data[i]['tasks'].collect{|t| t.id}, :day => i, :month => @current_filter['month'], :year => @current_filter['year']) %><% else %><% end %></h5>
+			    				</div>
+		    				<% end %>
+		    			<% end %>
+	    			</div>
+	    		<% end %>
+	    	</div>
+			</div>
+	</div>
+</div>
