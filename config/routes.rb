@@ -6,6 +6,10 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
+  match 'reports/by_user', :to => 'reports#by_user' , :via => [:get, :post]
+
+  match 'reports/get_gant', :to => 'reports#get_gant' , :via => [:get, :post]
+
   match 'notes/index', :to => 'notes#index' , :via => [:get, :post]
 
   match 'tasks/search', :to => 'tasks#search' , :via => [:get, :post]

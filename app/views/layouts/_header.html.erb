@@ -15,8 +15,11 @@
                 <li <% if current_page?(:controller => 'projects') %> class='active' <% end %>><%= link_to 'Projects', :controller => 'projects', :action => 'index' %></li>
                 <li <% if current_page?(:controller => 'tasks') %> class='active' <% end %>><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
                 <li <% if current_page?(:controller => 'notes') %> class='active' <% end %>><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
-                <li <% if current_page?(:controller => 'reports') %> class='active' <% end %>><%= link_to 'Reports', :controller => 'reports', :action => 'index' %></li>
+
                 <li <% if current_page?(:controller => 'workDays') %> class='active' <% end %>><%= link_to 'WorkDays', :controller => 'workDays', :action => 'index' %></li>
+
+                <li <% if current_page?(:controller => 'reports') %> class='active' <% end %>><%= link_to 'Reports', :controller => 'reports'%></li>
+
                 <% if @current_user.role == 'Admin' %>
                     <li <% if current_page?(:controller => 'users') %> class='active' <% end %>><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
                 <% end %>
