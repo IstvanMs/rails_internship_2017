@@ -1,9 +1,6 @@
 class ReportsController < ApplicationController
-<<<<<<< HEAD
-	before_action :authenticate_user, :only => [:index, :by_user, :by_project]
-=======
+
 	before_action :authenticate_user, :only => [:index, :by_user, :by_project, :get_gant]
->>>>>>> 13c9e5a55235d263d39b5cf11f362e8b8bcd11f7
 
 	def index
 	end
