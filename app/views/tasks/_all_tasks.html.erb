@@ -81,7 +81,7 @@
             <tr class=<% if @label == 'Started' %>"success"<%end%>
                       <% if @label == 'Paused' %>"warning"<%end%>
                       <% if @label == 'Finished' %>"danger"<%end%>
-                      <% if @label == 'Not-tarted' %>"info"<%end%>>
+                      <% if @label == 'Not-started' %>"info"<%end%>>
               <td class="text-center" style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= task.title %></td>
               <% if current_page?(controller: 'tasks', action: 'index')%>
                 <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= task.requirement %></td>

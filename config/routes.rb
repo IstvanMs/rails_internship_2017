@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  get 'work_days/start_workDay'
+
+  get 'work_days/finish_workDay'
+
   get 'dashboards/index'
 
   match 'notes/index', :to => 'notes#index' , :via => [:get, :post]

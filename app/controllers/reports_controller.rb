@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+	before_action :authenticate_user, :only => [:index, :by_user, :by_project]
 
 	def index
 	end
