@@ -22,6 +22,60 @@ class Task < ApplicationRecord
     return @task_infos
   end
 
+  def self.get_report_task_infos(tasks, st_today, ed_today)
+    @task_infos = Hash.new
+    tasks.each do |t|
+      @intervals = JSON.parse(t.intervals)
+      @time = 0
+      @time2 = 0
+      @intervals.each do |i|
+        if i['start_time'] != nil && i['end_time'] != nil
+          ed_time = Time.parse(i['end_time'])
+          st_time = Time.parse(i['start_time'])
+          @time += (ed_time - st_time)/60
+          if st_time >= st_today && st_time <= ed_today
+            if ed_time <= ed_today
+              @time2 += (ed_time - st_time)/60
+            else
+              @time2 += (ed_today - st_time)/60
+            end
+          end
+        end
+      end
+
+      @task_infos[t.id] = {'duration' => @time, 'duration_day' => @time2, 'project_name' => Project.find(t.project.id).title}
+    end
+    return @task_infos
+  end
+
+  def self.generate_gant_data(tasks, st_today, ed_today)
+    @gant_data = Hash.new 
+    tasks.each do |t|
+      @intervals = JSON.parse(t.intervals)
+      @times = Hash.new
+      j = 0
+      @intervals.each do |i|
+        if i['start_time'] != nil && i['end_time'] != nil
+          ed_time = Time.parse(i['end_time'])
+          st_time = Time.parse(i['start_time'])
+          if st_time >= st_today && st_time <= ed_today
+            if ed_time <= ed_today
+              @time = ed_time
+            else
+              @time = ed_today
+            end
+          end
+          if @time != nil
+            @times[j] = {'start' => st_time, 'end' => @time}
+            j += 1
+          end
+        end
+      end
+      @gant_data[t.id] = {'intervals' => @times}
+    end
+    return @gant_data
+  end
+
   def self.start(task)
     if task.status != "Started"
       if task.status == 'Not-started'
