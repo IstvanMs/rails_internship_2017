@@ -64,14 +64,14 @@ class Task < ApplicationRecord
             else
               @time = ed_today
             end
-          end
-          if @time != nil
-            @times[j] = {'start' => st_time, 'end' => @time}
-            j += 1
+            if @time != nil
+              @times[j] = {'start' => st_time.strftime('%H:%M:%S'), 'end' => @time.strftime('%H:%M:%S'), 'start_pixel' => (st_time - st_today)/120, 'end_pixel' => (@time -st_today)/120}
+              j += 1
+            end
           end
         end
       end
-      @gant_data[t.id] = {'intervals' => @times}
+      @gant_data[t.id] = {'intervals' => @times,'id' => t.id, 'title' => t.title}
     end
     return @gant_data
   end
