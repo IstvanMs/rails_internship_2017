@@ -14,4 +14,9 @@ class Report
 		end
 		return @data
 	end
+
+	def self.generate_data_project(current_filter)
+		@data = Array.new(Project.find(current_filter['project'])_tasks.all.length)
+
+	end
 end

@@ -27,6 +27,20 @@ class ReportsController < ApplicationController
 	end
 
 	def by_project
+
+		@projects = Project
+
+		@days=Array.new
+
+		@current_filter = Hash.new
+
+		if params[:day] != nil && params[:project] != nil
+			@current_filter = {'day' => params[:day], 'project' => Project.find(params[:project]), 'len' => Project.find(params[:project])_tasks.all.length}
+		else
+			@current_filter = {'day' => Time.now.strftime("%d/%m/%Y"), 'project' => @projects.first, 'len' => @projects.first.tasks.length}
+
+		@data = Report.generate_data_project(@current_filter)
+
 	end
 
 end

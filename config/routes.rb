@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
 
-  get 'work_days/start_workDay'
-
-  get 'work_days/finish_workDay'
 
   get 'dashboards/index'
+
+  match 'work_days/start_work_day', :to => 'work_days#start_work_day' , :via => [:get, :post]
+
+  match 'work_days/finish_work_day', :to => 'work_days#finish_work_day' , :via => [:get, :post]
+
 
   match 'reports/by_user', :to => 'reports#by_user' , :via => [:get, :post]
 

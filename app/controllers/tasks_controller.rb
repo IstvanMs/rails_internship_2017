@@ -78,6 +78,11 @@ class TasksController < ApplicationController
 		redirect_to :controller => 'tasks' , :action => 'index'	
 	end
 
+	def pause_current_task
+		Task.pause(Task.find(params[:task]))
+		redirect_to :controller => 'tasks' , :action => 'index'
+	end
+
 	private
 		def task_params
 			params.require(:task).permit(:title, :requirement, :task_type, :status, :assigned_user, :intervals)
