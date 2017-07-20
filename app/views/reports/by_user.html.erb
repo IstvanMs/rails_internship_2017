@@ -162,7 +162,7 @@
 			    					<h5><%= @data[i]['tasks'][j].status %></h5>
 			    				</div>
 			    				<div class='col-xs-1'>
-			    					<h5><% if j == 0 %><%= link_to 'Day'+@data[i]['day'].to_s, reports_get_gant_path(:tasks => @data[i]['tasks'].collect{|t| t.id}, :day => i, :month => @current_filter['month'], :year => @current_filter['year']) %><% else %><% end %></h5>
+			    					<h5><% if j == 0 %><%= link_to 'Day'+@data[i]['day'].to_s, reports_get_gant_path(:tasks => @data[i]['tasks'].collect{|t| t.id}, :day => i, :month => @current_filter['month'], :year => @current_filter['year'], :user => @current_filter['user'].id) %><% else %>-<% end %></h5>
 			    				</div>
 		    				<% end %>
 		    			<% end %>

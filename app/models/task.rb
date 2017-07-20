@@ -16,8 +16,7 @@ class Task < ApplicationRecord
       if @time != 0
         @time = @time.truncate + 1
       end
-
-      @task_infos[t.id] = {'client_name' => ProjectUser.find_by(:project => t.project).user.username,'assigned' => User.find(t.assigned_user).username,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => Project.find(t.project.id).title}
+      @task_infos[t.id] = {'client_name' => ProjectUser.find_by(:project => t.project).user.username,'assigned' => t.user.username,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => t.project.title}
     end
     return @task_infos
   end
@@ -43,7 +42,7 @@ class Task < ApplicationRecord
         end
       end
 
-      @task_infos[t.id] = {'duration' => @time, 'duration_day' => @time2, 'project_name' => Project.find(t.project.id).title}
+      @task_infos[t.id] = {'duration' => @time, 'duration_day' => @time2, 'project_name' => t.project.title}
     end
     return @task_infos
   end
@@ -64,14 +63,14 @@ class Task < ApplicationRecord
             else
               @time = ed_today
             end
-          end
-          if @time != nil
-            @times[j] = {'start' => st_time, 'end' => @time}
-            j += 1
+            if @time != nil
+              @times[j] = {'start' => st_time.strftime('%H:%M:%S'), 'end' => @time.strftime('%H:%M:%S'), 'start_pixel' => (st_time - st_today)/120, 'end_pixel' => (@time -st_today)/120}
+              j += 1
+            end
           end
         end
       end
-      @gant_data[t.id] = {'intervals' => @times}
+      @gant_data[t.id] = {'intervals' => @times,'id' => t.id, 'title' => t.title}
     end
     return @gant_data
   end

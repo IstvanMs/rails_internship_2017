@@ -17,3 +17,19 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
+
+function getRndColor() {
+    var r = 255*Math.random()|0,
+        g = 255*Math.random()|0,
+        b = 255*Math.random()|0;
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+function rgbSum(rgb){
+	var s = 0;
+	var str = rgb.toString().substr(4);
+	str = str.substr(0,str.length - 1);
+	str = str.split(',');
+	s = parseInt(str[0]) + parseInt(str[1]) + parseInt(str[2]);
+	return s;
+}

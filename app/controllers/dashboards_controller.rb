@@ -7,7 +7,7 @@ class DashboardsController < ApplicationController
       #Admin
       when "Admin"
         @users = User.all.order(:role, :username).first(10)
-        
+
         @projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(9)
         @project_infos = Project.create_project_infos(@projects)
 
@@ -35,10 +35,9 @@ class DashboardsController < ApplicationController
 
       #client
       when 'Client'
-        @projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(9)
+        @projects = @current_user.projects.order(:title).first(9)
         @project_infos = Project.create_project_infos(@projects)
-
-        @tasks= Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc).first(6)
+        @tasks = Task.where(:project => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(status: :desc, title: :asc).first(6)
         @task_infos = Task.create_task_infos(@tasks)
         render 'index_client'
       else puts 'Role error!'

@@ -11,8 +11,7 @@ class Project < ApplicationRecord
     def self.create_project_infos(projects)
 	    @project_infos = Hash.new
 	    projects.each do |p|
-	      @project_infos[p.id] = {'client_name' => ProjectUser.find_by(:project => p).user.username,'created_at' => p.created_at.strftime("%F %I:%M%p")}
-	      @tasks = Task.where(:project => p.id)
+	      @tasks = p.tasks
 	      @duration = 0
 	      @tasks.each do |t|
 	        @intervals = JSON.parse(t.intervals)
