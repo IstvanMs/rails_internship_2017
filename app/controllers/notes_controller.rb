@@ -7,14 +7,16 @@ class NotesController < ApplicationController
     when 'Manager'
       @notes = Note.all
     when 'Client'
+      @table = Project.joins(:tasks , :projectUsers => :user ).where(:project_users => { :user_id => @current_user}).uniq
       @notes = Note.where(:visibility => 'general')
-      @notes += Note.where(:visibility => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| 'project-' + p.id.to_s})
-      @notes += Note.where(:visibility => Task.where(:project => Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|pu| pu.project.id}).collect{|p| p.id}).collect{|t| 'task-' + t.id.to_s})
+      @notes += Note.where(:visibility => @table.collect{|p| 'project-'+p.id.to_s})
+      @notes += Note.where(:visibility => @table.collect(&:task_ids).uniq.flatten.collect{|id| 'task-' + id.to_s})
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     else
+      @table = Project.joins(:tasks).where(:tasks => { :assigned_user => @current_user}).uniq
       @notes = Note.where(:visibility => 'general')
-      @notes += Note.where(:visibility => Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).collect{|p| 'project-' + p.id.to_s})
-      @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user.id).collect{|t| 'task-' + t.id.to_s})
+      @notes += Note.where(:visibility => @table.collect{|p| 'project-' + p.id.to_s})
+      @notes += Note.where(:visibility => @table.collect(&:task_ids).uniq.flatten.collect{|id| 'task-' + id.to_s})
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     end
     @notes = @notes.sort_by{|n| n.visibility}

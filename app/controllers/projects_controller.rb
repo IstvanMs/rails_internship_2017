@@ -12,22 +12,25 @@ class ProjectsController < ApplicationController
 				@projects = Project.where('title like ?', '%' + @search_par + '%').order(:title)
 			end
 		when 'Employee'
+			@table = Project.joins(:tasks).where(:tasks => { :assigned_user => @current_user}).uniq
 			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect(&:project_id)).order(:title)
+				@projects = Project.where(:id => @table.collect(&:id)).order(:title)
 			else
-				@projects = Project.where('id in (?) and title like ?', Task.where(:assigned_user => @current_user.id).collect(&:project_id), '%' + @search_par + '%').order(:title)
+				@projects = Project.where('id in (?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
 			end
 		when 'Admin'
+			@table = Project.joins(:tasks).where(:tasks => { :assigned_user => @current_user}).uniq
 			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect(&:project_id)).order(:title)
+				@projects = Project.where(:id => @table.collect(&:id)).order(:title)
 			else
-				@projects = Project.where('id in (?) and title like ?', Task.where(:assigned_user => @current_user.id).collect(&:project_id), '%' + @search_par + '%').order(:title)
+				@projects = Project.where('id in (?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
 			end
 		when 'Client'
+			@table = Project.joins(:tasks , :projectUsers => :user ).where(:project_users => { :user_id => @current_user}).uniq
 			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id)).order(:title)
+				@projects = @table.sort_by{ |p| p.title}
 			else
-				@projects = Project.where('id in(?) and title like ?', ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id), '%' + @search_par + '%').order(:title)
+				@projects = Project.where('id in(?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
 			end
 		else
 			puts 'Role error!'
