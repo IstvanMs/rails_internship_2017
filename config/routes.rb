@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   match 'reports/by_user', :to => 'reports#by_user' , :via => [:get, :post]
 
+  match 'reports/by_project', :to => 'reports#by_project' , :via => [:get, :post]
+
   match 'reports/get_gant', :to => 'reports#get_gant' , :via => [:get, :post]
 
   match 'notes/index', :to => 'notes#index' , :via => [:get, :post]

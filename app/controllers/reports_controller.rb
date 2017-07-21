@@ -37,13 +37,14 @@ class ReportsController < ApplicationController
 		@projects = Project.all
 
 		@days=Array.new
-
 		@current_filter = Hash.new
 
-		if params[:day] != nil && params[:project] != nil
-			@current_filter = {'day' => params[:day], 'project' => Project.find(params[:project]), 'len' => Project.find(params[:project]).tasks.all.length}
+		puts "PARAMS: #{params.inspect}"
+
+		if params[:day] && params[:project]
+			@current_filter = {'day' => params[:day], 'project' => Project.find(params[:project])}
 		else
-			@current_filter = {'day' => Time.now.strftime("%d/%m/%Y"), 'project' => @projects.first, 'len' => @projects.first.tasks.length}
+			@current_filter = {'day' => Time.now.strftime("%d/%m/%Y"), 'project' => @projects.second}
 		end
 		
 		@data = Report.generate_data_project(@current_filter)
