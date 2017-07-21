@@ -34,7 +34,7 @@ class ReportsController < ApplicationController
 
 	def by_project
 
-		@projects = Project
+		@projects = Project.all
 
 		@days=Array.new
 

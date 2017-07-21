@@ -23,7 +23,7 @@
       <%= select_tag 'type', options_for_select(@days, @current_filter['day']) %>
 
       <label>&nbsp;&nbsp;&nbsp;&nbsp;Project:&nbsp;</label>
-      <%= select_tag "project", options_from_collection_for_select(@projects, "id", "title", @current_filter['project'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <%= select_tag "project", options_from_collection_for_select(@projects, "title", "id", @current_filter['project'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
       <%= button_tag(type: "submit", class: "btn btn-success") do %>
           <i class="glyphicon glyphicon-arrow-right"></i>
@@ -85,16 +85,12 @@
           <div class='col-xs-1'>
             <h4>Status</h4>
           </div>
-          <div class='col-xs-1'>
-            <h4>Gantt</h4>
-          </div>
         </div>
         <div class='row' style='height: 700px; overflow-y: auto; overflow-x:hidden;'>
-          <% for i in 1..@current_filter['len'] %>
-              <div class='row' style="background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>" align='center'>
-                <% if @data[i]['tasks'].length == 0 %>
+              <div class='row' style="background-color: #f2f4f7" align='center'>
+                <% if @data['tasks'].length == 0 %>
                     <div class='col-xs-1'>
-                      <h5><%= @data[i]['day'] %></h5>
+                      <h5><%= @data['day'] %></h5>
                     </div>
                     <div class='col-xs-4'>
                       <div class='row'>
@@ -126,42 +122,39 @@
                       <h5>-</h5>
                     </div>
                 <% else %>
-                    <% for j in 0..@data[i]['tasks'].length - 1 %>
+                    <% for j in 0..@data['tasks'].length - 1 %>
                         <div class='col-xs-4'>
+                          <h5><% if j == 0 %><%= @data['day'] %><% end %></h5>
                           <div class='row'>
                             <div class='col-xs-6'>
-                              <h5><%= @data[i]['tasks'][j].title %></h5>
+                              <h5><%= @data['tasks'][j].title %></h5>
                             </div>
                             <div class='col-xs-6'>
-                              <h5><%= @data[i]['tasks'][j].requirement %></h5>
+                              <h5><%= @data['tasks'][j].requirement %></h5>
                             </div>
                           </div>
                         </div>
                         <div class='col-xs-3'>
                           <div class='row'>
                             <div class='col-xs-6'>
-                              <h5><% time = number_with_precision( @data[i]['task_infos'][@data[i]['tasks'][j].id]['duration'], precision: 1)%>
+                              <h5><% time = number_with_precision( @data['task_infos'][@data['tasks'][j].id]['duration'], precision: 1)%>
                                 <%= time.to_s + ' minute'.pluralize(time) %></h5>
                             </div>
                             <div class='col-xs-6'>
-                              <h5><% time = number_with_precision( @data[i]['task_infos'][@data[i]['tasks'][j].id]['duration_day'], precision: 1)%>
+                              <h5><% time = number_with_precision( @data['task_infos'][@data['tasks'][j].id]['duration_day'], precision: 1)%>
                                 <%= time.to_s + ' minute'.pluralize(time) %></h5>
                             </div>
                           </div>
                         </div>
                         <div class='col-xs-2'>
-                          <h5><%= @task_infos[@data[i]['tasks'][j].id]['assigned'] %></h5>
+                          <h5><%= @data['task_infos'][@data['tasks'][j].id]['assigned'] %></h5>
                         </div>
                         <div class='col-xs-1'>
-                          <h5><%= @data[i]['tasks'][j].status %></h5>
+                          <h5><%= @data['tasks'][j].status %></h5>
                         </div>
-                        <div class='col-xs-1'>
-                          <h5><% if j == 0 %><%= link_to 'Day'+@data[i]['day'].to_s, reports_get_gant_path(:tasks => @data[i]['tasks'].collect{|t| t.id}, :day => i, :month => @current_filter['month'], :year => @current_filter['year']) %><% else %><% end %></h5>
-                        </div>
+                        <% end %>
                     <% end %>
-                <% end %>
               </div>
-          <% end %>
         </div>
       </div>
     </div>
