@@ -16,7 +16,7 @@ class Report
 	end
 
 	def self.generate_data_project(current_filter)
-		@data = Array.new(Project.find(current_filter['project']).tasks.all.length)
+		@data = Array.new(Project.find(current_filter['project'].id).tasks.all.length)
 
 	end
 end
