@@ -7,26 +7,27 @@ class ProjectsController < ApplicationController
 		case @current_user.role
 		when 'Manager'
 			if @search_par == nil || @search_par == ''
-				@projects = Project.all.order(:title).first(6)
+				@projects = Project.all.order(:title)
 			else
-				@projects = Project.where('title like ?', '%' + @search_par + '%').order(:title).first(6)
+				@projects = Project.where('title like ?', '%' + @search_par + '%').order(:title)
 			end
 		when 'Employee'
 			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect(&:project_id)).order(:title)
 			else
+				@projects = Project.where('id in (?) and title like ?', Task.where(:assigned_user => @current_user.id).collect(&:project_id), '%' + @search_par + '%').order(:title)
 			end
 		when 'Admin'
 			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}).order(:title).first(6)
+				@projects = Project.where(:id => Task.where(:assigned_user => @current_user.id).collect(&:project_id)).order(:title)
 			else
-				@projects = Project.where('id in (?) and title like ?', Task.where(:assigned_user => @current_user.id).collect{|t| t.project.id}, '%' + @search_par + '%').order(:title).first(6)
+				@projects = Project.where('id in (?) and title like ?', Task.where(:assigned_user => @current_user.id).collect(&:project_id), '%' + @search_par + '%').order(:title)
 			end
 		when 'Client'
 			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}).order(:title).first(6)
+				@projects = Project.where(:id => ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id)).order(:title)
 			else
-				@projects = Project.where('id in(?) and title like ?', ProjectUser.where(:user => User.find(@current_user.id)).collect{|p| p.project.id}, '%' + @search_par + '%').order(:title).first(6)
+				@projects = Project.where('id in(?) and title like ?', ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id), '%' + @search_par + '%').order(:title)
 			end
 		else
 			puts 'Role error!'
