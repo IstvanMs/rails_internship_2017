@@ -10,11 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170721140440) do
-=======
 ActiveRecord::Schema.define(version: 20170721121320) do
->>>>>>> 6d46983f135bfb06c88a00334a6f4bb7c31b3553
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.text "text"
