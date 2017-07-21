@@ -1,22 +1,95 @@
-<div class="jumbotron" style="background: #e8f2ef;">
+<div class="container">
+	<% if flash[:notice] %>
 	<div class='row'>
-		<div class="panel-center" class="col-sm-4 ">
-			<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
-				<div class="panel-heading">
-					<center><h3> User information </h3></center>
-				</div>
-				<div class="panel-body">
-					<center><h4>
-						<strong>Username: </strong><br></br>
-						<%= @user.username %>
-					</h4></center><br></br>
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
+	</div>
+<% end %>
+	<div class='row'>
+		<div class='col-xs-4' style='min-width: 400px;'>
+			<div class="panel-center">
+				<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
+					<div class="panel-heading">
+						<center><h3> User information </h3></center>
+					</div>
+					<div class="panel-body">
+						<center><h4>
+							<strong>Username: </strong><br></br>
+							<%= @user.username %>
+						</h4></center><br>
 
-					<center><h4>
-						<strong>Role: </strong><br></br>
-						<%= @user.role %>
-					</h4></center>
+						<center><h4>
+							<strong>Role: </strong><br></br>
+							<%= @user.role %>
+						</h4></center><br>
+
+						<center><h4>
+							<strong>Email: </strong><br></br>
+							<%= @user.email %><br>
+							<hr>
+							<a href="#changeEmail" data-toggle="modal">(change email)</a><br>
+							<a href="#changePassword" data-toggle="modal">(change password)</a>
+						</h4></center><br>
+					</div>
 				</div>
 			</div>
-		</div></center>
+		</div>
+	</div>
+</div>
+
+<div id="changeEmail" class="modal fade">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	            <h4 class="modal-title">Change Email</h4>
+	        </div>
+	        <div class="modal-body" align='center'>
+	            <%= form_tag :action => 'change_email' do%>
+            		<label>Email:</label>
+					<div class='row' style="white-space: nowrap">
+						<%= text_field_tag 'new_email', nil, placeholder: 'Enter email...' %>
+					</div><br>
+
+					<%= button_tag(type: "submit", class: "btn btn-success") do %>
+	                    <i class="glyphicon glyphicon-save">Save</i>
+	                <% end %>
+	        	<% end %>
+	        </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<div id="changePassword" class="modal fade">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	            <h4 class="modal-title">Change Password</h4>
+	        </div>
+	        <div class="modal-body" align='center'>
+	            <%= form_tag :action => 'change_password' do%>
+            		<label>Password:</label>
+					<div class='row' style="white-space: nowrap">
+						<%= password_field_tag 'pass1', nil, placeholder: 'Enter email...' %>
+					</div><br>
+					<label>Password Confirmation:</label>
+					<div class='row' style="white-space: nowrap">
+						<%= password_field_tag 'pass2', nil, placeholder: 'Enter email...' %>
+					</div><br>
+
+					<%= button_tag(type: "submit", class: "btn btn-success") do %>
+	                    <i class="glyphicon glyphicon-save">Save</i>
+	                <% end %>
+	        	<% end %>
+	        </div>
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+	    </div>
 	</div>
 </div>

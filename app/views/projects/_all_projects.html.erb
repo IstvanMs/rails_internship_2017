@@ -1,4 +1,4 @@
-<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey;">
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 800px;">
 	<div class="panel-heading">
 		<center><h3> Project information </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
@@ -29,55 +29,42 @@
         </div>
       <% end %>
 	</div>
-   <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-      'height: 400px; margin-bottom: 15px; overflow-y: auto; '
-    <% else %>
-      'height: 500px; margin-bottom: 15px; overflow-y: auto;'
-    <% end %>>
-    <table class="table table-striped">
-      <thead>  
-        <tr bgcolor="#55b25d">
-          <th class="text-center">Title</th>
-          <% if current_page?(controller: 'projects', action: 'index')%>
-            <th class="text-center">Text</th>
-          <% end %>
-          <th class="text-center">Client</th>
-          <th class="text-center">Duration</th>
-          <th class="text-center">Project Date</th>
-          <% if @current_user.role == 'Manager' %>
-          <th></th>
-          <% end %>
-        </tr>
-      </thead>
-      <% @label = '' %>
-      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-            'height: 362px;'
-          <% else %>
-            'height: 462px;'
-          <% end %>>
-          <% @projects.each do |project| %>
-            <tr>
-            <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= project.title %></td>
-            <% if current_page?(controller: 'projects', action: 'index')%>
-              <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= project.text %></td>
-            <% end %>
-            <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['client_name'] %></td>
-            <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></td>
-            <td class="text-center" style="word-wrap: break-word;min-width: 60px;max-width: 60px;"><%= @project_infos[project.id]['created_at'] %></td>
-            
-            <% if @current_user.role == 'Manager' %>
-              <td><%= link_to 'Show', project_path(project) %> |
-              <%= link_to 'Edit', edit_project_path(project) %> |
+   
+  <div class='container'>
+    <div class='row' style="background-color: #55b25d;">
+      <div class='col-xs-2'><h4>Title</h4></div>
+      <% if current_page?(controller: 'projects', action: 'index')%>
+        <div class='col-xs-3'><h4>Text</h4></div>
+      <% end %>
+      <div class='col-xs-1'><h4>Client</h4></div>
+      <div class='col-xs-1'><h4>Duration</h4></div>
+      <div class='col-xs-2'><h4>Project Date</h4></div>
+      <% if @current_user.role == 'Manager' %>
+        <div class='col-xs-3'></div>
+      <% end %>
+    </div>
+
+    <% @projects.each do |project| %>
+      <div class='row' style='border-bottom: 1px solid #e0e0e0;'>
+        <div class='col-xs-2'><h5><%= project.title %></h5></div>
+        <% if current_page?(controller: 'projects', action: 'index')%>
+          <div class='col-xs-3'><h5><%= project.text %></h5></div>
+        <% end %>
+        <div class='col-xs-1'><h5><%= @project_infos[project.id]['client_name'] %></h5></div>
+        <div class='col-xs-1'><h5><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></h5></div>
+        <div class='col-xs-2'><h5><%= @project_infos[project.id]['created_at'] %></h5></div>
+        <% if @current_user.role == 'Manager' %>
+          <div class='col-xs-3'><%= link_to 'Show', project_path(project) %> |
+              <h5><%= link_to 'Edit', edit_project_path(project) %> |
               <%= link_to 'Destroy', project_path(project),
                           method: :delete,
-                          data: { confirm: 'Are you sure?' } %></td>
-            <% end %>
-
-        </tr>
+                          data: { confirm: 'Are you sure?' } %></h5></div>
         <% end %>
-      </tbody>
-    </table>
-    </div>
-  
+      </div>
+    <% end %>
+  </div>
+  <% if !current_page?(controller: 'dashboards', action: 'index')%>
+    <center><%= will_paginate @projects %><center>
+  <% end %>
 </div>
 

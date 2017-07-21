@@ -7,6 +7,11 @@ Rails.application.routes.draw do
 
   match 'work_days/finish_work_day', :to => 'work_days#finish_work_day' , :via => [:get, :post]
 
+  match 'sessions/profile', :to => 'sessions#profile' , :via => [:get, :post]
+
+  match 'sessions/change_email', :to => 'users#change_email' , :via => [:get, :post]
+
+  match 'sessions/change_password', :to => 'users#change_password' , :via => [:get, :post]
 
   match 'reports/by_user', :to => 'reports#by_user' , :via => [:get, :post]
 

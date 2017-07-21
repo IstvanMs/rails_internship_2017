@@ -20,6 +20,12 @@
 			</h4>
 
 			<h4>
+				<%= f.label "Email" %><br>
+				<span class="form-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+				<%= f.text_field :email %>
+			</h4>
+
+			<h4>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
 				<%= f.select(:role, ['Admin', 'Client', 'Employee', 'Manager'] ) %>
