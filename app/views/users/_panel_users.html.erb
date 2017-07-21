@@ -1,4 +1,4 @@
-<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
+<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
   <div class="panel-heading">
     <center><h3> Users </h3>
     <% if current_page?(controller: 'dashboards', action: 'index') %>
@@ -27,51 +27,49 @@
         </div>
       <% end %></center>
   </div>
-  <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-      'height: 400px; margin-bottom: 15px; overflow-y: auto; '
-    <% else %>
-      'height: 500px; margin-bottom: 15px; overflow-y: auto;'
-    <% end %>>
-    <table class="table table-striped">
-      <thead>  
-        <tr bgcolor="#55b25d">
-          <th class="text-center">Username</th>
-          <th class="text-center">Role</th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <% @label = '' %>
-      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-            'height: 362px;'
-          <% else %>
-            'height: 462px;'
-          <% end %>>
-        <% @label = '' %>
-        <% @users.each do |user| %>
-          <% if @label != user.role %>
-            <tr>
-              <th><%= user.role %></th>
-              <% @label = user.role %>
-            </tr>
-          <% end %>
-          <tr class=<% if user.role == 'Admin'%>'success'<% end %>
-                    <% if user.role == 'Manager'%>'info'<% end %>
-                    <% if user.role == 'Employee'%>'warning'<% end %>
-                    <% if user.role == 'Client'%>'active'<% end %>>
-            <td class="text-center"><%= user.username %></td>
-            <td class="text-center"><%= user.role %></td>
-            <td><%= link_to 'Show', user_path(user) %></td>
-            <td><%= link_to 'Edit', edit_user_path(user) %></td>
-            <td><%= link_to 'Destroy', user_path(user),
-                    method: :delete,
-                    data: { confirm: 'Are you sure?' } %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    </div>
   
+  <div class='container'>
+    <div class='row' style="background-color: #55b25d;" align='center'>
+      <div class='col-xs-3'>
+        <center><h4>Username</h4></center>
+      </div>
+      <div class='col-xs-2'>
+        <center><h4>Role</h4></center>
+      </div>
+      <div class='col-xs-3'>
+        <center><h4>Email</h4></center>
+      </div>
+      <div class='col-xs-4'>
+      </div>
+    </div>
+    <% @label = '' %>
+    <% @users.each do |user| %>
+    <% if @label != user.role %>
+      <div class='row' style='background-color: #eaeaea;'><center><b><%= user.role %><b></div>
+      <% @label = user.role %>
+    <% end %>
+      <div class='row' style='background-color: <% if user.role == 'Admin'%>#c9ffd2<% end %>
+                    <% if user.role == 'Manager'%>#c9f0ff<% end %>
+                    <% if user.role == 'Employee'%>#ffffc9<% end %>
+                    <% if user.role == 'Client'%>#ffc9c9<% end %>;'>
+        <div class='col-xs-3'>
+          <center><h5><%= user.username %></h5></center>
+        </div>
+        <div class='col-xs-2'>
+          <center><h5><%= user.role %></h5></center>
+        </div>
+        <div class='col-xs-3'>
+          <center><h5 style='word-wrap: break-word;'><%= user.email %></h5></center>
+        </div>
+        <div class='col-xs-4'>
+          <h5><%= link_to 'Show', user_path(user) %>
+          <%= link_to 'Edit', edit_user_path(user) %>
+          <%= link_to 'Destroy', user_path(user),
+                    method: :delete,
+                    data: { confirm: 'Are you sure?' } %></h5>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
 

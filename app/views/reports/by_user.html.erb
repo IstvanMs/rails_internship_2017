@@ -1,4 +1,4 @@
-<div class='container'>
+<div class='container' style='min-width: 700px;'>
 	<div class='row'>
 		<div class='panel panel-default'>
 			<div class='panel-body'>
@@ -86,7 +86,7 @@
     					<h4>Gantt</h4>
     				</div>
     			</div>
-    			<div class='row' style='height: 700px; overflow-y: auto; overflow-x:hidden;'>
+    			<div class='row' style='overflow-y: hidden; overflow-x: hidden;'>
     			<% for i in 1..@current_filter['len'] %>
 	    			<div class='row' style="background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>" align='center'>
 	    				<% if @data[i]['tasks'].length == 0 %>

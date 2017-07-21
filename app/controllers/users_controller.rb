@@ -13,6 +13,40 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def change_email
+    @user = User.find(session[:user_id])
+    if @user.update_attribute(:email, params[:new_email]) 
+      flash[:notice] = "Email saved!"
+      flash[:color] = "valid"
+      @current_user = User.find(@user.id)
+      redirect_to sessions_profile_path
+    else
+      flash[:notice] = "Invalid email!"
+      flash[:color] = "invalid"
+      redirect_to sessions_profile_path
+    end
+  end
+
+  def change_password
+    @user = User.find(session[:user_id])
+    if params[:pass1] != params[:pass2]
+      flash[:notice] = "Different passwords!"
+      flash[:color] = "invalid"
+      redirect_to sessions_profile_path
+    else
+      if @user.update_attribute(:password, params[:pass1]) 
+        flash[:notice] = "Password saved!"
+        flash[:color] = "valid"
+        @current_user = User.find(@user.id)
+        redirect_to sessions_profile_path
+      else
+        flash[:notice] = "Invalid password!"
+        flash[:color] = "invalid"
+        redirect_to sessions_profile_path
+      end
+    end
+  end
+
   def search
     redirect_to users_index_path(:search => params[:search])
   end
@@ -69,6 +103,6 @@ class UsersController < ApplicationController
 
   private 
   	def user_params
-  		params.require(:user).permit(:username, :password, :password_confirmation, :role)
+  		params.require(:user).permit(:username, :password, :password_confirmation, :email, :role)
   	end
 end

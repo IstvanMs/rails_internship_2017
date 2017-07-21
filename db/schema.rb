@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170718142135) do
+ActiveRecord::Schema.define(version: 20170721121320) do
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.text "text"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20170718142135) do
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
   end
 
   create_table "work_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

@@ -35,6 +35,7 @@ class ProjectsController < ApplicationController
 		else
 			puts 'Role error!'
 		end
+		@projects = @projects.paginate(:page => params[:page], :per_page => 30)
 		@project_infos = Project.create_project_infos(@projects)
 	end	
 

@@ -56,6 +56,8 @@ class TasksController < ApplicationController
 			end
 		end
 
+		@tasks = @tasks.paginate(:page => params[:page], :per_page => 30)
+
 		@task_infos = Task.create_task_infos(@tasks)
 	end
 
