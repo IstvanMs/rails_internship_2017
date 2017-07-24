@@ -18,7 +18,7 @@ class DashboardsController < ApplicationController
 
       #employee
       when 'Employee'
-        @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
+        @tasks= Task.where(:assigned_user => @current_user.id).order(status: :created_at, status: :desc, title: :asc).first(10)
         @task_infos = Task.create_task_infos(@tasks)
 
         @projects = Project.where(:id => @tasks.collect(&:project_id)).order(:title).first(9)
@@ -34,7 +34,7 @@ class DashboardsController < ApplicationController
         @projects = Project.all.order(:title).first(9)
         @project_infos = Project.create_project_infos(@projects)
         
-        @tasks = Task.all.order(status: :desc, title: :asc).first(6)
+        @tasks = Task.all.order(status: :created_at, status: :desc, title: :asc).first(10)
         @task_infos = Task.create_task_infos(@tasks)
         
         render 'index_manager'

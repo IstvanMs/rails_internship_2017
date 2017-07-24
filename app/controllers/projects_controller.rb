@@ -28,14 +28,14 @@ class ProjectsController < ApplicationController
 		when 'Client'
 			@table = Project.joins(:tasks , :projectUsers => :user ).where(:project_users => { :user_id => @current_user}).uniq
 			if @search_par == nil || @search_par == ''
-				@projects = @table.sort_by{ |p| p.title}
+				@projects = Project.where(:id => @table.collect(&:id)).order(:title)
 			else
 				@projects = Project.where('id in(?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
 			end
 		else
 			puts 'Role error!'
 		end
-		@projects = @projects.paginate(:page => params[:page], :per_page => 30)
+		@projects = @projects.paginate(:page => params[:page], :per_page => 50)
 		@project_infos = Project.create_project_infos(@projects)
 	end	
 

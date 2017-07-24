@@ -1,9 +1,9 @@
 <div class='container'>
 	<center><h2>New Project</h2></center>
-	<div class='col-md-5 col-lg-5' style="float: none; margin: 0 auto;">
+	<div class='col-md-5 col-lg-5' style="float: none; margin: 0 auto; min-width: 400px;">
 		<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
 			<div class="panel-heading">
-				<center><h3>Add new task</h3></center>
+				<center><h3>Add new project</h3></center>
 			</div>
 			<div class="panel-body">
 				<div class='col-md-24' >
@@ -14,7 +14,10 @@
 			</div>
 		</div>
 	</div>
-	<span class="bottomleft">
-		<%= button_to "Back", {:controller => 'projects', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
-	</span>
+
+	<% if request.referer == 'http://localhost:3000/dashboards/index' %>
+		<%= link_to "Back", {:controller => 'dashboards', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+	<% else %>
+		<%= link_to "Back", {:controller => 'projects', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+	<% end %>
 </div>
