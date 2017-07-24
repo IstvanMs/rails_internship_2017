@@ -1,0 +1,114 @@
+<div class='container'>
+	<div class='panel panel-success'>
+		<div class="panel-heading">
+			<center><h3>Gantt Chart</h3></center>
+			<div class='row' style="white-space: nowrap">
+				<center>
+					<div class='col-xs-6'>
+						<h4>Date:<%= ' ' + @current_filter['day'] + '.' + @current_filter['month'] + '.' + @current_filter['year'] %> </h4>
+					</div>
+					<div class='col-xs-6'>
+						<h4>User: <%= ' ' + @current_filter['user'].username %> </h4>
+					</div>
+				</center>
+			</div>
+		</div>
+
+		<div class='container'>
+			<div class='row' style='overflow-x: auto; overflow-y:hidden;'>
+				<div class='col-xs-8' style="background-color: #f2f9f7; width: 764px; height: 500px; border: 2px solid; border-color: #c0d8cf; border-radius: 5px;">
+					<% l = @gant_data.length * 30 %>
+					<div class='row' style='width: 760px; height: 470px; overflow-y: auto; overflow-x:hidden;'>
+						<canvas id="canvas" width="720" height='<%= l %> px' style='margin: <%= 460 - l %>px 0px 0px 20px;'></canvas>
+						
+					</div>
+					<div class='row' style='width: 720px;'>
+						<canvas id="canvas2" width="740" style='margin-left: 20px;'></canvas>
+					</div>
+				</div>
+				<div class='col-xs-3' style="background-color: #f2f9f7; width: 374px; height: 500px; border: 2px solid; border-color: #c0d8cf; border-radius: 5px;">
+					<div class='row' style="background-color: #8fc4a0;"><center><h4>Legend</h4></center></div>
+					<div class='row' align='center' style="background-color: #9cd8af;">
+						<div class='col-xs-1'>
+							<h5>#</h5>
+						</div>
+						<div class='col-xs-2'>
+							<h5>Task Nr</h5>
+						</div>
+						<div class='col-xs-2'>
+							<h5>Task Name</h5>
+						</div>
+						<div class='col-xs-2'>
+							<h5>Start Time</h5>
+						</div>
+						<div class='col-xs-2'>
+							<h5>End Time</h5>
+						</div>
+						<div class='col-xs-2'>
+							<h5>Duration</h5>
+						</div>
+					</div>
+					<div class='row' style='width: 374; height: 470px; overflow-y: auto; overflow-x:hidden;'>
+						<canvas id="canvas3" width="374" height='<%= @current_filter['nr_intervals'] * 30%> px'></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var c = document.getElementById("canvas2");
+	var ctx = c.getContext("2d");
+	ctx.moveTo(0, 3);
+	ctx.lineTo(720, 3);
+	for(var i=0; i < 25; ++i){
+		ctx.moveTo(i*30, 0);
+		ctx.lineTo(i*30, 6);
+		ctx.fillText(i, i*30 - 1, 17);
+	}
+	ctx.stroke();
+
+	c = document.getElementById("canvas");
+	ctx = c.getContext("2d");
+	c2 = document.getElementById("canvas3");
+	ctx2 = c2.getContext("2d");
+	var st,ed;
+	var j=0;
+	var j2=0;
+	'<% @tasks.each do |t| %>';
+		var color = getRndColor();
+		'<% @gant_data[t.id]["intervals"].each do |i| %>';
+			st_pix = '<%= i[1]["start_pixel"] %>';
+			et_pix = '<%= i[1]["end_pixel"] %>';
+			st_time = '<%= i[1]["start"] %>';
+			et_time = '<%= i[1]["end"] %>';
+			var w = et_pix - st_pix;
+			if (w < 1 && w >0) w = 1;
+			ctx.fillStyle = color;
+			ctx.fillRect(st_pix, j*30, w, 30);
+			ctx.stroke();
+
+			//legend
+			ctx2.fillStyle = color;
+			ctx2.fillRect(10, j2*30 + 10, 20, 20);
+			if (rgbSum(color) < 300) {
+				ctx2.fillStyle = 'white';
+			}else{
+				ctx2.fillStyle = 'black';
+			}
+			ctx2.fillText(j + 1, 17, j2*30 + 25);
+			ctx2.fillStyle = 'black';
+			ctx2.fillText('<%= t.id %>', 60, j2*30 + 25);
+			ctx2.fillText('<%= t.title %>', 110, j2*30 + 25);
+			ctx2.fillText(st_time, 165, j2*30 + 25);
+			ctx2.fillText(et_time, 227, j2*30 + 25);
+			ctx2.fillText((et_pix - st_pix).toPrecision(2) + ' minutes', 287, j2*30 + 25);
+			ctx2.stroke();
+			++j2; 
+		'<% end %>';
+		++j;
+		ctx.fillStyle = 'black';
+		ctx.fillText(j, 0, j*30 - 5);
+	'<% end %>';
+</script>
