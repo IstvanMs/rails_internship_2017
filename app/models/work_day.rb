@@ -23,6 +23,18 @@ class WorkDay < ApplicationRecord
 			work_day.save
 	end
 
+	def start_work_day
+		@work_day = WorkDay.new
+		WorkDay.start(WorkDay.find(params[:work_day]))
+		redirect_to :controller => 'dashboards'
+	end
+
+	def finish_work_day
+		@work_day = WorkDay.where('start_time.today?').first
+		WorkDay.finish(WorkDay.find(params[:work_day]))
+		redirect_to :controller => 'dashboards'
+	end
+
 	def self.get_work_day
 		if WorkDay.exists?(:status => "Started")
 			return WorkDay.find_by(:status => 'Started')

@@ -45,6 +45,8 @@ Rails.application.routes.draw do
 
 	get 'welcome/index'
 
+  resources :work_days
+
   resources :notes
 
 	resources :projects

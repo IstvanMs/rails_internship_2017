@@ -1,5 +1,7 @@
 <% if @current_user.role == "Employee" %>
 
+    <%work_day=WorkDay.get_work_day%>
+
     <div class="col-md-4" >
       <%= button_to work_days_start_work_day_path(:work_day => work_day), {:class => 'btn btn-md btn-success', :disabled => work_day.status == 'Started'} do%>
           <i class="glyphicon glyphicon-play"></i>
@@ -10,10 +12,10 @@
       <%= button_to work_days_finish_work_day_path(:work_day => work_day), {:class => 'btn btn-md btn-danger', :disabled => work_day.status == 'Finished' || work_day.status != 'Started'} do %>
       <i class="glyphicon glyphicon-stop"></i>
 
-      <td><h5 class='pull-right'><%= link_to 'Finish work day',
-                                             method: :finish,
-                                             data: { confirm: 'Are you sure?' } %></h5></td>
-      <% end %>
+      <td><h5 class='pull-right'><%= link_to 'finish_work_day', work_days_path(work_day),
+                                             #method: finish_work_day,
+                                     data: { confirm: 'Are you sure?' } %></h5>
+      <% end %></td>
     </div>
 
 <% end %>

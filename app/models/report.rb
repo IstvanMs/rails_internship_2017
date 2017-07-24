@@ -18,11 +18,10 @@ class Report
 	def self.generate_data_project(current_filter)
 		@tasks = Project.find(current_filter['project'].id).tasks
 
-		@d = DateTime.parse(current_filter['day'])
-		@d2 = DateTime.parse(current_filter['day'] + ' 23:59:59')
+		@d = DateTime.parse(@current_filter['day'].to_s)
+		@d2 = DateTime.parse(current_filter['day'] + '23:59:59')
 		@task_infos = Task.get_report_task_infos(@tasks, @d, @d2)
 		@data = {'tasks' => @tasks, 'task_infos' => @task_infos}
-
 		return @data
 
 	end

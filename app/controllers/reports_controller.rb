@@ -38,14 +38,16 @@ class ReportsController < ApplicationController
 
 		@days=Array.new
 		@current_filter = Hash.new
-		puts "PARAMS: #{params.inspect}"
 
 		if params[:day] && params[:project]
 			@current_filter = {'day' => params[:day], 'project' => Project.find(params[:project])}
 		else
-			@current_filter = {'day' => Time.now.strftime("%d/%m/%Y"), 'project' => @projects.second}
+			@current_filter = {'day' => Time.now.strftime("%d-%m-%Y"), 'project' => @projects.first}
 		end
-		
+		@current_filter['day'].to_s
+		@current_filter['day'].sub! '/', '-'
+		@current_filter['day'].sub! '/', '-'
+		puts("DAAAAAAYYYYY",@current_filter['day'])
 		@data = Report.generate_data_project(@current_filter)
 
 	end
