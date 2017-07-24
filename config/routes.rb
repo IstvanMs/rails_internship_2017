@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
+  match 'sessions/forgot_password', :to => 'sessions#forgot_password' , :via => [:get, :post]
+
   match 'work_days/start_work_day', :to => 'work_days#start_work_day' , :via => [:get, :post]
 
   match 'work_days/finish_work_day', :to => 'work_days#finish_work_day' , :via => [:get, :post]
@@ -13,11 +15,13 @@ Rails.application.routes.draw do
 
   match 'sessions/change_password', :to => 'users#change_password' , :via => [:get, :post]
 
+  match 'reports/filter', :to => 'reports#filter' , :via => [:get, :post]
+
   match 'reports/by_user', :to => 'reports#by_user' , :via => [:get, :post]
 
   match 'reports/by_project', :to => 'reports#by_project' , :via => [:get, :post]
 
-  match 'reports/get_gant', :to => 'reports#get_gant' , :via => [:get, :post]
+  match 'reports/get_gantt', :to => 'reports#get_gantt' , :via => [:get, :post]
 
   match 'notes/index', :to => 'notes#index' , :via => [:get, :post]
 

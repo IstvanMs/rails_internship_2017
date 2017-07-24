@@ -19,7 +19,8 @@ class NotesController < ApplicationController
       @notes += Note.where(:visibility => @table.collect(&:task_ids).uniq.flatten.collect{|id| 'task-' + id.to_s})
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     end
-    @notes = @notes.sort_by{|n| n.visibility}
+    @notes = Note.where(:id => @notes.collect(&:id)).order(:visibility)
+    @notes = @notes.paginate(:page => params[:page], :per_page => 50)
   end
 
 	def show

@@ -34,7 +34,9 @@ class UsersController < ApplicationController
       flash[:color] = "invalid"
       redirect_to sessions_profile_path
     else
-      if @user.update_attribute(:password, params[:pass1]) 
+      @user.password = params[:pass1]
+      @user.encrypt_password
+      if @user.save
         flash[:notice] = "Password saved!"
         flash[:color] = "valid"
         @current_user = User.find(@user.id)

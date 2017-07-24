@@ -1,4 +1,4 @@
-<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey;">
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 850px;">
   <div class="panel-heading">
     <center><h3> Task information </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
@@ -24,7 +24,7 @@
                 <%= text_field_tag 'search', nil, placeholder: 'Search term...' %>
   
                 <span class="input-group-btn">
-                  <%= button_tag(type: "submit", class: "btn btn-default") do %>
+                  <%= button_tag(type: "submit", class: "btn btn-sm btn-default") do %>
                       <i class="glyphicon glyphicon-search"></i>
                   <% end %>
                 </span>
@@ -35,76 +35,61 @@
       <% end %>
   </div>
   
-   <div class='table-responsive' style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-      'height: 400px; margin-bottom: 15px; overflow-y: auto; '
-    <% else %>
-      'height: 500px; margin-bottom: 15px; overflow-y: auto;'
-    <% end %>>
-    <table class="table table-striped">
-      <thead>  
-        <tr bgcolor="#55b25d">
-          <th class="text-center">Title</th>
-          <% if current_page?(controller: 'tasks', action: 'index')%>
-            <th class="text-center">Requirement</th>
-          <% end %>
-          <th class="text-center">Client</th>
-          <th class="text-center">Project</th>
-          <th class="text-center">Assigned User</th>
-          <th class="text-center">Type</th>
-          <th class="text-center">Duration</th>
-          <th class="text-center">Status</th>
-          <% if current_page?(controller: 'tasks', action: 'index')%>
-            <th class="text-center">Last Update</th>
-          <% end %>
-          <% if @current_user.role != 'Client' %>
-            <th></th>
-          <% end %>
-          <% if @current_user.role == 'Admin' || @current_user.role == 'Employee' %>
-            <th></th>
-          <% end %>
-        </tr>
-      </thead>
-      <% @label = '' %>
-      <tbody style=<% if current_page?(:controller => 'dashboards', :action => 'index') %>
-            'height: 362px;'
-          <% else %>
-            'height: 442px;'
-          <% end %>>
-         <% @tasks.each do |task| %>
-            <% if @label != task.status %>
-            <tr>
-              <th><%= task.status %>
-                  <% @label = task.status %></th>
-            </tr>
-            <% end %>
+   <div class='container' style='width: 100%;'>
+    <div class='row' style="background-color: #55b25d;" align='center'>
+      <div class='col-xs-2'><h4>Title</h4></div>
+      <% if current_page?(controller: 'tasks', action: 'index')%>
+        <div class='col-xs-3'><h4>Requirement</h4></div>
+      <% end %>
+      <div class='col-xs-1'><h4>Client</h4></div>
+      <div class='col-xs-1'><h4>Assigned User</h4></div>
+      <div class='col-xs-1'><h4>Project</h4></div>
+      <div class='col-xs-1'><h4>Type</h4></div>
+      <div class='col-xs-1'><h4>Status</h4></div>
+      <% if @current_user.role == 'Employee' %>
+        <div class='col-xs-2'></div>
+      <% end %>
+    </div>
 
-            <tr class=<% if @label == 'Started' %>"success"<%end%>
-                      <% if @label == 'Paused' %>"warning"<%end%>
-                      <% if @label == 'Finished' %>"danger"<%end%>
-                      <% if @label == 'Not-started' %>"info"<%end%>>
-              <td class="text-center" style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= task.title %></td>
-              <% if current_page?(controller: 'tasks', action: 'index')%>
-                <td class="text-center" style="word-wrap: break-word;min-width: 50%;max-width: 50%;"><%= task.requirement %></td>
-              <% end %>
-              <td class="text-center" style="word-wrap: break-word;min-width: 70px;max-width: 70px;"><%= @task_infos[task.id]['client_name'] %></td>
-              <td class="text-center" style="word-wrap: break-word;min-width: 70px;max-width: 70px;"><%= @task_infos[task.id]['project_name'] %></td>
-              <td class="text-center" style="word-wrap: break-word;min-width: 110px;max-width: 110px;"><%= @task_infos[task.id]['assigned'] %></td>
-              <td class="text-center"><%= task.task_type %></td>
-              <td class="text-center"><%= @task_infos[task.id]['duration'] %> <%= 'minute'.pluralize(@task_infos[task.id]['duration']) %></td>
-              <td class="text-center"><%= task.status %></td>
-              <% if current_page?(controller: 'tasks', action: 'index')%>
-                <td class="text-center"><%= @task_infos[task.id]['last_update'] %></td>
-              <% end %>
-              
-              <% if @current_user.role == 'Manager' %>
-              <td><h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
-                         method: :delete,
-                         data: { confirm: 'Are you sure?' } %></h5></td>
-              <% end %>
-        
-              <% if @current_user.role != "Client" && @current_user.id == task.assigned_user%>
-              <td style="word-wrap: break-word; width: 120px;"><div class="row pull-right">
-                <div class="col-md-4" >
+    <% if @tasks.length == 0 %>
+      <div class='row' align='center'>
+        <h1>No tasks available!</h1>
+      </div>
+    <% end %>
+
+    <% @label = '' %>
+    <% @tasks.each do |task| %>
+      <div class='row' style='background-color: #eaeaea;'><b>
+        <% if @label != task.status %>
+            <%= task.status %>
+            <% @label = task.status %>
+        <% end %>
+      </b></div>
+
+      <div class='row' style='background-color: <% if @label == 'Started'%>#c9ffd2<% end %>
+                    <% if @label == 'Not-started'%>#c9f0ff<% end %>
+                    <% if @label == 'Paused'%>#ffffc9<% end %>
+                    <% if @label == 'Finished'%>#ffc9c9<% end %>; border-bottom: 1px solid #e0e0e0;' align='center'>
+        <div class='col-xs-2'><h5><%= task.title %></h5></div>
+        <% if current_page?(controller: 'tasks', action: 'index')%>
+          <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
+        <% end %>
+        <div class='col-xs-1'><h5><%= @task_infos[task.id]['client_name'] %></h5></div>
+        <div class='col-xs-1'><h5><%= @task_infos[task.id]['assigned'] %></h5></div>
+        <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
+        <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
+        <div class='col-xs-1'><h5><%= task.status %></h5></div>
+        <% if @current_user.role == 'Manager' %>
+        <div class='col-xs-2'>
+          <h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
+            method: :delete,
+            data: { confirm: 'Are you sure?' } %></h5>
+          </div>
+        <% end %>
+        <% if @current_user.role == 'Employee' %>
+          <div class='col-xs-2'>
+            <div class='row'>
+              <div class="col-md-4" >
                   <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
                   <i class="glyphicon glyphicon-play"></i>
                   <% end %>
@@ -121,15 +106,14 @@
                   <i class="glyphicon glyphicon-stop"></i>
                   <% end %>
                 </div>
-              </div>
-            </td>
-            <td></td>
-            <% end %>
-
-          </tr>
-         <% end %>
-      </tbody>
-    </table>
-    </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <% if current_page?(controller: 'tasks', action: 'index')%>
+    <center><%= will_paginate @tasks_finish_task_path %><center>
+  <% end %>
 
 </div>
