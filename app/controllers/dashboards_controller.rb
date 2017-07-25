@@ -24,8 +24,8 @@ class DashboardsController < ApplicationController
         @projects = Project.where(:id => @tasks.collect(&:project_id)).order(:title).first(9)
         @project_infos = Project.create_project_infos(@projects)
 
-        work_day = WorkDay.get_work_day
-        puts work_day
+        @work_days = WorkDay.get_work_day
+        #puts @work_day
 
         render 'index_employee'
 

@@ -19,7 +19,7 @@
 <%= form_tag :action => 'by_project' do%>
     <div class='row' style="white-space: nowrap">
 
-      <p>Date: <input value="<%= @current_filter['day'] %>" type="text" id="datepicker" name="day"></p>
+      <p>Date: <input value="<%= @aux['day'] %>" type="text" id="datepicker" name="day"></p>
 
       <label>Project:&nbsp;</label>
       <%= select_tag "project", options_from_collection_for_select(@projects, "id", "title", @current_filter['project'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -44,7 +44,7 @@
               <h4>Project: <%=@current_filter['project'].title %></h4>
             </div>
             <div class='row' style="white-space: nowrap">
-              <h4>Date: <% @current_filter['day'] %> </h4>
+              <h4>Date: <%=@aux['day'] %> </h4>
             </div>
           </center>
         </div>

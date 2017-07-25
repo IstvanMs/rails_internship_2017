@@ -46,16 +46,30 @@ class ReportsController < ApplicationController
 
 		@days=Array.new
 		@current_filter = Hash.new
+		@aux = Hash.new
 
 		if params[:day] && params[:project]
-			@current_filter = {'day' => params[:day], 'project' => Project.find(params[:project])}
+			@aux = {'day' => params[:day], 'project' => Project.find(params[:project])}
 		else
-			@current_filter = {'day' => Time.now.strftime("%d-%m-%Y"), 'project' => @projects.first}
+			@aux = {'day' => Time.now.strftime("%m/%d/%Y"), 'project' => @projects.first}
 		end
-		@current_filter['day'].to_s
-		@current_filter['day'].sub! '/', '-'
-		@current_filter['day'].sub! '/', '-'
-		puts("DAAAAAAYYYYY",@current_filter['day'])
+		puts @aux['day']
+		puts @aux['project']
+
+		require 'date'
+		DateTime.strptime(@aux['day'], '%m/%d/%Y')
+		datetime = DateTime.strptime(@aux['day'], '%m/%d/%Y')
+		puts datetime.day
+		puts datetime.month
+		puts datetime.year
+		@current_filter = {'day' => datetime.day, 'month' => datetime.month, 'year' => datetime.year, 'project' => @aux['project']}
+
+		puts ' '
+		puts @current_filter['day']
+		puts @current_filter['month']
+		puts @current_filter['year']
+		puts @current_filter['project']
+
 		@data = Report.generate_data_project(@current_filter)
 
 	end
