@@ -162,7 +162,7 @@
 			    					<h5><%= @data[i]['tasks'][j].status %></h5>
 			    				</div>
 			    				<div class='col-xs-1'>
-			    					<h5><% if j == 0 %><%= link_to 'Day'+@data[i]['day'].to_s, reports_get_gantt_path(:tasks => @data[i]['tasks'].collect{|t| t.id}, :day => i, :month => @current_filter['month'], :year => @current_filter['year'], :user => @current_filter['user'].id) %><% else %>-<% end %></h5>
+			    					<h5><% if j == 0 %><a href="#myModal" data-toggle="modal" id="<%= @data[i]['day'] %>" title="<%= @data[i]['tasks'].collect{|t| t.id} %>" data-target="#gantt-modal"><%= 'Day' + @data[i]['day'].to_s %></a><% else %>-<% end %></h5>
 			    				</div>
 		    				<% end %>
 		    			<% end %>
@@ -172,3 +172,170 @@
 			</div>
 	</div>
 </div>
+
+
+<div id="gantt-modal" class="modal fade" style='overflow-x: auto;'>
+    <div class="modal-dialog" style='width: 1170px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title edit-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class='container'>
+                	<div class='row' style='overflow-x: auto; overflow-y:hidden;'>
+                		<div class='col-xs-8' style="background-color: #f2f9f7; width: 764px; height: 500px; border: 2px solid; border-color: #c0d8cf; border-radius: 5px;">
+                			<div class='row' style='width: 760px; height: 470px; overflow-y: auto; overflow-x:hidden;'>
+                				<div id="work1">
+    							</div>
+    						</div>
+    						<div class='row'>
+                				<div id="work2" style='width: 760px;'>
+    							</div>
+    						</div>
+                		</div>
+
+                		<div class='col-xs-3' style="background-color: #f2f9f7; width: 374px; height: 500px; border: 2px solid; border-color: #c0d8cf; border-radius: 5px;">
+                			<div class='row' style="background-color: #8fc4a0;"><center><h4>Legend</h4></center></div>
+							<div class='row' align='center' style="background-color: #9cd8af;">
+								<div class='col-xs-1'>
+									<h5>#</h5>
+								</div>
+								<div class='col-xs-2'>
+									<h5>Task Nr</h5>
+								</div>
+								<div class='col-xs-2'>
+									<h5>Task Name</h5>
+								</div>
+								<div class='col-xs-2'>
+									<h5>Start Time</h5>
+								</div>
+								<div class='col-xs-2'>
+									<h5>End Time</h5>
+								</div>
+								<div class='col-xs-2'>
+									<h5>Duration</h5>
+								</div>
+							</div>
+							<div class='row' style='width: 375; height: 470px; overflow-y: auto; overflow-x:hidden;'>
+								<div id="work3" style='width: 374px;'>
+    							</div>
+							</div>
+                		</div>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	$('#gantt-modal').on('show.bs.modal', function(e) {
+	    
+	    var $modal = $(this),
+	        day = e.relatedTarget.id;
+	        tasks = e.relatedTarget.title;
+	        data = {'tasks' : tasks, 'day' : day, 'month' : '<%= @current_filter["month"] %>', 'year' : '<%= @current_filter["year"] %>', 'user' : '<%= @current_filter["user"].id %>'};
+	    
+	           $.ajax({
+	                url: 'get_gantt',
+		            data:  data,
+		            dataType: "json",
+		            cache: false,
+		            type: "post",
+		            success: function(data){
+						var j2=0;
+						var interval_len = data.helper.nr_intervals;
+						var user = data.helper.user;
+						var gantt_data = data.gantt_data;
+						var tasks = data.tasks;
+						var canvas_h = data.helper.gant_len;
+
+						$modal.find('.edit-title').html('Day ' + day + ' (user: ' + user.username + ' - month: ' + data.helper.month + ')');
+			            
+						if(document.getElementById('canvas1') == null){
+		            		var newCanvas = $('<canvas/>',{ id: 'canvas1'}).prop({ width: 720, height: canvas_h * 30 });
+							$('#work1').append(newCanvas);
+							$('#canvas1').css('margin', (460 - canvas_h * 30).toString() + 'px 0px 0px 20px');
+						}else{
+							$("#canvas1").remove();
+							var newCanvas = $('<canvas/>',{ id: 'canvas1'}).prop({ width: 720, height: canvas_h * 30 });
+							$('#work1').append(newCanvas);
+							$('#canvas1').css('margin', (460 - canvas_h * 30).toString() + 'px 0px 0px 20px');
+						}
+
+						if(document.getElementById('canvas2') == null){
+		            		var newCanvas = $('<canvas/>',{ id: 'canvas2'}).prop({ width: 740, height: 40 });
+							$('#work2').append(newCanvas);
+							$('#canvas2').css('margin-left', '20px');
+						}else{
+							$("#canvas2").remove();
+							var newCanvas = $('<canvas/>',{ id: 'canvas2'}).prop({ width: 740, height: 40 });
+							$('#work2').append(newCanvas);
+							$('#canvas2').css('margin-left', '20px');
+						}
+
+						if(document.getElementById('canvas3') == null){
+		            		var newCanvas = $('<canvas/>',{ id: 'canvas3'}).prop({ width: 374, height: interval_len * 30 });
+							$('#work3').append(newCanvas);
+						}else{
+							$("#canvas3").remove();
+							var newCanvas = $('<canvas/>',{ id: 'canvas3'}).prop({ width: 374, height: interval_len * 30 });
+							$('#work3').append(newCanvas);
+						}
+
+						var c = document.getElementById("canvas2");
+						var ctx = c.getContext("2d");
+
+						ctx.moveTo(0, 3);
+						ctx.lineTo(720, 3);
+						for(var i=0; i < 25; ++i){
+							ctx.moveTo(i*30, 0);
+							ctx.lineTo(i*30, 6);
+							ctx.fillText(i, i*30 - 1, 17);
+						}
+						ctx.stroke();
+
+						c = document.getElementById('canvas1');
+						ctx = c.getContext('2d');
+						var c2 = document.getElementById('canvas3');
+						var ctx2 = c2.getContext('2d');
+
+						for(var i = 0; i < tasks.length; ++i){
+							var color = getRndColor();
+							var interval = gantt_data[tasks[i].id].intervals;
+							for(var ii = 0; ii < gantt_data[tasks[i].id].nr_int; ++ii){
+								var st_pix = interval[ii].start_pixel;
+								var et_pix = interval[ii].end_pixel;
+								var st_time = interval[ii].start;
+								var et_time = interval[ii].end;
+								var w = et_pix - st_pix;
+
+								if (w < 1 && w >0) w = 1;
+								ctx.fillStyle = color;
+								ctx.fillRect(st_pix, i*30, w, 30);
+								ctx.stroke();
+
+								ctx2.fillStyle = color;
+								ctx2.fillRect(10, j2*30 + 10, 20, 20);
+								if (rgbSum(color) < 300) {
+									ctx2.fillStyle = 'white';
+								}else{
+									ctx2.fillStyle = 'black';
+								}
+								ctx2.fillText(i + 1, 17, j2*30 + 25);
+								ctx2.fillStyle = 'black';
+								ctx2.fillText(tasks[i].id, 60, j2*30 + 25);
+								ctx2.fillText(tasks[i].title, 110, j2*30 + 25);
+								ctx2.fillText(st_time, 165, j2*30 + 25);
+								ctx2.fillText(et_time, 227, j2*30 + 25);
+								ctx2.fillText((et_pix - st_pix).toPrecision(2) + ' minutes', 287, j2*30 + 25);
+								ctx2.stroke();
+								++j2; 
+							}
+						}
+						}
+	            });
+	    
+})
+</script>

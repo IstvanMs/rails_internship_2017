@@ -70,7 +70,7 @@ class Task < ApplicationRecord
           end
         end
       end
-      @gant_data[t.id] = {'intervals' => @times,'id' => t.id, 'title' => t.title}
+      @gant_data[t.id] = {'intervals' => @times, 'nr_int' => @times.length}
     end
     return @gant_data
   end

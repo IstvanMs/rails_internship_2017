@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
+  match 'reports/test', :to => 'reports#test', :via => [:get, :post]
+
   match 'sessions/forgot_password', :to => 'sessions#forgot_password' , :via => [:get, :post]
 
   match 'work_days/start_work_day', :to => 'work_days#start_work_day' , :via => [:get, :post]

@@ -23,6 +23,7 @@ class ReportsController < ApplicationController
 		@data = Report.generate_data(@current_filter)
 	end
 
+
 	def filter
 		session[:reports_year] = params[:year]
 		session[:reports_month] = params[:month]
@@ -31,13 +32,16 @@ class ReportsController < ApplicationController
 	end
 
 	def get_gantt
-		@tasks = Task.where('id in (?)',params[:tasks])
+		@tasks = Task.where('id in (?)',params[:tasks].tr('[]', '').split(',').map(&:to_i))
 		@gant_data = Task.generate_gant_data(@tasks, Time.parse(params[:day].to_s + '-' + Date::MONTHNAMES.index(params[:month]).to_s + '-' + params[:year].to_s), Time.parse(params[:day].to_s + '-' + Date::MONTHNAMES.index(params[:month]).to_s + '-' + params[:year].to_s + ' 23:59:59'))
 		@nr = 0
 		@tasks.each do |t|
 			@nr += @gant_data[t.id]['intervals'].length
 		end
-		@current_filter = {'year' => params[:year], 'month' => params[:month], 'day' => params[:day], 'user' => User.find(params[:user]),'nr_intervals' => @nr}
+		@current_filter = {'year' => params[:year], 'month' => params[:month], 'day' => params[:day], 'user' => User.find(params[:user]),'nr_intervals' => @nr, 'gant_len' => @gant_data.length}
+		respond_to do |format|
+		  format.json { render json:  {'tasks': @tasks , 'gantt_data': @gant_data , 'helper': @current_filter}}
+		end
 	end
 
 	def by_project
