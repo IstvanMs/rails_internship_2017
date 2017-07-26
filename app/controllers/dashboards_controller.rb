@@ -11,7 +11,7 @@ class DashboardsController < ApplicationController
         @tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc).first(6)
         @task_infos = Task.create_task_infos(@tasks)
 
-        @projects = Project.where(:id => @tasks.collect(&:project_id)).order(:title).first(9)
+        @projects = @current_user.projects.order(:title).first(10)
         @project_infos = Project.create_project_infos(@projects)
 
         render 'index_admin'
@@ -21,7 +21,7 @@ class DashboardsController < ApplicationController
         @tasks= Task.where(:assigned_user => @current_user.id).order(status: :created_at, status: :desc, title: :asc).first(10)
         @task_infos = Task.create_task_infos(@tasks)
 
-        @projects = Project.where(:id => @tasks.collect(&:project_id)).order(:title).first(9)
+        @projects = @current_user.projects.order(:title).first(10)
         @project_infos = Project.create_project_infos(@projects)
 
         @work_days = WorkDay.get_work_day
@@ -31,7 +31,7 @@ class DashboardsController < ApplicationController
 
       #manager
       when 'Manager'
-        @projects = Project.all.order(:title).first(9)
+        @projects = Project.all.order(:title).first(10)
         @project_infos = Project.create_project_infos(@projects)
         
         @tasks = Task.all.order(status: :created_at, status: :desc, title: :asc).first(10)
@@ -41,7 +41,7 @@ class DashboardsController < ApplicationController
 
       #client
       when 'Client'
-        @projects = @current_user.projects.order(:title).first(9)
+        @projects = @current_user.projects.order(:title).first(10)
         @project_infos = Project.create_project_infos(@projects)
 
         @tasks = Task.where(:project => ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id)).order(status: :desc, title: :asc).first(6)
