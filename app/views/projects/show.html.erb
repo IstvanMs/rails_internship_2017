@@ -91,44 +91,6 @@
 </div>
 
 <script type="text/javascript">
-  onload = function first_create_select_for_users(){
-    document.getElementById('select_for_users').innerHTML = '';
-    var role = document.getElementById('role').value;
-    var id;
-    var name;
-	switch(role){
-		case '1':
-			id = '<%= @users_sel.select{|u| u.role == "Manager"}.collect{|u| u.id} %>';
-			name = '<%= @users_sel.select{|u| u.role == "Manager"}.collect{|u| u.username} %>';
-		break;
-		case '2':
-			id = '<%= @users_sel.select{|u| u.role == "Employee"}.collect{|u| u.id} %>';
-			name = '<%= @users_sel.select{|u| u.role == "Employee"}.collect{|u| u.username} %>';
-		break;
-		case '3':
-			id = '<%= @users_sel.select{|u| u.role == "Client"}.collect{|u| u.id} %>';
-			name = '<%= @users_sel.select{|u| u.role == "Client"}.collect{|u| u.username} %>';
-		break;
-	}
-	id = id.substr(1,id.length - 2);
-	name = name.substr(1,name.length - 2);
-	id = id.split(',');
-	name = name.split(',');
-	var newDiv = document.createElement('div');
-	var selectHTML = "";
-	selectHTML="<center><label>Users:</label><center>";
-	newDiv.innerHTML = selectHTML;
-	document.getElementById('select_for_users').appendChild(newDiv);
-	newDiv = document.createElement('div');
-	selectHTML = "";
-	selectHTML="<select id=\"selected_id\" name=\"selected_id\">";
-	for(var i = 0; i < id.length; i = i + 1) {
-	  selectHTML += "<option value='" + id[i].trim() + "'>" + name[i].trim().substr(6,name[i].trim().length - 12) + "</option>";
-	}
-	selectHTML += "</select>";
-	newDiv.innerHTML = selectHTML;
-	document.getElementById('select_for_users').appendChild(newDiv);
-  }
 
   function create_select_for_users(){
     document.getElementById('select_for_users').innerHTML = '';
