@@ -1,5 +1,13 @@
-<div class='row'>
-	<div class="col-md-2" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
+<div class='container'>
+	<% if flash[:notice] %>
+	<div class='row'>
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
+	</div>
+	<% end %>
+	<div class='row'>
+	<div class="col-xs-4" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
 	  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
 	    <div class="panel-heading">
 	      <center><h2>Project(<%= @project.title %>)</h1></center>
@@ -7,24 +15,39 @@
 
 	    <div class="panel-body">
 			<h4>
-				<strong>Title</strong>
-				<%= @project.title %>
+				<strong>Title:</strong><br>
+				<center><%= @project.title %></center>
 			</h4>
 
 			<h4>
-				<strong>Text</strong>
-				<%= @project.text %>
+				<strong>Text;</strong>
+				<center><%= @project.text %></center>
 			</h4>
 
 			<h4>
-				<strong>Client</strong>
-				<%= @project_infos['client_name'] %>
+				<strong>Client:</strong>
+				<center><%= @project_infos['client_name'] %></center>
 			</h4>
 
 			<h4>
-				<strong>Project Date</strong>
-				<%= @project_infos['created_at'] %>
+				<strong>Project Date:</strong>
+				<center><%= @project_infos['created_at'] %></center>
 			</h4>
+			<h4>
+				<strong>Users</strong>
+		        
+				<center><div class='row'>
+					<div class="dropdown">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle">Remove user from project<b class="caret"></b></a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<% @users_in.each do |user| %>
+								<li><%= link_to user.username, :controller => 'projects', :action => 'remove_user', :user_id => user.id, :project_id => @project.id %></li>
+							<% end %>
+						</ul>
+					</div>
+				</div></center>
+			</h4>
+			 <a href="#addUserToProject" data-toggle="modal">(add user)</a>
 		</div>
 	  </div>
 	</div>
@@ -33,3 +56,116 @@
 		<%= button_to "Back", {:controller => 'projects', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
 	</span>
 </div>
+
+<div id="addUserToProject" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add User</h4>
+            </div>
+            <div class="modal-body" align='center'>
+				<%= form_tag :action => 'add_user' do%>
+					<div class="input-group">
+						<center><label>Role</label></center>
+						<select id='role' name='role' onchange='create_select_for_users();'>
+							<option value='1'>Manager</option>
+							<option value='2'>Employee</option>
+							<option value='3'>Client</option>
+						</select>
+						<%= hidden_field_tag 'id', @project.id %>
+						<br>
+						<div id='select_for_users'></div><br>
+						<button type="submit" class="btn btn-md btn-success">
+						<i class="glyphicon glyphicon-save"></i> Save
+					</button>
+					</div>
+				<% end %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+  onload = function first_create_select_for_users(){
+    document.getElementById('select_for_users').innerHTML = '';
+    var role = document.getElementById('role').value;
+    var id;
+    var name;
+	switch(role){
+		case '1':
+			id = '<%= @users_sel.select{|u| u.role == "Manager"}.collect{|u| u.id} %>';
+			name = '<%= @users_sel.select{|u| u.role == "Manager"}.collect{|u| u.username} %>';
+		break;
+		case '2':
+			id = '<%= @users_sel.select{|u| u.role == "Employee"}.collect{|u| u.id} %>';
+			name = '<%= @users_sel.select{|u| u.role == "Employee"}.collect{|u| u.username} %>';
+		break;
+		case '3':
+			id = '<%= @users_sel.select{|u| u.role == "Client"}.collect{|u| u.id} %>';
+			name = '<%= @users_sel.select{|u| u.role == "Client"}.collect{|u| u.username} %>';
+		break;
+	}
+	id = id.substr(1,id.length - 2);
+	name = name.substr(1,name.length - 2);
+	id = id.split(',');
+	name = name.split(',');
+	var newDiv = document.createElement('div');
+	var selectHTML = "";
+	selectHTML="<center><label>Users:</label><center>";
+	newDiv.innerHTML = selectHTML;
+	document.getElementById('select_for_users').appendChild(newDiv);
+	newDiv = document.createElement('div');
+	selectHTML = "";
+	selectHTML="<select id=\"selected_id\" name=\"selected_id\">";
+	for(var i = 0; i < id.length; i = i + 1) {
+	  selectHTML += "<option value='" + id[i].trim() + "'>" + name[i].trim().substr(6,name[i].trim().length - 12) + "</option>";
+	}
+	selectHTML += "</select>";
+	newDiv.innerHTML = selectHTML;
+	document.getElementById('select_for_users').appendChild(newDiv);
+  }
+
+  function create_select_for_users(){
+    document.getElementById('select_for_users').innerHTML = '';
+    var role = document.getElementById('role').value;
+    var id;
+    var name;
+	switch(role){
+		case '1':
+			id = '<%= @users_sel.select{|u| u.role == "Manager"}.collect{|u| u.id} %>';
+			name = '<%= @users_sel.select{|u| u.role == "Manager"}.collect{|u| u.username} %>';
+		break;
+		case '2':
+			id = '<%= @users_sel.select{|u| u.role == "Employee"}.collect{|u| u.id} %>';
+			name = '<%= @users_sel.select{|u| u.role == "Employee"}.collect{|u| u.username} %>';
+		break;
+		case '3':
+			id = '<%= @users_sel.select{|u| u.role == "Client"}.collect{|u| u.id} %>';
+			name = '<%= @users_sel.select{|u| u.role == "Client"}.collect{|u| u.username} %>';
+		break;
+	}
+	id = id.substr(1,id.length - 2);
+	name = name.substr(1,name.length - 2);
+	id = id.split(',');
+	name = name.split(',');
+	var newDiv = document.createElement('div');
+	var selectHTML = "";
+	selectHTML="<center><label>Users:</label><center>";
+	newDiv.innerHTML = selectHTML;
+	document.getElementById('select_for_users').appendChild(newDiv);
+	newDiv = document.createElement('div');
+	selectHTML = "";
+	selectHTML="<select id=\"selected_id\" name=\"selected_id\">";
+	for(var i = 0; i < id.length; i = i + 1) {
+	  selectHTML += "<option value='" + id[i].trim() + "'>" + name[i].trim().substr(6,name[i].trim().length - 12) + "</option>";
+	}
+	selectHTML += "</select>";
+	newDiv.innerHTML = selectHTML;
+	document.getElementById('select_for_users').appendChild(newDiv);
+  }
+</script>

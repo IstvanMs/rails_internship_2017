@@ -4,50 +4,72 @@ class ProjectsController < ApplicationController
 	
 	def index
 		@search_par = params[:search]
-		case @current_user.role
-		when 'Manager'
+		if @current_user.role == 'Manager'
 			if @search_par == nil || @search_par == ''
 				@projects = Project.all.order(:title)
 			else
 				@projects = Project.where('title like ?', '%' + @search_par + '%').order(:title)
 			end
-		when 'Employee'
-			@table = Project.joins(:tasks).where(:tasks => { :assigned_user => @current_user}).uniq
-			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => @table.collect(&:id)).order(:title)
-			else
-				@projects = Project.where('id in (?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
-			end
-		when 'Admin'
-			@table = Project.joins(:tasks).where(:tasks => { :assigned_user => @current_user}).uniq
-			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => @table.collect(&:id)).order(:title)
-			else
-				@projects = Project.where('id in (?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
-			end
-		when 'Client'
-			@table = Project.joins(:tasks , :projectUsers => :user ).where(:project_users => { :user_id => @current_user}).uniq
-			if @search_par == nil || @search_par == ''
-				@projects = Project.where(:id => @table.collect(&:id)).order(:title)
-			else
-				@projects = Project.where('id in(?) and title like ?', @table.collect(&:id), '%' + @search_par + '%').order(:title)
-			end
 		else
-			puts 'Role error!'
+			if @search_par == nil || @search_par == ''
+				@projects = @current_user.projects.order(:title)
+			else
+				@projects = Project.where('id in(?) and title like ?', @current_user.projects.ids, '%' + @search_par + '%').order(:title)
+			end
 		end
 		@projects = @projects.paginate(:page => params[:page], :per_page => 50)
 		@project_infos = Project.create_project_infos(@projects)
 	end	
+
+	def add_user
+		@project = Project.find(params[:id])
+		@user = User.find(params[:selected_id])
+		@project_user = ProjectUser.new do |u|
+			u.user = @user
+			u.project = @project
+		end
+		if @project_user.save
+			flash[:notice] = "Saved!"
+      		flash[:color] = "valid"
+			redirect_to project_path(@project)
+		else
+			flash[:notice] = "Error on save!"
+      		flash[:color] = "invalid"
+			redirect_to project_path(@project)
+		end
+	end
+
+	def remove_user
+		@project = Project.find(params[:project_id])
+		@user = User.find(params[:user_id])
+		@project_user = ProjectUser.find_by('user_id = ? and project_id = ? ', @user.id, @project.id)
+		if @project_user.destroy
+			flash[:notice] = "Removed from project!"
+      		flash[:color] = "valid"
+			redirect_to project_path(@project)
+		else
+			flash[:notice] = "Error on delete!"
+      		flash[:color] = "invalid"
+			redirect_to project_path(@project)
+		end
+	end
 
 	def search
 		redirect_to projects_index_path(:search => params[:search])
 	end
 
 	def show
+		@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
+		@users_sel = User.where('id NOT IN (?)', ProjectUser.where(:project_id => params[:id]).collect(&:user_id))
 		@clients = User.where(:role => 'Client')
 		@project = Project.find(params[:id])
 		@users = User.where.not(:role => 'Client')
-		@project_infos = {'client_name' => ProjectUser.find_by(:project => @project).user.username,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+		client_name = User.joins(:projects).where(:role => 'Client', :projects => {:id => params[:id]}).first
+		if client_name != nil
+			@project_infos = {'client_name' => client_name.username,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+		else 
+			@project_infos = {'client_name' => '-','created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+		end
 	end	
 
 	def new
