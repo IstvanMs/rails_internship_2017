@@ -1,17 +1,27 @@
 <% if @current_user.role == "Employee" %>
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 300px;">
+  <div class="panel-heading">
+    <center><h3>Workday</h3></center>
+  </div>
+  <%@work_day=WorkDay.get_work_day%>
+  
+  <div class='container' style='width: 100%;'>
+    <div class='row' align='center'>
+      <div class="col-xs-6">
+        <h4>Start day:</h4>
+        <%= button_to work_days_start_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-success', :disabled => @work_day.status == 'Started'} do%>
+        <i class="glyphicon glyphicon-play"></i>
+        <% end %><br>
+      </div>
 
-    <%@work_day=WorkDay.get_work_day%>
-
-    <div class="col-md-4" >
-      <%= button_to work_days_start_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-success', :disabled => @work_day.status == 'Started'} do%>
-          <i class="glyphicon glyphicon-play"></i>
-      <% end %>
+      <div class="col-xs-6">
+        <h4>End day:</h4>
+        <%= button_to work_days_finish_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-danger', :disabled => @work_day.status == 'Finished' || @work_day.status != 'Started'} do %>
+        <i class="glyphicon glyphicon-stop"></i>
+        <% end %><br>
+      </div>
     </div>
-
-    <div class="col-md-4" >
-      <%= button_to work_days_finish_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-danger', :disabled => @work_day.status == 'Finished' || @work_day.status != 'Started'} do %>
-      <i class="glyphicon glyphicon-stop"></i>
-      <% end %>
-    </div>
-
+    <%= 'Started at: ' + @work_day.start_time.to_s %>
+  </div>
+</div>
 <% end %>
