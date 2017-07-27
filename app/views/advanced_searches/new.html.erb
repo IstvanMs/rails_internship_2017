@@ -1,0 +1,32 @@
+<h1>Advanced search</h1>
+
+<% form_for @advanced_search do |f| %>
+  <div class="field">
+    <%= f.label :keywords %><br />
+    <%= f.text_field :keywords %>
+  </div>
+
+  <div class="field">
+    <%= f.label :project_id %><br />
+    <%= f.collection_select :project_id, Project.order(:title), :id, :title, include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :assigned_user_id %><br />
+    <%= f.collection_select :assigned_user_id, User.order(:username), :id, :username, include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :type %><br />
+    <%= f.select(:type, %w{ Bug Feature }, :include_blank => true) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
+  </div>
+
+    <!-- DATAAAAAAA -->
+
+  <div class="actions"><%= f.submit "Advanced search" %></div>
+<% end %>

@@ -10,8 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170721140440) do
-ActiveRecord::Schema.define(version: 20170721121320) do
+ActiveRecord::Schema.define(version: 20170727121910) do
+
+  create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string "keywords"
+    t.integer "project_id"
+    t.string "type"
+    t.date "date_added"
+    t.string "status"
+    t.integer "assigned_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.text "text"
