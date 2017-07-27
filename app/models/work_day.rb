@@ -9,16 +9,14 @@ class WorkDay < ApplicationRecord
 		if work_day.status != "Started"
 				work_day.start_time = Time.now
 		end
-			work_day.status = "Started"
-			work_day.save
+			work_day.update_attribute(:status, 'Started')
 	end
 
 	def self.finish(work_day)
 		if work_day.status != "Finished"
 				work_day.end_time = Time.now
 		end
-			work_day.status = "Finished"
-			work_day.save
+			work_day.update_attribute(:status, 'Finished')
 	end
 
 	def self.get_work_day
