@@ -75,11 +75,11 @@
 	            <%= form_tag :action => 'change_password' do%>
             		<label>Password:</label>
 					<div class='row' style="white-space: nowrap">
-						<%= password_field_tag 'pass1', nil, placeholder: 'Enter email...' %>
+						<%= password_field_tag 'pass1', nil, placeholder: 'Enter password...' %>
 					</div><br>
 					<label>Password Confirmation:</label>
 					<div class='row' style="white-space: nowrap">
-						<%= password_field_tag 'pass2', nil, placeholder: 'Enter email...' %>
+						<%= password_field_tag 'pass2', nil, placeholder: 'Enter password...' %>
 					</div><br>
 
 					<%= button_tag(type: "submit", class: "btn btn-success") do %>

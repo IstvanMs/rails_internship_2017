@@ -11,11 +11,7 @@
     <div class="col-md-4" >
       <%= button_to work_days_finish_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-danger', :disabled => @work_day.status == 'Finished' || @work_day.status != 'Started'} do %>
       <i class="glyphicon glyphicon-stop"></i>
-
-      <td><h5 class='pull-right'><%= link_to 'finish_work_day', work_days_path(@work_day),
-                                             #method: finish_work_day,
-                                     data: { confirm: 'Are you sure?' } %></h5>
-      <% end %></td>
+      <% end %>
     </div>
 
 <% end %>

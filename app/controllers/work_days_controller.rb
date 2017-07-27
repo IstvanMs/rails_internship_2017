@@ -8,8 +8,8 @@ class WorkDaysController < ApplicationController
     end
 
     def finish_work_day
-      @work_day = WorkDay.where('start_time.today?').first
-      WorkDay.finish(WorkDay.where(params[:work_day]))
+      @work_day = WorkDay.get_work_day
+      WorkDay.finish(@work_day)
       redirect_to :controller => 'dashboards' , :action => 'index'
     end
 
