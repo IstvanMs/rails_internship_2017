@@ -5,7 +5,9 @@ class TasksController < ApplicationController
 	def create
 		@project = Project.find(params[:project_id])
 		@task = @project.tasks.create(task_params)
+		@user = User.find(@task.assigned_user)
 		if @task.save
+			MailerMailer.assigned_to_task(@user, @task).deliver
 			redirect_to :controller => 'tasks' , :action => 'index'
 		else
 			@users = User.where('role != ? and role != ?', 'Client', 'Manager')

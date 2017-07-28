@@ -31,6 +31,7 @@ class ProjectsController < ApplicationController
 		if @project_user.save
 			flash[:notice] = "Saved!"
       		flash[:color] = "valid"
+      		MailerMailer.assigned_to_project(@user, @project).deliver
 			redirect_to project_path(@project)
 		else
 			flash[:notice] = "Error on save!"
