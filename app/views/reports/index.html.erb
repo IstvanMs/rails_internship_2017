@@ -1,2 +1,43 @@
-<%= button_to 'By user', {:controller => 'reports', :action => 'by_user'}, {:class => 'btn btn-md btn-primary pull-left'} %>
-<%= button_to 'By project', {:controller => 'reports', :action => 'by_project'}, {:class => 'btn btn-md btn-primary pull-right'} %>
+<div class='container'>
+	<div class='row' style="height: 50vh; min-height: 200px; min-width: 400px;">
+		<%= link_to :controller => 'reports', :action => 'by_user' do%>
+			<div class='col-xs-6' style='height: 100%;' onmouseover='changeColorBlue("by_user","title_user","first")' onmouseout='changeColorWhite("by_user","title_user","first")'>
+				<div id='by_user' class='container' style='border: 1px solid #cbd2d3; height: 100%; background-color: #ffffff;'>
+					<div class='row' style='margin-top: 8%; margin-bottom: 20px; height: 50%;' align='center'>
+						<%= image_tag("chart_icon.png", :id => 'first', :size => '130x130', :alt => "Logo1") %>
+					</div>
+					<div class='row' style='height: 40%;' align='center'>
+						<font id='title_user' color='#165f87'><h3>By User</h3></font>
+					</div>
+				</div>
+			</div>
+		<% end %>
+
+		<%= link_to :controller => 'reports', :action => 'by_project' do%>
+			<div class='col-xs-6' style='height: 100%;' onmouseover='changeColorBlue("by_project","title_proj","second")' onmouseout='changeColorWhite("by_project","title_proj","second")'>
+				<div id='by_project' class='container' style='border: 1px solid #cbd2d3; height: 100%; background-color: #ffffff;'>
+					<div class='row' style='margin-top: 8%; margin-bottom: 20px; height: 50%;' align='center'>
+						<%= image_tag("chart_icon.png", :id => 'second' ,:size => '130x130', :alt => "Logo2") %>
+					</div>
+					<div class='row' style='height: 40%;' align='center'>
+						<font id='title_proj' color='#165f87'><h3>By Project</h3></font>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function changeColorBlue(name1, name2, name3){
+		document.getElementById(name1).style.backgroundColor = "#00cef2";
+		document.getElementById(name2).style.color = "#ffffff";
+		document.getElementById(name3).style.filter = "brightness(0) invert(1)";
+	}
+
+	function changeColorWhite(name1, name2, name3){
+		document.getElementById(name1).style.backgroundColor = "#ffffff";
+		document.getElementById(name2).style.color = "#165f87";
+		document.getElementById(name3).style.filter = "brightness(1) invert(0)";
+	}
+</script>

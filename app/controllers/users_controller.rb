@@ -15,10 +15,13 @@ class UsersController < ApplicationController
 
   def change_email
     @user = User.find(session[:user_id])
+    @old = @user.email
     if @user.update_attribute(:email, params[:new_email]) 
       flash[:notice] = "Email saved!"
       flash[:color] = "valid"
       @current_user = User.find(@user.id)
+      MailerMailer.change_email(@current_user.email, @current_user, @old).deliver
+      MailerMailer.change_email(@old, @current_user, @old).deliver
       redirect_to sessions_profile_path
     else
       flash[:notice] = "Invalid email!"
@@ -40,6 +43,7 @@ class UsersController < ApplicationController
         flash[:notice] = "Password saved!"
         flash[:color] = "valid"
         @current_user = User.find(@user.id)
+        MailerMailer.reset_password(@current_user, params[:pass1]).deliver
         redirect_to sessions_profile_path
       else
         flash[:notice] = "Invalid password!"
@@ -93,6 +97,7 @@ class UsersController < ApplicationController
     @users = User.all.order(:role,:username)
 
   	if @user.save 
+      MailerMailer.new_user(@user).deliver
   		flash[:notice] = "Saved!"
   		flash[:color] = "valid"
   		redirect_to users_path
