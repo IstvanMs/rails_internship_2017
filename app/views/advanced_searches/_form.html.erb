@@ -1,0 +1,51 @@
+<div class='container' style='width: 100%;'>
+  <div class='row' style="background-color: #55b25d;" align='center'>
+    <div class='col-xs-2'><h4>Title</h4></div>
+    <% if current_page?(controller: 'tasks', action: 'index')%>
+        <div class='col-xs-3'><h4>Requirement</h4></div>
+    <% end %>
+    <div class='col-xs-1'><h4>Client</h4></div>
+    <div class='col-xs-1'><h4>Assigned User</h4></div>
+    <div class='col-xs-1'><h4>Project</h4></div>
+    <div class='col-xs-1'><h4>Type</h4></div>
+    <div class='col-xs-1'><h4>Status</h4></div>
+  </div>
+
+  <% if @tasks.length == 0 %>
+      <div class='row' align='center'>
+        <h1>No tasks available!</h1>
+      </div>
+  <% end %>
+
+  <% @label = '' %>
+  <% @tasks.each do |task| %>
+      <div class='row' style='background-color: #eaeaea;'><b>
+        <% if @label != task.status %>
+            <%= task.status %>
+            <% @label = task.status %>
+        <% end %>
+      </b></div>
+
+      <div class='row' style='background-color: <% if @label == 'Started'%>#c9ffd2<% end %>
+          <% if @label == 'Not-started'%>#c9f0ff<% end %>
+          <% if @label == 'Paused'%>#ffffc9<% end %>
+          <% if @label == 'Finished'%>#ffc9c9<% end %>; border-bottom: 1px solid #e0e0e0;' align='center'>
+        <div class='col-xs-2'><h5><%= task.title %></h5></div>
+        <% if current_page?(controller: 'tasks', action: 'index')%>
+            <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
+        <% end %>
+        <div class='col-xs-1'><h5><%= @task_infos[task.id]['client_name'] %></h5></div>
+        <div class='col-xs-1'><h5><%= @task_infos[task.id]['assigned'] %></h5></div>
+        <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
+        <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
+        <div class='col-xs-1'><h5><%= task.status %></h5></div>
+        <% if @current_user.role == 'Manager' %>
+            <div class='col-xs-2'>
+              <h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
+                                                 method: :delete,
+                                                 data: { confirm: 'Are you sure?' } %></h5>
+            </div>
+        <% end %>
+  <% end %>
+  </div>
+</div>

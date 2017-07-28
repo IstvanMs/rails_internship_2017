@@ -1,18 +1,18 @@
 class AdvancedSearch < ApplicationRecord
 
-  def taasks
-    @taasks ||= find_taasks
+  def tasks
+    @tasks ||= find_tasks
   end
 
   private
 
-  def find_taasks
-    taasks = Taask.order(:title)
-    taasks = taasks.where("title like ?", "%#{keywords}%") if keywords.present?
-    taasks = taasks.where(project_id: project_id) if project_id.present?
-    taasks = taasks.where(assigned_user_id: assigned_user_id) if assigned_user_id.present?
-
-    # RESTUUUUL
-
+  def find_tasks
+    tasks = Task.order(:title)
+    tasks = tasks.where("title like ?", "%#{keywords}%") if keywords.present?
+    tasks = tasks.where(project_id: project_id) if project_id.present?
+    tasks = tasks.where(assigned_user_id: assigned_user_id) if assigned_user_id.present?
+    tasks = tasks.where("interval >= ?", from) if from.present?
+    tasks = tasks.where("interval <= ?", to) if to.present?
   end
+
 end

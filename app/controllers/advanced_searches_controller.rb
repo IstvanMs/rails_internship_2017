@@ -5,7 +5,7 @@ class AdvancedSearchesController < ApplicationController
   end
 
   def create
-    @advanced_search = AdvancedSearch.create!(params[:advanced_search])
+    @advanced_search = AdvancedSearch.create!(params[:advanced_search].permit!)
     redirect_to @advanced_search
   end
 

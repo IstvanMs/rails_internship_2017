@@ -1,6 +1,6 @@
 <h1>Advanced search</h1>
 
-<% form_for @advanced_search do |f| %>
+<%= form_for @advanced_search do |f| %>
   <div class="field">
     <%= f.label :keywords %><br />
     <%= f.text_field :keywords %>
@@ -17,8 +17,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :type %><br />
-    <%= f.select(:type, %w{ Bug Feature }, :include_blank => true) %>
+    <%= f.label :mode %><br />
+    <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true) %>
   </div>
 
   <div class="field">
@@ -26,7 +26,11 @@
     <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
   </div>
 
-    <!-- DATAAAAAAA -->
+  <div class="field">
+    <%= f.label :from, "Interval" %><br />
+    <%= f.text_field :from, size: 10 %>
+    <%= f.text_field :to, size: 10 %>
+  </div>
 
   <div class="actions"><%= f.submit "Advanced search" %></div>
 <% end %>
