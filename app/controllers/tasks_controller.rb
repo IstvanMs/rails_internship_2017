@@ -57,6 +57,7 @@ class TasksController < ApplicationController
 				end
 			end
 		end
+		@lengths = {'tasks' => @tasks.length}
 
 		@tasks = @tasks.paginate(:page => params[:page], :per_page => 50)
 

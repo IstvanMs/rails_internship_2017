@@ -1,17 +1,17 @@
 <div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 800px;">
 	<div class="panel-heading">
-		<center><h3> Project information </h3>
+		<center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['projects'].to_s + ' project'.pluralize(@lengths['projects']) %>"> Project information </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(view all projects)',{ :controller => 'projects', :action => 'index'} %></center>
       <% end %>
       <% if current_page?(controller: 'dashboards', action: 'index') && @current_user.role == 'Manager'%>
       <div class='row'>
-          <%= button_to new_project_path , :class => 'btn btn-md btn-success pull-right' do%>
-          <i class="glyphicon glyphicon-plus">Create new project</i>
+          <%= button_to new_project_path , :class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 10px;' do%>
+            <i class="glyphicon glyphicon-plus">Create</i>
           <% end %>
       </div>
       <% end %>
-      <% if current_page?(controller: 'projects', action: 'index') %>
+      <% if !current_page?(controller: 'dashboards', action: 'index') %>
         <div class='row'>
           <div class='col-xs-2'>
             <%= form_tag :action => 'search' do%>
@@ -53,7 +53,7 @@
     <% @projects.each do |project| %>
       <div class='row' style='border-bottom: 1px solid #e0e0e0;' align='center'>
         <div class='col-xs-2'><h5><%= project.title %></h5></div>
-        <% if current_page?(controller: 'projects', action: 'index')%>
+        <% if !current_page?(controller: 'dashboards', action: 'index')%>
           <div class='col-xs-3'><h5><%= project.text %></h5></div>
         <% end %>
         <div class='col-xs-1'><h5><%= @project_infos[project.id]['client_name'] %></h5></div>
@@ -69,8 +69,13 @@
       </div>
     <% end %>
   </div>
-  <% if current_page?(controller: 'projects', action: 'index')%>
+  <% if !current_page?(controller: 'dashboards', action: 'index')%>
     <center><%= will_paginate @projects %></center>
   <% end %>
 </div>
 
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
+</script>

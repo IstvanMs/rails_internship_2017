@@ -185,7 +185,7 @@
             <div class="modal-body">
                 <div class='container'>
                 	<div class='row' style='overflow-x: auto; overflow-y:hidden;'>
-                		<div class='col-xs-8' style="background-color: #f2f9f7; width: 764px; height: 500px; border: 2px solid; border-color: #c0d8cf; border-radius: 5px;">
+                		<div id='diag' class='col-xs-8' style="background-color: #f2f9f7; width: 764px; height: 500px; border: 2px solid; border-color: #c0d8cf; border-radius: 5px;">
                 			<div class='row' style='width: 760px; height: 470px; overflow-y: auto; overflow-x:hidden;'>
                 				<div id="work1">
     							</div>
@@ -255,12 +255,12 @@
 						$modal.find('.edit-title').html('Day ' + day + ' (user: ' + user.username + ' - month: ' + data.helper.month + ')');
 			            
 						if(document.getElementById('canvas1') == null){
-		            		var newCanvas = $('<canvas/>',{ id: 'canvas1'}).prop({ width: 720, height: canvas_h * 30 });
+		            		var newCanvas = $('<canvas/>',{ id: 'canvas1'}).prop({ width: 720, height: canvas_h * 31 });
 							$('#work1').append(newCanvas);
 							$('#canvas1').css('margin', (460 - canvas_h * 30).toString() + 'px 0px 0px 20px');
 						}else{
 							$("#canvas1").remove();
-							var newCanvas = $('<canvas/>',{ id: 'canvas1'}).prop({ width: 720, height: canvas_h * 30 });
+							var newCanvas = $('<canvas/>',{ id: 'canvas1'}).prop({ width: 720, height: canvas_h * 31 });
 							$('#work1').append(newCanvas);
 							$('#canvas1').css('margin', (460 - canvas_h * 30).toString() + 'px 0px 0px 20px');
 						}
@@ -277,11 +277,11 @@
 						}
 
 						if(document.getElementById('canvas3') == null){
-		            		var newCanvas = $('<canvas/>',{ id: 'canvas3'}).prop({ width: 374, height: interval_len * 30 });
+		            		var newCanvas = $('<canvas/>',{ id: 'canvas3'}).prop({ width: 374, height: interval_len * 35 });
 							$('#work3').append(newCanvas);
 						}else{
 							$("#canvas3").remove();
-							var newCanvas = $('<canvas/>',{ id: 'canvas3'}).prop({ width: 374, height: interval_len * 30 });
+							var newCanvas = $('<canvas/>',{ id: 'canvas3'}).prop({ width: 374, height: interval_len * 35 });
 							$('#work3').append(newCanvas);
 						}
 
@@ -301,6 +301,8 @@
 						ctx = c.getContext('2d');
 						var c2 = document.getElementById('canvas3');
 						var ctx2 = c2.getContext('2d');
+						ctx2.fillStyle = "#f2f9f7";
+						ctx2.fillRect(0, 0, c2.width, c2.height);
 
 						for(var i = 0; i < tasks.length; ++i){
 							var color = getRndColor();
@@ -324,7 +326,7 @@
 								}else{
 									ctx2.fillStyle = 'black';
 								}
-								ctx2.fillText(i + 1, 17, j2*30 + 25);
+								ctx.fillText(i + 1, 17, i*30 + 25);
 								ctx2.fillStyle = 'black';
 								ctx2.fillText(tasks[i].id, 60, j2*30 + 25);
 								ctx2.fillText(tasks[i].title, 110, j2*30 + 25);
@@ -343,8 +345,11 @@
 $('#cmd').click(function () {
     var pdf = new jsPDF('p','pt','a4');
 
-	pdf.addHTML(document.getElementById('gantt-modal'),function() {
-	    pdf.save(document.getElementById('title').innerHTML +'.pdf');
+	pdf.addHTML(document.getElementById('diag'), 0, 0, function() {
+	    pdf.addPage();
+	    pdf.addHTML(document.getElementById('canvas3'), 0, 0, function() {
+		    pdf.save(document.getElementById('title').innerHTML +'.pdf');
+		});
 	});
 });
 </script>

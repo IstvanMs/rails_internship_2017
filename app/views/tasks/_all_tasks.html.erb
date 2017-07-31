@@ -1,13 +1,13 @@
 <div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 850px;">
   <div class="panel-heading">
-    <center><h3> Task information </h3>
+    <center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['tasks'].to_s + ' task'.pluralize(@lengths['tasks']) %>"> Task information </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(view all tasks)',{ :controller => 'tasks', :action => 'index'} %></center>
       <% end %>
       <% if current_page?(controller: 'dashboards', action: 'index') && @current_user.role == 'Manager'%>
       <div class='row'>
         <div class="dropdown pull-right">
-            <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle"><i class="glyphicon glyphicon-plus"></i>Add new task to project<b class="caret"></b></a>
+            <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle" style='margin-right: 10px;'><i class="glyphicon glyphicon-plus"></i>Add new task to project<b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <% @projects.each do |project| %>
                   <li><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></li>
@@ -119,3 +119,10 @@
   <p><%= link_to "Advanced Search", new_advanced_search_path %></p>
 
 </div>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
+</script>
