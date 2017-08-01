@@ -41,11 +41,11 @@
       <% if current_page?(controller: 'tasks', action: 'index')%>
         <div class='col-xs-3'><h4>Requirement</h4></div>
       <% end %>
-      <div class='col-xs-1'><h4>Client</h4></div>
       <div class='col-xs-1'><h4>Assigned User</h4></div>
       <div class='col-xs-1'><h4>Project</h4></div>
       <div class='col-xs-1'><h4>Type</h4></div>
       <div class='col-xs-1'><h4>Status</h4></div>
+      <div class='col-xs-1'><h4></h4></div>
       <% if @current_user.role == 'Employee' %>
         <div class='col-xs-2'></div>
       <% end %>
@@ -74,20 +74,24 @@
         <% if current_page?(controller: 'tasks', action: 'index')%>
           <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
         <% end %>
-        <div class='col-xs-1'><h5><%= @task_infos[task.id]['client_name'] %></h5></div>
         <div class='col-xs-1'><h5><%= @task_infos[task.id]['assigned'] %></h5></div>
         <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
         <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
         <div class='col-xs-1'><h5><%= task.status %></h5></div>
         <% if @current_user.role == 'Manager' %>
-        <div class='col-xs-2'>
-          <h5 class='pull-right'><%= link_to 'Destroy Task', [task.project, task],
+        <div class='col-xs-3'>
+          <h5 class='pull-right'><%= link_to 'Show', task_path(task) %> | 
+            <%= link_to 'Edit', edit_task_path(task) %> | 
+            <%= link_to 'Destroy Task', [task.project, task],
             method: :delete,
             data: { confirm: 'Are you sure?' } %></h5>
           </div>
         <% end %>
         <% if @current_user.role == 'Employee' %>
             <%@work_day=WorkDay.get_work_day%>
+          <div class='col-xs-1'>
+            <%= link_to 'Show', task_path(task) %>
+          </div>
           <div class='col-xs-2'>
             <div class='row'>
               <div class="col-md-4" >

@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
-	before_action :authenticate_user, :only => [:index, :start_task, :pause_task, :finish_task, :search]
-	before_action :manager_user, :only => [:create, :destroy, :add_task]
+	before_action :authenticate_user, :only => [:index, :start_task, :pause_task, :finish_task, :search, :show]
+	before_action :manager_user, :only => [:create, :destroy, :add_task, :edit]
 
 	def create
 		@project = Project.find(params[:project_id])
@@ -12,6 +12,29 @@ class TasksController < ApplicationController
 		else
 			@users = User.where('role != ? and role != ?', 'Client', 'Manager')
 			render 'add_task'
+		end
+	end
+
+	def show
+		@task = Task.find(params[:id])
+		@assigned_user = User.find(@task.assigned_user)
+	end
+
+	def edit
+		@task = Task.find(params[:id])
+		@project = Project.find(@task.project_id)
+		@users = User.where('role != ? and role != ?', 'Client', 'Manager')
+	end
+
+	def update
+		@task = Task.find(params[:id])
+		@project = Project.find(@task.project_id)
+		@users = User.where('role != ? and role != ?', 'Client', 'Manager')
+		
+		if @task.update(task_params)
+			redirect_to @task
+		else
+			render 'edit'
 		end
 	end
 
@@ -70,38 +93,22 @@ class TasksController < ApplicationController
 			Task.pause(@task)
 		end
 		Task.start(Task.find(params[:task]))
-		if request.referer == 'http://localhost:3000/dashboards/index'
-			redirect_to '/dashboards/index'
-		else
-			redirect_to '/tasks/index'
-		end
+		redirect_to request.env['HTTP_REFERER']
 	end
 
 	def pause_task
 		Task.pause(Task.find(params[:task]))
-		if request.referer == 'http://localhost:3000/dashboards/index'
-				redirect_to '/dashboards/index'
-		else
-				redirect_to '/tasks/index'
-		end
+		redirect_to request.env['HTTP_REFERER']
 	end
 
 	def finish_task
 		Task.finish(Task.find(params[:task]))
-		if request.referer == 'http://localhost:3000/dashboards/index'
-			redirect_to '/dashboards/index'
-		else
-			redirect_to '/tasks/index'
-		end
+		redirect_to request.env['HTTP_REFERER']
 	end
 
 	def pause_current_task
 		Task.pause(Task.find(params[:task]))
-		if request.referer == 'http://localhost:3000/dashboards/index'
-			redirect_to '/dashboards/index'
-		else
-			redirect_to '/tasks/index'
-		end
+		redirect_to request.env['HTTP_REFERER']
 	end
 
 	private

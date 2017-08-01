@@ -59,6 +59,8 @@ Rails.application.routes.draw do
 
 	resources :projects
 
+  resources :tasks
+
 	resources :projects do
 		resources :tasks
   end
