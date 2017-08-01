@@ -87,11 +87,10 @@
           </div>
         <% end %>
         <% if @current_user.role == 'Employee' %>
-            <%@work_day=WorkDay.get_work_day%>
           <div class='col-xs-2'>
             <div class='row'>
               <div class="col-md-4" >
-                  <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => @work_day.status == 'Not-started' || @work_day.status == 'Finished'|| task.status == 'Started' || task.status == 'Finished' } do%>
+                  <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => (@work_day && @work_day.status != 'Started') || task.status == 'Started' || task.status == 'Finished' } do%>
                   <i class="glyphicon glyphicon-play"></i>
                   <% end %>
                 </div>

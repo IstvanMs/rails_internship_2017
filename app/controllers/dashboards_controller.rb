@@ -39,8 +39,7 @@ class DashboardsController < ApplicationController
 
         @project_infos = Project.create_project_infos(@projects)
 
-        @work_days = WorkDay.get_work_day
-        #puts @work_day
+        @work_day = WorkDay.get_work_day(@current_user.id)
 
         render 'index_employee'
 
