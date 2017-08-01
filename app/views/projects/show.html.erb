@@ -7,7 +7,7 @@
 	</div>
 	<% end %>
 	<div class='row'>
-	<div class="col-xs-4" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
+	<div class="col-xs-4" style="min-width: 400px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
 	  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
 	    <div class="panel-heading">
 	      <center><h2>Project(<%= @project.title %>)</h1></center>
@@ -33,9 +33,17 @@
 				<strong>Project Date:</strong>
 				<center><%= @project_infos['created_at'] %></center>
 			</h4>
+
 			<h4>
-				<strong>Users</strong>
-		        
+				<strong>Assigned users:</strong>
+			</h4>
+			<ul>
+				<% @users_in.each do |user| %>
+					<li><%= user.username%></li>
+				<% end %>
+			</ul>
+
+			<h4>
 				<center><div class='row'>
 					<div class="dropdown">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle">Remove user from project<b class="caret"></b></a>
@@ -52,9 +60,7 @@
 	  </div>
 	</div>
 
-	<span class="bottomleft">
-		<%= button_to "Back", {:controller => 'projects', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
-	</span>
+	<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
 </div>
 
 <div id="addUserToProject" class="modal fade">
@@ -115,19 +121,24 @@
 	name = name.substr(1,name.length - 2);
 	id = id.split(',');
 	name = name.split(',');
-	var newDiv = document.createElement('div');
-	var selectHTML = "";
-	selectHTML="<center><label>Users:</label><center>";
-	newDiv.innerHTML = selectHTML;
-	document.getElementById('select_for_users').appendChild(newDiv);
-	newDiv = document.createElement('div');
-	selectHTML = "";
-	selectHTML="<select id=\"selected_id\" name=\"selected_id\">";
-	for(var i = 0; i < id.length; i = i + 1) {
-	  selectHTML += "<option value='" + id[i].trim() + "'>" + name[i].trim().substr(6,name[i].trim().length - 12) + "</option>";
+	if (id[0] == ''){
+		var newDiv = document.createElement('div');
+		newDiv.innerHTML = "<center><h4>No users available!</h4></center>";
+	}else{
+		var newDiv = document.createElement('div');
+		var selectHTML = "";
+		selectHTML="<center><label>Users:</label><center>";
+		newDiv.innerHTML = selectHTML;
+		document.getElementById('select_for_users').appendChild(newDiv);
+		newDiv = document.createElement('div');
+		selectHTML = "";
+		selectHTML="<select id=\"selected_id\" name=\"selected_id\">";
+		for(var i = 0; i < id.length; i = i + 1) {
+		  selectHTML += "<option value='" + id[i].trim() + "'>" + name[i].trim().substr(6,name[i].trim().length - 12) + "</option>";
+		}
+		selectHTML += "</select>";
+		newDiv.innerHTML = selectHTML;
 	}
-	selectHTML += "</select>";
-	newDiv.innerHTML = selectHTML;
 	document.getElementById('select_for_users').appendChild(newDiv);
   }
 </script>
