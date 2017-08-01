@@ -1,6 +1,7 @@
 <div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 850px;">
   <div class="panel-heading">
     <center><h3> Task information </h3>
+
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(view all tasks)',{ :controller => 'tasks', :action => 'index'} %></center>
       <% end %>
@@ -87,16 +88,17 @@
           </div>
         <% end %>
         <% if @current_user.role == 'Employee' %>
+            <%@work_day=WorkDay.get_work_day%>
           <div class='col-xs-2'>
             <div class='row'>
               <div class="col-md-4" >
-                  <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => task.status == 'Started' || task.status == 'Finished'} do%>
+                  <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => @work_day.status == 'Not-started' || @work_day.status == 'Finished'|| task.status == 'Started' || task.status == 'Finished' } do%>
                   <i class="glyphicon glyphicon-play"></i>
                   <% end %>
                 </div>
 
                 <div class="col-md-4" >
-                  <%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == "Paused" || task.status == 'Finished' || task.status == 'Not-started'} do%>
+                  <%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == 'Paused' || task.status == 'Finished' || task.status == 'Not-started'} do%>
                   <i class="glyphicon glyphicon-pause"></i>
                   <% end %>
                 </div>

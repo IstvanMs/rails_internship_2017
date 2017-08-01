@@ -1,0 +1,25 @@
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey;">
+  <div class="panel-heading">
+    <center><h3> Work day information </h3></center>
+  </div>
+
+  <div class='container' style='width: 100%;'>
+    <div class='row' style="background-color: #55b25d;" align='center'>
+      <div class='col-xs-2'><h4>User</h4></div>
+      <div class='col-xs-2'><h4>Status</h4></div>
+          <div class='col-xs-2'><h4>Start time</h4></div>
+          <div class='col-xs-2'><h4>Worked time</h4></div>
+          <div class='col-xs-2'><h4>Un-end</h4></div>
+    </div>
+
+    <% @users.each do |user| %>
+        <% @work_day = WorkDay.where(user_id: user.id) %>
+
+        <div class='col-xs-2'><h5><%= user.username %></h5></div>
+        <div class='col-xs-2'><h5><%= @work_day.status %></h5></div>
+        <div class='col-xs-2'><h5> - <!--user.work_day.start_time --></h5></div>
+        <div class='col-xs-2'><h5> - </h5></div>
+        <div class='col-xs-2'><h5> - </h5></div>
+    <% end %>
+  </div>
+</div>

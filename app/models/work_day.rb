@@ -3,9 +3,6 @@ class WorkDay < ApplicationRecord
 	belongs_to :user
 
 	def self.start(work_day)
-		puts '_'
-		puts work_day
-		puts '_'
 		if work_day.status != "Started"
 				work_day.start_time = Time.now
 		end
@@ -17,6 +14,9 @@ class WorkDay < ApplicationRecord
 				work_day.end_time = Time.now
 		end
 			work_day.update_attribute(:status, 'Finished')
+		#@tasks = Task.all
+		#@tasks.each do |task|
+		#	Task.pause(Task.find(task.id))
 	end
 
 	def self.get_work_day

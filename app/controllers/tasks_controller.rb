@@ -69,22 +69,38 @@ class TasksController < ApplicationController
 			Task.pause(@task)
 		end
 		Task.start(Task.find(params[:task]))
-		redirect_to :controller => 'tasks' , :action => 'index'
+		if request.referer == 'http://localhost:3000/dashboards/index'
+			redirect_to '/dashboards/index'
+		else
+			redirect_to '/tasks/index'
+		end
 	end
 
 	def pause_task
 		Task.pause(Task.find(params[:task]))
-		redirect_to :controller => 'tasks' , :action => 'index'
+		if request.referer == 'http://localhost:3000/dashboards/index'
+				redirect_to '/dashboards/index'
+		else
+				redirect_to '/tasks/index'
+		end
 	end
 
 	def finish_task
 		Task.finish(Task.find(params[:task]))
-		redirect_to :controller => 'tasks' , :action => 'index'	
+		if request.referer == 'http://localhost:3000/dashboards/index'
+			redirect_to '/dashboards/index'
+		else
+			redirect_to '/tasks/index'
+		end
 	end
 
 	def pause_current_task
 		Task.pause(Task.find(params[:task]))
-		redirect_to :controller => 'tasks' , :action => 'index'
+		if request.referer == 'http://localhost:3000/dashboards/index'
+			redirect_to '/dashboards/index'
+		else
+			redirect_to '/tasks/index'
+		end
 	end
 
 	private

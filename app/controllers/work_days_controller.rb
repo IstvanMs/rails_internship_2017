@@ -12,5 +12,4 @@ class WorkDaysController < ApplicationController
       WorkDay.finish(@work_day)
       redirect_to :controller => 'dashboards' , :action => 'index'
     end
-
 end

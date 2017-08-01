@@ -36,6 +36,8 @@ class DashboardsController < ApplicationController
         
         @tasks = Task.all.order(status: :created_at, status: :desc, title: :asc).first(10)
         @task_infos = Task.create_task_infos(@tasks)
+
+        @users = User.where( :role => 'Employee' )
         
         render 'index_manager'
 
