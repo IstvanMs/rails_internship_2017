@@ -13,15 +13,21 @@
     </div>
 
     <% @users.each do |user| %>
-        <% work_day = WorkDay.get_work_day %>
         <% work_day = WorkDay.where(:user_id => user.id) %>
 
-
-        <div class='col-xs-2'><h5><%= user.username %></h5></div>
-        <div class='col-xs-2'><h5><%= work_day.status %></h5></div>
-        <div class='col-xs-2'><h5><%= work_day.start_time %></h5></div>
-        <div class='col-xs-2'><h5> - </h5></div>
-        <div class='col-xs-2'><h5> - </h5></div>
+        <div class='col-xs-2'><h5> user.username</h5></div>
+        <div class='col-xs-2'><h5> work_day.status</h5></div>
+        <div class='col-xs-2'><h5>work_day.start_time</h5></div>
+        <!--if work_day.end_time != nil
+          <div class='col-xs-2'><h5> work_day.end_time - work_day.start_time</h5></div>
+         else
+          <div class='col-xs-2'><h5> Still working </h5></div>
+         end -->
+        <div class='col-xs-2'>
+          <button type="Un-end" class="btn btn-sm btn-primary btn-block">
+            <i class="glyphicon glyphicon"></i> Un-end
+          </button>
+        </div>
     <% end %>
   </div>
 </div>
