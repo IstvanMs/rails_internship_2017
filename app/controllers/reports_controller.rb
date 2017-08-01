@@ -1,4 +1,4 @@
-class ReportsController < ApplicationController
+ class ReportsController < ApplicationController
 	before_action :manager_user, :only => [:index, :by_user, :by_project, :get_gantt]
 
 	def index
