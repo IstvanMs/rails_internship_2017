@@ -20,6 +20,7 @@ class NotesController < ApplicationController
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     end
     @notes = Note.where(:id => @notes.collect(&:id)).order(:visibility)
+    @lengths = {'notes' => @notes.length}
     @notes = @notes.paginate(:page => params[:page], :per_page => 50)
   end
 

@@ -5,7 +5,10 @@
 				<div class="panel-heading">
 					<h3> Note information </h3>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body" style='background-color: <% if @note.visibility.split('-')[0] == 'general'%>#eaf1f9<% end %>
+                    <% if @note.visibility.split('-')[0] == 'task'%>#c9f0ff<% end %>
+                    <% if @note.visibility.split('-')[0] == 'project'%>#ffffc9<% end %>
+                    <% if @note.visibility.split('-')[0] == 'user'%>#ffc9c9<% end %>;'>
 					<h4>
 						<strong>Text:</strong>
   						<%= @note.text %>

@@ -17,6 +17,7 @@ class ProjectsController < ApplicationController
 				@projects = Project.where('id in(?) and title like ?', @current_user.projects.ids, '%' + @search_par + '%').order(:title)
 			end
 		end
+		@lengths = {'projects' => @projects.length}
 		@projects = @projects.paginate(:page => params[:page], :per_page => 50)
 		@project_infos = Project.create_project_infos(@projects)
 	end	
