@@ -1,0 +1,49 @@
+<div class='container'>
+	<% if flash[:notice] %>
+	<div class='row'>
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
+	</div>
+	<% end %>
+	<div class='row'>
+	<div class="col-xs-4" style="min-width: 400px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
+	  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
+	    <div class="panel-heading">
+	      <center><h2>Task(<%= @task.title %>)</h1></center>
+	    </div>
+
+	    <div class="panel-body" style='background-color: <% if @task.status == 'Started'%>#c9ffd2<% end %>
+                    <% if @task.status == 'Not-started'%>#c9f0ff<% end %>
+                    <% if @task.status == 'Paused'%>#ffffc9<% end %>
+                    <% if @task.status == 'Finished'%>#ffc9c9<% end %>;'>
+			<h4>
+				<strong>Title:</strong><br>
+				<center><%= @task.title %></center>
+			</h4>
+
+			<h4>
+				<strong>Requirement:</strong>
+				<center><%= @task.requirement %></center>
+			</h4>
+
+			<h4>
+				<strong>Assigned User:</strong>
+				<center><%= @assigned_user.username %></center>
+			</h4>
+
+			<h4>
+				<strong>Status:</strong>
+				<center><%= @task.status %></center>
+			</h4>
+
+			<h4>
+				<strong>Type:</strong>
+				<center><%= @task.task_type %></center>
+			</h4>
+		</div>
+	  </div>
+	</div>
+
+	<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+</div>
