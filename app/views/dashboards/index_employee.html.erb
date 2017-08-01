@@ -1,19 +1,19 @@
-<div class='jumbotron' style="background: #e8f2ef;">
-	<div class='row'>
-		<div class='col-md-8' style='min-width: 870px;'>
+<div class='row'>
+	<div class='col-xs-8' style='min-width: 870px;'>
+		<div class='row'>
 			<%= render '/tasks/all_tasks' %>
 		</div>
 
-		<div class='col-md-4'>
-	      <%= render '/work_days/index' %>
-	    </div>
-	</div>
-	<div class='row'>
-		<div class='col-md-8' style='min-width: 870px;'>
+		<div class='row'>
 			<%= render '/projects/all_projects' %>
 		</div>
+	</div>
+	<div class='col-xs-4'>
+		<div class='row'>
+	      <%= render '/work_days/index' %>
+		</div>
 
-		<div class='col-md-4'>
+		<div class='row'>
 			<%= render '/notes/all_notes' %>
 		</div>
 	</div>

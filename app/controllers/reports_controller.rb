@@ -12,23 +12,12 @@
 		end
 		@years = (Time.now.year - 20 .. Time.now.year).to_a
 		@current_filter = Hash.new
-		if request.referrer == 'http://localhost:3000/reports/by_user'
-			@current_filter = {'year' => session[:reports_year], 'month' => session[:reports_month], 'user' => User.find(session[:reports_user]), 'len' => Time.days_in_month(Date::MONTHNAMES.index(session[:reports_month]))}
+		if params[:year] != nil && params[:month] != nil && params[:user] != nil
+			@current_filter = {'year' => params[:year], 'month' => params[:month], 'user' => User.find(params[:user]), 'len' => Time.days_in_month(Date::MONTHNAMES.index(params[:month]))}
 		else
-			session[:reports_year] = nil
-			session[:reports_month] = nil
-			session[:reports_user] = nil
 			@current_filter = {'year' => @years[20], 'month' => Date::MONTHNAMES[Time.now.month] , 'user' => @users.first, 'len' => Time.days_in_month(Date::MONTHNAMES.index(@months[0]))}
 		end
 		@data = Report.generate_data(@current_filter)
-	end
-
-
-	def filter
-		session[:reports_year] = params[:year]
-		session[:reports_month] = params[:month]
-		session[:reports_user] = params[:user]
-		redirect_to reports_by_user_path
 	end
 
 	def get_gantt

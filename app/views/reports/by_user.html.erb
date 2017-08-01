@@ -4,7 +4,7 @@
 			<div class='panel-body'>
 				<div class='row'>
 					<div class='col-xs-2'>
-					<%= form_tag :action => 'filter' do%>
+					<%= form_tag :action => 'by_user' do%>
 						<div class='row' style="white-space: nowrap">
 							<label>&nbsp;&nbsp;&nbsp;&nbsp;Year:&nbsp;</label>
 							<%= select_tag 'year', options_for_select(@years, @current_filter['year']) %>
@@ -326,6 +326,7 @@
 								}else{
 									ctx2.fillStyle = 'black';
 								}
+								ctx2.fillText(i + 1, 17, (j2 + 1) * 30 - 4);
 								ctx.fillText(i + 1, 17, i*30 + 25);
 								ctx2.fillStyle = 'black';
 								ctx2.fillText(tasks[i].id, 60, j2*30 + 25);
