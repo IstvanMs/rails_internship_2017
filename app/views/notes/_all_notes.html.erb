@@ -1,0 +1,80 @@
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 400px;">
+  <div class="panel-heading">
+    <center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['notes'].to_s + ' note'.pluralize(@lengths['notes']) %>"> Note information </h3>
+      <% if current_page?(controller: 'dashboards', action: 'index')%>
+        <%= link_to '(view all notes)',{ :controller => 'notes', :action => 'index'} %></center>
+      <% end %>
+      <% if current_page?(controller: 'dashboards', action: 'index') && @current_user.role == 'Manager'%>
+      <div class='row'>
+          <%= button_to new_note_path, :class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 10px;' do%>
+            <i class="glyphicon glyphicon-plus">Add</i>
+          <% end %>
+      </div>  
+      <% end %>
+  </div>
+   
+  <div class='container' style='width: 100%;'>
+    <div class='row' style="background-color: #55b25d;" align='center'>
+      <div class='col-xs-2'><h4>Type</h4></div>
+      <div class='col-xs-4'><h4>Text</h4></div>
+      <% if current_page?(:controller => 'notes', :action => 'index') %>
+        <div class='col-xs-2'><h4>Created</h4></div>
+      <% end %>
+      <% if @current_user.role == 'Manager' %>
+        <div class='col-xs-2'><h4>Visibility</h4></div>
+        <div class='col-xs-2'><h4>          </h4></div>
+      <% end %>
+    </div>
+
+    <% if @notes.length == 0 %>
+      <div class='row' align='center'>
+        <h1>No notes available!</h1>
+      </div>
+    <% end %>
+
+    <% @label = '' %>
+
+    <% @notes.each do |note| %>
+      <% if @label != note.visibility.split('-')[0] %>
+        <div class='row' style='background-color: #eaeaea;'><b><%= note.visibility.split('-')[0].titleize %></b></div>
+        <% @label = note.visibility.split('-')[0] %>
+      <% end %>
+
+      <div class='row' style='border-bottom: 1px solid #e0e0e0; background-color: <% if @label == 'general'%>#eaf1f9<% end %>
+                    <% if @label == 'task'%>#c9f0ff<% end %>
+                    <% if @label == 'project'%>#ffffc9<% end %>
+                    <% if @label == 'user'%>#ffc9c9<% end %>; border-bottom: 1px solid #e0e0e0;' align='center'>
+        <div class='col-xs-2'><h5><%= note.visibility.split('-')[0] %></h5></div>
+          <div class='col-xs-4'><h5><%= note.text %></h5></div>
+          <% if !current_page?(:controller => 'dashboards', :action => 'index') %>
+            <div class='col-xs-2'><h5><%= note.created_at %></h5></div>
+          <% end %>
+          <% if @current_user.role == 'Manager' %>
+            <div class='col-xs-2'><h5><%= note.visibility %></h5></div>
+            <div class='col-xs-2'>
+                <%= link_to 'Show', note_path(note) %> | 
+                <%= link_to 'Edit', edit_note_path(note) %> |
+                <%= link_to 'Destroy', note_path(note),
+                            method: :delete,
+                            data: { confirm: 'Are you sure?' } %>   
+              </div>
+          <% else %>
+          <div class='col-xs-2'><%= link_to 'Show', note_path(note) %></div>
+          <% end %>
+        </div>
+    <% end %>
+  </div>
+  <% if !current_page?(controller: 'dashboards', action: 'index')%>
+    <center><%= will_paginate @notes_finish_task_path %><center>
+  <% end %>
+<<<<<<< HEAD
+</div>
+=======
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
+</script>
+>>>>>>> ac50b0a87e332eb8d392c7313e8322c9ba77998b
