@@ -1,24 +1,25 @@
-<center><div class="panel panel-default">
-      <%= form_for @task do |f| %>
+<div class="row"> 
+    <center><div class="panel panel-default">
+      <%= form_for([@project, @project.tasks.build]) do |f| %>
         <div class="panel-body">
-          <h4>
+          <p>
             <%= f.label :title %><br>
             <%= f.text_field :title %>
-          </h4>
-          <h4>
+          </p>
+          <p>
             <%= f.label :requirement %><br>
             <%= f.text_area :requirement %>
           </p>
 
-          <h4>
+          <p>
             <%= f.label "Role" %><br>
             <%= f.select(:task_type, ['Feature', 'Bug'] ) %>
-          </h4>
+          </p>
 
-          <h4>
+          <p>
             <%= f.label "Assigned User" %><br>
             <%= f.select :assigned_user, options_for_select(@users.map{ |u| [u.username, u.id] }, selected_key = f.object.assigned_user) %>
-          </h4>
+          </p>
             <%= f.hidden_field :intervals, :value => "[]" %>
             <%= f.hidden_field :status, :value => "Not-started" %>
 
@@ -31,6 +32,13 @@
           </div>
       <% end %>
 
+      <!--"INVALID FORM" BEFORE ERRORS-->
+      <!--<% if flash[:notice] %>
+        <div class="alert alert-warning">
+            <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+        </div>
+      <% end %>-->
+
       <% if @task != nil %>
         <% if @task.errors.any? %>
             <div class="alert alert-warning" class="Signup_Errors">
@@ -41,3 +49,4 @@
         <% end %>
       <% end %>
     </div>
+</div>

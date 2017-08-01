@@ -17,7 +17,12 @@ class Task < ApplicationRecord
         @time = @time.truncate + 1
       end
       client_name = User.joins(:projects).where(:role => 'Client', :projects => {:id => t.project_id}).first
-      @task_infos[t.id] = {'client_name' => client_name,'assigned' => t.user.username,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => t.project.title}
+      if t.user == nil
+        assigned = '';
+      else
+        assigned = t.user.username
+      end
+      @task_infos[t.id] = {'client_name' => client_name, 'assigned' => assigned,'last_update' => t.updated_at.strftime("%F %I:%M%p"),'duration' => @time,'project_name' => t.project.title}
     end
     return @task_infos
   end
