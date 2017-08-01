@@ -19,8 +19,6 @@ Rails.application.routes.draw do
 
   match 'sessions/change_password', :to => 'users#change_password' , :via => [:get, :post]
 
-  match 'reports/filter', :to => 'reports#filter' , :via => [:get, :post]
-
   match 'reports/by_user', :to => 'reports#by_user' , :via => [:get, :post]
 
   match 'reports/by_project', :to => 'reports#by_project' , :via => [:get, :post]
