@@ -1,11 +1,8 @@
 <div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 850px;">
   <div class="panel-heading">
-<<<<<<< HEAD
     <center><h3> Task information </h3>
 
-=======
     <center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['tasks'].to_s + ' task'.pluralize(@lengths['tasks']) %>"> Task information </h3>
->>>>>>> ac50b0a87e332eb8d392c7313e8322c9ba77998b
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(view all tasks)',{ :controller => 'tasks', :action => 'index'} %></center>
       <% end %>
