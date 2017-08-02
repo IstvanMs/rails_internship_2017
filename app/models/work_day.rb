@@ -2,6 +2,11 @@ class WorkDay < ApplicationRecord
 
 	belongs_to :user
 
+  def self.pause_all_tasks(user_id)
+    @task = Task.find_by(:status => 'Started', :assigned_user => user_id)
+    Task.pause(@task)
+  end
+
 	def self.start(work_day, user_id)
 		if work_day.status != "Started"
 			work_day.start_time = Time.now
@@ -13,12 +18,11 @@ class WorkDay < ApplicationRecord
 
 	def self.finish(work_day)
 		if work_day.status != "Finished"
-				work_day.end_time = Time.now
+      work_day.end_time = Time.now
+      work_day.status = "Finished"
+      work_day.save
+      WorkDay.pause_all_tasks(work_day.user_id)
 		end
-			work_day.update_attribute(:status, 'Finished')
-		#@tasks = Task.all
-		#@tasks.each do |task|
-		#	Task.pause(Task.find(task.id))
 	end
 
 	def self.get_work_day(user_id)
@@ -30,7 +34,7 @@ class WorkDay < ApplicationRecord
 				end_time = @work_day.end_time
 				next_day = end_time + 1.day
 				next_start_time = Time.new(next_day.year, next_day.month, next_day.day, 0, 0, 0)
-				if (Time.now >= next_start_time)
+				if Time.now >= next_start_time
 					WorkDay.new
 				else
 					nil
@@ -40,6 +44,5 @@ class WorkDay < ApplicationRecord
 			WorkDay.new
 		end
 	end
-
 
 end

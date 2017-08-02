@@ -16,23 +16,6 @@
         </div>
       </div>  
       <% end %>
-      <% if current_page?(controller: 'tasks', action: 'index') %>
-        <div class='row'>
-          <div class='col-xs-2'>
-            <%= form_tag :action => 'search' do%>
-              <div class="input-group">
-                <%= text_field_tag 'search', nil, placeholder: 'Search term...', :class => 'form-control' %>
-  
-                <span class="input-group-btn">
-                  <%= button_tag(type: "submit", class: "btn btn-md btn-default") do %>
-                      <i class="glyphicon glyphicon-search"></i>
-                  <% end %>
-                </span>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
   </div>
   
    <div class='container' style='width: 100%;'>
@@ -88,14 +71,13 @@
           </div>
         <% end %>
         <% if @current_user.role == 'Employee' %>
-            <%@work_day=WorkDay.get_work_day%>
           <div class='col-xs-1'>
             <%= link_to 'Show', task_path(task) %>
           </div>
           <div class='col-xs-2'>
             <div class='row'>
               <div class="col-md-4" >
-                   <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => (@work_day && @work_day.status != 'Started') || task.status == 'Started' || task.status == 'Finished' } do%>
+                   <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => (@work_day && @work_day.status != 'Started') || !@work_day || task.status == 'Started' || task.status == 'Finished' } do%>
                    <i class="glyphicon glyphicon-play"></i>
                    <% end %>
                  </div>
@@ -108,7 +90,7 @@
                 </div>
 
                 <div class="col-md-4" >
-                  <%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || task.status == 'Not-started'} do%>
+                  <%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || !@work_day || task.status == 'Not-started'} do%>
                   <i class="glyphicon glyphicon-stop"></i>
                   <% end %>
                 </div>
@@ -119,11 +101,63 @@
     <% end %>
   </div>
   <% if current_page?(controller: 'tasks', action: 'index')%>
-    <center><%= will_paginate @tasks_finish_task_path %><center>
+    <center><%= will_paginate @tasks_finish_task_path %></center>
   <% end %>
+<hr>
+<center><h3><a href="#advancedSearch" data-toggle="modal">Advanced search</a></h3></center><br />
 
-  <p><%= link_to "Advanced Search", new_advanced_search_path %></p>
+</div>
 
+<div id="advancedSearch" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Advanced Search</h4>
+      </div>
+      <div class="modal-body" align='center'>
+        <%= form_for AdvancedSearch.new do |f| %>
+            <div class="field">
+              <%= f.label :keywords %><br />
+              <%= f.text_field :keywords %>
+            </div>
+
+            <div class="field">
+              <%= f.label :project_id %><br />
+              <%= f.collection_select :project_id, Project.order(:title), :id, :title, include_blank: true %>
+            </div>
+
+            <div class="field">
+              <%= f.label :assigned_user_id %><br />
+              <%= f.collection_select :assigned_user_id, User.order(:username), :id, :username, include_blank: true %>
+            </div>
+
+            <div class="field">
+              <%= f.label :mode %><br />
+              <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true) %>
+            </div>
+
+            <div class="field">
+              <%= f.label :status %><br />
+              <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
+            </div>
+
+            <div class="field">
+              <%= f.label :from, "Interval" %><br />
+              <%= f.text_field :from, size: 10 %>
+              <%= f.text_field :to, size: 10 %>
+            </div>
+
+            <%= button_tag(type: "submit", class: "btn btn-success") do %>
+                <i class="glyphicon glyphicon-save">Submit</i>
+            <% end %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 

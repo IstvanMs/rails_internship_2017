@@ -111,6 +111,15 @@ class TasksController < ApplicationController
 		redirect_to request.env['HTTP_REFERER']
 	end
 
+	def create_advanced_search
+		@advanced_search = AdvancedSearch.create!(params[:advanced_search])
+		redirect_to @advanced_search
+	end
+
+	def show_advanced_search
+		@advanced_search = AdvancedSearch.find(params[:id])
+	end
+
 	private
 		def task_params
 			params.require(:task).permit(:title, :requirement, :task_type, :status, :assigned_user, :intervals)

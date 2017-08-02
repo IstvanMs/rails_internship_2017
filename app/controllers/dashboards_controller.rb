@@ -58,6 +58,10 @@ class DashboardsController < ApplicationController
         @task_infos = Task.create_task_infos(@tasks)
 
         @users = User.where( :role => 'Employee' )
+
+        this_time = Time.now
+        @today = Time.new(this_time.year, this_time.month, this_time.day, 0, 0, 0)
+
         
         render 'index_manager'
 
