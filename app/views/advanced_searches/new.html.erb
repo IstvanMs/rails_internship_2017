@@ -1,36 +1,51 @@
-<h1>Advanced search</h1>
+<div id="advancedSearch" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Advanced Search</h4>
+      </div>
+      <div class="modal-body" align='center'>
+        <%= form_for @advanced_search do |f| %>
+            <div class="field">
+              <%= f.label :keywords %><br />
+              <%= f.text_field :keywords %>
+            </div>
 
-<%= form_for @advanced_search do |f| %>
-  <div class="field">
-    <%= f.label :keywords %><br />
-    <%= f.text_field :keywords %>
+            <div class="field">
+              <%= f.label :project_id %><br />
+              <%= f.collection_select :project_id, Project.order(:title), :id, :title, include_blank: true %>
+            </div>
+
+            <div class="field">
+              <%= f.label :assigned_user_id %><br />
+              <%= f.collection_select :assigned_user_id, User.order(:username), :id, :username, include_blank: true %>
+            </div>
+
+            <div class="field">
+              <%= f.label :mode %><br />
+              <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true) %>
+            </div>
+
+            <div class="field">
+              <%= f.label :status %><br />
+              <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
+            </div>
+
+            <div class="field">
+              <%= f.label :from, "Interval" %><br />
+              <%= f.text_field :from, size: 10 %>
+              <%= f.text_field :to, size: 10 %>
+            </div>
+
+            <%= button_tag(type: "submit", class: "btn btn-success") do %>
+                <i class="glyphicon glyphicon-save">Save</i>
+            <% end %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :project_id %><br />
-    <%= f.collection_select :project_id, Project.order(:title), :id, :title, include_blank: true %>
-  </div>
-
-  <div class="field">
-    <%= f.label :assigned_user_id %><br />
-    <%= f.collection_select :assigned_user_id, User.order(:username), :id, :username, include_blank: true %>
-  </div>
-
-  <div class="field">
-    <%= f.label :mode %><br />
-    <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true) %>
-  </div>
-
-  <div class="field">
-    <%= f.label :status %><br />
-    <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
-  </div>
-
-  <div class="field">
-    <%= f.label :from, "Interval" %><br />
-    <%= f.text_field :from, size: 10 %>
-    <%= f.text_field :to, size: 10 %>
-  </div>
-
-  <div class="actions"><%= f.submit "Advanced search" %></div>
-<% end %>
+</div>

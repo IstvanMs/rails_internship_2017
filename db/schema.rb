@@ -11,6 +11,10 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170802084207) do
+<<<<<<< HEAD
+=======
+ActiveRecord::Schema.define(version: 20170802064903) do
+>>>>>>> 8fb22fb5877818d8db361c64ae9712273849b938
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -28,6 +32,13 @@ ActiveRecord::Schema.define(version: 20170802084207) do
     t.bigint "user_id"
     t.text "text"
     t.bigint "task_id"
+<<<<<<< HEAD
+=======
+    t.integer "reply_to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_comments_on_task_id"
+>>>>>>> 8fb22fb5877818d8db361c64ae9712273849b938
     t.integer "reply_to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

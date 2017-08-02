@@ -41,4 +41,9 @@ class User < ApplicationRecord
 	def match_password(login_password="")
 		encrypted_password == BCrypt::Engine.hash_secret(login_password, salt)
 	end
+
+	def get_work_day
+		WorkDay.get_work_day(id)
+	end
+
 end

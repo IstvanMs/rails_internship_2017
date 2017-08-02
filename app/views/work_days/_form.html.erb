@@ -13,14 +13,22 @@
     </div>
 
     <% @users.each do |user| %>
-        <% @work_day = WorkDay.get_work_day(user.id) %>
-
+        <% @work_day = user.get_work_day %>
+  <% if @work_day %>
     <div class='row' style="background-color: #ffffff;" align='center'>
       <div class='col-xs-2'><h5><%= user.username %></h5></div>
-      <div class='col-xs-2'><h5><%= @work_day.status %></h5></div>
+
+      <% if  @work_day.start_time != nil && @work_day.start_time > @today && @work_day.end_time !=nil %>
+          <div class='col-xs-2'><h5>Finished</h5></div>
+          <% elsif @work_day.start_time != nil && @work_day.start_time > @today %>
+              <div class='col-xs-2'><h5>Working</h5></div>
+              <% else %>
+                  <div class='col-xs-2'><h5>Not-working</h5></div>
+      <% end %>
+
       <div class='col-xs-3'><h5><%= @work_day.start_time %></h5></div>
       <% if @work_day.end_time != nil %>
-        <div class='col-xs-2'><h5><%= @work_day.end_time - work_day.start_time %></h5></div>
+        <div class='col-xs-2'><h5><%= @work_day.end_time - @work_day.start_time %></h5></div>
       <% else %>
         <div class='col-xs-2'><h5> Still working </h5></div>
       <% end %>
@@ -30,6 +38,12 @@
         </button>
       </div>
     </div>
+  <% else %>
+            <div class='row' style="background-color: #ffffff;" align='center'>
+              <div class='col-xs-2'><h5><%= user.username %></h5></div>
+              <div class='col-xs-10'><h5>Work day not started</h5></div>
+            </div>
+  <% end %>
     <% end %>
   </div>
 </div>
