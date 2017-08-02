@@ -62,7 +62,12 @@ class ProjectsController < ApplicationController
 
 	def show
 		@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
-		@users_sel = User.where('id NOT IN (?)', ProjectUser.where(:project_id => params[:id]).collect(&:user_id))
+		@table = ProjectUser.where(:project_id => params[:id]).collect(&:user_id)
+		if @table.length > 0
+			@users_sel = User.where('id NOT IN (?)', @table)
+		else
+			@users_sel = User.all
+		end
 		@clients = User.where(:role => 'Client')
 		@project = Project.find(params[:id])
 		@users = User.where.not(:role => 'Client')
