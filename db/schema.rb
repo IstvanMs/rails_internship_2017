@@ -82,7 +82,5 @@ ActiveRecord::Schema.define(version: 20170728100114) do
     t.string "status"
   end
 
-  add_foreign_key "project_users", "projects"
-  add_foreign_key "project_users", "users"
   add_foreign_key "tasks", "projects"
 end
