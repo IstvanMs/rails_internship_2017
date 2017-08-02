@@ -17,7 +17,11 @@ class TasksController < ApplicationController
 
 	def show
 		@task = Task.find(params[:id])
-		@assigned_user = User.find(@task.assigned_user)
+		if User.exists?(@task.assigned_user)
+			@assigned_user = User.find(@task.assigned_user)
+		else
+			@assigned_user = nil
+		end
 	end
 
 	def edit

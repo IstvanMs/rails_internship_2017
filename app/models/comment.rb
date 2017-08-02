@@ -1,4 +1,6 @@
 class Comment < ApplicationRecord
-  belongs_to :commenter
-  belongs_to :reply_to
+  validates :text, :presence => true, :length => { :minimum => 1 }
+
+  belongs_to :user
+  belongs_to :task
 end

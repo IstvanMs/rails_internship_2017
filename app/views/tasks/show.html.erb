@@ -1,49 +1,143 @@
-<div class='container'>
-	<% if flash[:notice] %>
+<div class='container' style="min-width: 420px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;">
 	<div class='row'>
-		<div class="alert alert-warning">
-		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		<div class='col-xs-8'>
+			<div class='row'>
+				<div class='col-xs-12'>
+					<% if flash[:notice] %>
+						<div class='row'>
+							<div class="alert alert-warning">
+							    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+							</div>
+						</div>
+					<% end %>
+
+					<div class='row'>
+						<div class="col-xs-12" style="min-width: 400px;"><br>
+						  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px; margin: 1cm 0cm 1cm 0cm;">
+						    <div class="panel-heading">
+						      <center><h2>Task(<%= @task.title %>)</h1></center>
+						    </div>
+
+						    <div class="panel-body" style='background-color: <% if @task.status == 'Started'%>#c9ffd2<% end %>
+					                    <% if @task.status == 'Not-started'%>#c9f0ff<% end %>
+					                    <% if @task.status == 'Paused'%>#ffffc9<% end %>
+					                    <% if @task.status == 'Finished'%>#ffc9c9<% end %>;'>
+								<h4>
+									<strong>Title:</strong><br>
+									<center><%= @task.title %></center>
+								</h4>
+
+								<h4>
+									<strong>Requirement:</strong>
+									<center><%= @task.requirement %></center>
+								</h4>
+
+								<h4>
+									<strong>Assigned User:</strong>
+									<center><% if @assigned_user %><%= @assigned_user.username %><% else %>-<% end %></center>
+								</h4>
+
+								<h4>
+									<strong>Status:</strong>
+									<center><%= @task.status %></center>
+								</h4>
+
+								<h4>
+									<strong>Type:</strong>
+									<center><%= @task.task_type %></center>
+								</h4>
+							</div>
+						  </div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class='row'>
+				<div class='col-xs-12'>
+					<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left', :style => 'margin: 0px 0px 10px 0px;'}%>
+				</div>
+			</div>
+		</div>
+
+		<div class='col-xs-4' style='min-width: 270px; margin-bottom: 58px;'>
+			<div class='row'>
+				<div class='col-xs-12' style="background: #ffffff; border: 1px solid lightgrey; border-radius: 5px; margin-top: 58px; min-height: 377px;">
+					<div class='row'>
+						<%= render '/comments/form', :@reply_to => nil %>
+					</div>
+					<hr style=' border: 1px solid #ccc;'>
+					<h4>Comments:</h4>
+					<div class='row' style='width: 100%;'>
+						<div class='container' style='margin: 0px 0px 10px 15px; background: #ffffff; border: 1px solid lightgrey;'>
+							<% @task.comments.each do |comment| %>
+							  <% if comment.user && comment.reply_to == nil %>
+							  	<div class='row'>
+							  		<div class='panel'>
+							  			<div class="panel-heading" style='background: #b5c6ad;'>
+							  				<div class='row'>
+							  					<div class='col-xs-9'>
+								  					<strong><i class='glyphicon glyphicon-user'></i><%= comment.user.username %>:</strong><br>
+								  				</div>
+								  				<div class='col-xs-3'>
+								  					<% if comment.user == @current_user || @current_user.role == 'Manager' %>
+									  					<%= link_to 'delete', [comment.task, comment],
+											            method: :delete,
+											            data: { confirm: 'Are you sure?' } %>
+										            <% end %>
+								  				</div>
+							  				</div>
+							  			</div>
+							  			<div class="panel-body" style='background: #f0f2ef;'>
+							  				<div class='row'>
+								  				<center><%= comment.text %></center>
+								  			</div>
+								  			
+								  			<div class='row'>
+												<div class="dropdown">
+												    <a href="#" data-toggle="dropdown" class="dropdown-toggle pull-right">reply <b class="caret"></b></a>
+												    <div class="container dropdown-menu">
+												    	<%= render 'comments/form', :@reply_to => comment.id %>
+												    </div>
+												</div>
+											</div>
+								  		</div>
+							  		</div>
+						  		</div>
+						  		<% @task.comments.each do |c| %>
+									<%if c.reply_to == comment.id %>
+										<div class='row'  style='margin-left: 20px;'>
+											<div class='panel'>
+				  								<div class="panel-heading" style='background: #dbe0d9;'>
+				  									<div class='row'>
+					  									<div class='col-xs-9'>
+										  					<strong><i class='glyphicon glyphicon-user'></i><%= c.user.username %>(reply):</strong><br>
+										  				</div>
+										  				<div class='col-xs-3'>
+										  					<% if c.user == @current_user || @current_user.role == 'Manager' %>
+											  					<%= link_to 'delete', [c.task, c],
+													            method: :delete,
+													            data: { confirm: 'Are you sure?' } %>
+												            <% end %>
+										  				</div>
+										  			</div>
+				  								</div>
+				  								<div class="panel-body" style='background: #fcfcfc;'>
+									  				<div class='row'>
+										  				<center><%= c.text %></center>
+										  			</div>
+										  		</div>
+				  							</div>
+										</div>
+									<% end %>
+								<% end %>
+							  <% end %>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<% end %>
-	<div class='row'>
-	<div class="col-xs-4" style="min-width: 400px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
-	  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
-	    <div class="panel-heading">
-	      <center><h2>Task(<%= @task.title %>)</h1></center>
-	    </div>
-
-	    <div class="panel-body" style='background-color: <% if @task.status == 'Started'%>#c9ffd2<% end %>
-                    <% if @task.status == 'Not-started'%>#c9f0ff<% end %>
-                    <% if @task.status == 'Paused'%>#ffffc9<% end %>
-                    <% if @task.status == 'Finished'%>#ffc9c9<% end %>;'>
-			<h4>
-				<strong>Title:</strong><br>
-				<center><%= @task.title %></center>
-			</h4>
-
-			<h4>
-				<strong>Requirement:</strong>
-				<center><%= @task.requirement %></center>
-			</h4>
-
-			<h4>
-				<strong>Assigned User:</strong>
-				<center><%= @assigned_user.username %></center>
-			</h4>
-
-			<h4>
-				<strong>Status:</strong>
-				<center><%= @task.status %></center>
-			</h4>
-
-			<h4>
-				<strong>Type:</strong>
-				<center><%= @task.task_type %></center>
-			</h4>
-		</div>
-	  </div>
-	</div>
-
-	<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
 </div>

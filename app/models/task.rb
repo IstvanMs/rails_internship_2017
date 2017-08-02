@@ -2,6 +2,7 @@ class Task < ApplicationRecord
   belongs_to :project
   validates :title, :presence => true, :uniqueness => true, :length => { :in => 1..20 }
   belongs_to :user, :foreign_key => 'assigned_user'
+  has_many :comments, dependent: :destroy
 
   def self.create_task_infos(tasks)
     @task_infos = Hash.new
