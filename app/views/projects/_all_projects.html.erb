@@ -71,7 +71,7 @@
       </div>
     <% end %>
   </div>
-  <% if !current_page?(controller: 'dashboards', action: 'index')%>
+  <% if !current_page?(controller: 'dashboards', action: 'index') %>
     <center><%= will_paginate @projects %></center>
   <% end %>
 </div>

@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   match 'sessions/forgot_password', :to => 'sessions#forgot_password' , :via => [:get, :post]
 
+  match 'work_days/un_end_work_day', :to => 'work_days#un_end_work_day' , :via => [:get, :post]
+
   match 'work_days/start_work_day', :to => 'work_days#start_work_day' , :via => [:get, :post]
 
   match 'work_days/finish_work_day', :to => 'work_days#finish_work_day' , :via => [:get, :post]

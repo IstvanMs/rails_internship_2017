@@ -2,21 +2,20 @@
   <div class="panel-heading">
     <center><h3> Work day information </h3></center>
   </div>
-   
   <div class='container' style='width: 100%;'>
     <div class='row' style="background-color: #55b25d;" align='center'>
-      <div class='col-xs-2'><h4>User</h4></div>
+      <div class='col-xs-3'><h4>User</h4></div>
       <div class='col-xs-2'><h4>Status</h4></div>
       <div class='col-xs-3'><h4>Start time</h4></div>
       <div class='col-xs-2'><h4>Worked time</h4></div>
-      <div class='col-xs-3'><h4>Un-end</h4></div>
+      <div class='col-xs-2'><h4>Un-end</h4></div>
     </div>
 
     <% @users.each do |user| %>
         <% @work_day = user.get_work_day %>
   <% if @work_day %>
     <div class='row' style="background-color: #ffffff;" align='center'>
-      <div class='col-xs-2'><h5><%= user.username %></h5></div>
+      <div class='col-xs-3'><h5><%= user.username %></h5></div>
 
       <% if  @work_day.start_time != nil && @work_day.start_time > @today && @work_day.end_time !=nil %>
           <div class='col-xs-2'><h5>Finished</h5></div>
@@ -27,21 +26,26 @@
       <% end %>
 
       <div class='col-xs-3'><h5><%= @work_day.start_time %></h5></div>
-      <% if @work_day.end_time != nil %>
-        <div class='col-xs-2'><h5><%= @work_day.end_time - @work_day.start_time %></h5></div>
-      <% else %>
+
+      <% if @work_day.end_time == nil %>
         <div class='col-xs-2'><h5> Still working </h5></div>
       <% end %>
-      <div class='col-xs-3'>
-        <button type="Un-end" class="btn btn-sm btn-primary btn-block">
-          <i class="glyphicon glyphicon"></i> Un-end
-        </button>
+
+      <div class='col-xs-2'>
+        <%= button_to '', {:controller => 'work_days', :action => 'un_end_work_day', :work_day => @work_day}, {data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-md btn-primary btn-block', :disabled => @work_day.end_time == nil} do %>
+            <i class="glyphicon glyphicon-stop"></i>Un-end
+        <% end %><br>
       </div>
     </div>
   <% else %>
             <div class='row' style="background-color: #ffffff;" align='center'>
-              <div class='col-xs-2'><h5><%= user.username %></h5></div>
-              <div class='col-xs-10'><h5>Work day not started</h5></div>
+              <div class='col-xs-3'><h5><%= user.username %></h5></div>
+              <div class='col-xs-6'><h5>Work day doesn't exist</h5></div>
+              <div class='col-xs-3'>
+                <%= button_to '', {:controller => 'work_days', :action => 'un_end_work_day', :work_day => @work_day}, {data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-md btn-primary btn-block'} do %>
+                    <i class="glyphicon glyphicon-stop"></i>Un-end
+                <% end %><br>
+              </div>
             </div>
   <% end %>
     <% end %>
