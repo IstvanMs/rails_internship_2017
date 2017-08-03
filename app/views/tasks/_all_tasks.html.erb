@@ -18,7 +18,7 @@
       <% end %>
   </div>
   
-   <div class='container' style='width: 100%;'>
+  <div class='container' style='width: 100%;'>
     <div class='row' style="background-color: #55b25d;" align='center'>
       <div class='col-xs-2'><h4>Title</h4></div>
       <% if current_page?(controller: 'tasks', action: 'index')%>
@@ -28,9 +28,8 @@
       <div class='col-xs-1'><h4>Project</h4></div>
       <div class='col-xs-1'><h4>Type</h4></div>
       <div class='col-xs-1'><h4>Status</h4></div>
-      <div class='col-xs-1'><h4></h4></div>
       <% if @current_user.role == 'Employee' %>
-        <div class='col-xs-2'></div>
+        <div class='col-xs-3'></div>
       <% end %>
     </div>
 
@@ -38,74 +37,66 @@
       <div class='row' align='center'>
         <h1>No tasks available!</h1>
       </div>
-    <% end %>
+    <% else %>
+      <% @label = '' %>
+      <% @tasks.each do |task| %>
+        <div class='row' style='background-color: #eaeaea;'><b>
+          <% if @label != task.status %>
+              <%= task.status %>
+              <% @label = task.status %>
+          <% end %>
+        </b></div>
 
-    <% @label = '' %>
-    <% @tasks.each do |task| %>
-      <div class='row' style='background-color: #eaeaea;'><b>
-        <% if @label != task.status %>
-            <%= task.status %>
-            <% @label = task.status %>
-        <% end %>
-      </b></div>
-
-      <div class='row' style='background-color: <% if @label == 'Started'%>#c9ffd2<% end %>
+        <div class='row' style='background-color: <% if @label == 'Started'%>#c9ffd2<% end %>
                     <% if @label == 'Not-started'%>#c9f0ff<% end %>
                     <% if @label == 'Paused'%>#ffffc9<% end %>
                     <% if @label == 'Finished'%>#ffc9c9<% end %>; border-bottom: 1px solid #e0e0e0;' align='center'>
-        <div class='col-xs-2'><h5><%= task.title %></h5></div>
-        <% if current_page?(controller: 'tasks', action: 'index')%>
-          <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
-        <% end %>
-        <div class='col-xs-1'><h5><%= @task_infos[task.id]['assigned'] %></h5></div>
-        <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
-        <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
-        <div class='col-xs-1'><h5><%= task.status %></h5></div>
-        <% if @current_user.role == 'Manager' %>
-        <div class='col-xs-3'>
-          <h5 class='pull-right'><%= link_to 'Show', task_path(task) %> | 
-            <%= link_to 'Edit', edit_task_path(task) %> | 
-            <%= link_to 'Destroy Task', [task.project, task],
-            method: :delete,
-            data: { confirm: 'Are you sure?' } %></h5>
-          </div>
-        <% end %>
-        <% if @current_user.role == 'Employee' %>
-          <div class='col-xs-1'>
-            <%= link_to 'Show', task_path(task) %>
-          </div>
-          <div class='col-xs-2'>
-            <div class='row'>
-              <div class="col-md-4" >
-                   <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => (@work_day && @work_day.status != 'Started') || !@work_day || task.status == 'Started' || task.status == 'Finished' } do%>
+          <div class='col-xs-2'><h5><%= task.title %></h5></div>
+          <% if current_page?(controller: 'tasks', action: 'index')%>
+            <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
+          <% end %>
+          <div class='col-xs-1'><h5><%= @task_infos[task.id]['assigned'] %></h5></div>
+          <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
+          <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
+          <div class='col-xs-1'><h5><%= task.status %></h5></div>
+          <% if @current_user.role == 'Manager' %>
+            <div class='col-xs-3'>
+            <h5 class='pull-right'><%= link_to 'Show', task_path(task) %> | 
+              <%= link_to 'Edit', edit_task_path(task) %> | 
+              <%= link_to 'Destroy Task', [task.project, task],
+              method: :delete,
+              data: { confirm: 'Are you sure?' } %></h5>
+            </div>
+          <% end %>
+          <% if @current_user.role == 'Employee' %>
+            <div class='col-xs-3'>
+              <div class='row' style="white-space: nowrap">
+                <div class='col-xs-3'>
+                  <%= link_to 'Show', task_path(task) %>
+                </div>
+                <div class='col-xs-3'>
+                  <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => (@work_day && @work_day.status != 'Started') || !@work_day || task.status == 'Started' || task.status == 'Finished' } do%>
                    <i class="glyphicon glyphicon-play"></i>
                    <% end %>
-                 </div>
                 </div>
-
-                <div class="col-md-4" >
+                <div class='col-xs-3'>
                   <%= button_to tasks_pause_task_path(:task => task), {:class => 'btn btn-md btn-warning', :disabled => task.status == 'Paused' || task.status == 'Finished' || task.status == 'Not-started'} do%>
                   <i class="glyphicon glyphicon-pause"></i>
                   <% end %>
                 </div>
-
-                <div class="col-md-4" >
+                <div class='col-xs-3'>
                   <%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || !@work_day || task.status == 'Not-started'} do%>
                   <i class="glyphicon glyphicon-stop"></i>
                   <% end %>
                 </div>
+              </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
       </div>
+      <% end %>
     <% end %>
   </div>
-  <% if current_page?(controller: 'tasks', action: 'index')%>
-    <center><%= will_paginate @tasks_finish_task_path %></center>
-  <% end %>
-<hr>
-<center><h3><a href="#advancedSearch" data-toggle="modal">Advanced search</a></h3></center><br />
-
+<center><h4><a href="#advancedSearch" data-toggle="modal">Advanced search</a></h4></center><br />  
 </div>
 
 <div id="advancedSearch" class="modal fade">

@@ -3,6 +3,7 @@ class User < ApplicationRecord
 	has_many :projectUsers , dependent: :destroy
 	has_many :projects, through: :projectUsers , dependent: :destroy
 	has_many :workDays, dependent: :destroy
+	has_many :comments, dependent: :destroy
 
 	attr_accessor :password
 	USERNAME_REGEX = /\w\z/i

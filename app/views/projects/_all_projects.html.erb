@@ -36,7 +36,7 @@
       <% if current_page?(controller: 'projects', action: 'index')%>
         <div class='col-xs-3'><h4>Text</h4></div>
       <% end %>
-      <div class='col-xs-1'><h4>Client</h4></div>
+      <div class='col-xs-1'><h4>Clients</h4></div>
       <div class='col-xs-1'><h4>Duration</h4></div>
       <div class='col-xs-2'><h4>Project Date</h4></div>
       <% if @current_user.role == 'Manager' %>
@@ -56,7 +56,9 @@
         <% if !current_page?(controller: 'dashboards', action: 'index')%>
           <div class='col-xs-3'><h5><%= project.text %></h5></div>
         <% end %>
-        <div class='col-xs-1'><h5><%= @project_infos[project.id]['client_name'] %></h5></div>
+        <div class='col-xs-1'><h5><% @project_infos[project.id]['client_name'].each do |c| %>
+                                        <li><%= c.username %></li>
+                                      <% end %></h5></div>
         <div class='col-xs-1'><h5><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></h5></div>
         <div class='col-xs-2'><h5><%= @project_infos[project.id]['created_at'] %></h5></div>
         <% if @current_user.role == 'Manager' %>

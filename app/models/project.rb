@@ -26,11 +26,11 @@ class Project < ApplicationRecord
 	        end
 	        @duration += @time
 	      end
-	      client_name = User.joins(:projects).where(:role => 'Client', :projects => {:id => p}).first
-	      if client_name != nil
-	      	@project_infos[p.id] = {'client_name' => client_name.username,'created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
+	      client_names = User.joins(:projects).where(:role => 'Client', :projects => {:id => p})
+	      if client_names != nil
+	      	@project_infos[p.id] = {'client_name' => client_names,'created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
 	      else 
-	      	@project_infos[p.id] = {'client_name' => '-','created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
+	      	@project_infos[p.id] = {'client_name' => nil,'created_at' => p.created_at.strftime("%F %I:%M%p"),'duration' => @duration}
 	      end
 	    end
 	    return @project_infos

@@ -62,15 +62,20 @@ class ProjectsController < ApplicationController
 
 	def show
 		@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
-		@users_sel = User.where('id NOT IN (?)', ProjectUser.where(:project_id => params[:id]).collect(&:user_id))
+		@table = ProjectUser.where(:project_id => params[:id]).collect(&:user_id)
+		if @table.length > 0
+			@users_sel = User.where('id NOT IN (?)', @table)
+		else
+			@users_sel = User.all
+		end
 		@clients = User.where(:role => 'Client')
 		@project = Project.find(params[:id])
 		@users = User.where.not(:role => 'Client')
-		client_name = User.joins(:projects).where(:role => 'Client', :projects => {:id => params[:id]}).first
-		if client_name != nil
-			@project_infos = {'client_name' => client_name.username,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+		client_names = User.joins(:projects).where(:role => 'Client', :projects => {:id => params[:id]})
+		if client_names != nil
+			@project_infos = {'client_name' => client_names,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
 		else 
-			@project_infos = {'client_name' => '-','created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+			@project_infos = {'client_name' => nil,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
 		end
 	end	
 
@@ -108,6 +113,7 @@ class ProjectsController < ApplicationController
 	def update
 		@project = Project.find(params[:id]) 
 		@users = User.where.not(:role => 'Client')
+		@user = User.find(params[:client])
 
 		if @project.update(project_params)
 			redirect_to @project

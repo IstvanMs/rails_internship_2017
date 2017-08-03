@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  commenter: one
+  user: one
   text: MyText
-  reply_to: one
+  task: one
+  reply_to: 1
 
 two:
-  commenter: two
+  user: two
   text: MyText
-  reply_to: two
+  task: two
+  reply_to: 1
