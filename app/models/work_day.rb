@@ -2,20 +2,20 @@ class WorkDay < ApplicationRecord
 
 	belongs_to :user
 
-  def self.pause_all_tasks(user_id)
-    @task = Task.find_by(:status => 'Started', :assigned_user => user_id)
+	def self.pause_all_tasks(user_id)
+		@task = Task.find_by(:status => 'Started', :assigned_user => user_id)
 		if @task
-    	Task.pause(@task)
+			Task.pause(@task)
 		end
-    if @task
-    	Task.pause(@task)
+		if @task
+			Task.pause(@task)
 		end
-  end
+	end
 
-  def self.un_end(work_day)
+  	def self.un_end(work_day)
 		if work_day.status == "Finished"
 			work_day.end_time = nil
-			work_day.status == "Started"
+			work_day.status = "Started"
 			work_day.save
 		end
 	end
@@ -35,6 +35,19 @@ class WorkDay < ApplicationRecord
       work_day.status = "Finished"
       work_day.save
       WorkDay.pause_all_tasks(work_day.user_id)
+		end
+	end
+
+	def self.get_work_day_manager(user_id)
+		@work_day = WorkDay.where(:user_id => user_id).order(:end_time => 'desc').first
+		if @work_day
+			if @work_day.start_time >= Time.new(Time.now.year, Time.now.month, Time.now.day, 0, 0, 0)
+				@work_day
+			else
+				nil
+			end
+		else
+			nil
 		end
 	end
 

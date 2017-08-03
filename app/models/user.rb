@@ -44,7 +44,7 @@ class User < ApplicationRecord
 	end
 
 	def get_work_day
-		WorkDay.get_work_day(id)
+		WorkDay.get_work_day_manager(id)
 	end
 
 end

@@ -13,41 +13,41 @@
 
     <% @users.each do |user| %>
         <% @work_day = user.get_work_day %>
-  <% if @work_day %>
-    <div class='row' style="background-color: #ffffff;" align='center'>
-      <div class='col-xs-3'><h5><%= user.username %></h5></div>
+        <% if @work_day %>
+          <div class='row' style="background-color: #ffffff;" align='center'>
+            <div class='col-xs-3'><h5><%= user.username %></h5></div>
 
-      <% if  @work_day.start_time != nil && @work_day.start_time > @today && @work_day.end_time !=nil %>
-          <div class='col-xs-2'><h5>Finished</h5></div>
-          <% elsif @work_day.start_time != nil && @work_day.start_time > @today %>
+            <% if  !@work_day.start_time %>
+              <div class='col-xs-2'><h5>Not-working</h5></div>
+            <% elsif !@work_day.end_time %>
               <div class='col-xs-2'><h5>Working</h5></div>
-              <% else %>
-                  <div class='col-xs-2'><h5>Not-working</h5></div>
-      <% end %>
+            <% else %>
+              <div class='col-xs-2'><h5>Ended</h5></div>
+            <% end %>
+               
+            <div class='col-xs-3'><h5><%= @work_day.start_time %></h5></div>
 
-      <div class='col-xs-3'><h5><%= @work_day.start_time %></h5></div>
+            <% if @work_day.end_time %>
+              <div class='col-xs-2'><h5> <%= number_with_precision((@work_day.end_time - @work_day.start_time)/(60*24), precision: 2) %>h</h5></div>
+            <% elsif @work_day.start_time %>
+              <div class='col-xs-2'><h5> On progress </h5></div>
+            <% else %>
+              <div class='col-xs-2'><h5> Not worked yet </h5></div>
+            <% end %>
 
-      <% if @work_day.end_time == nil %>
-        <div class='col-xs-2'><h5> Still working </h5></div>
-      <% end %>
+            <% if @work_day.start_time && @work_day.end_time %>
+              <%= link_to work_days_un_end_work_day_path(:user_id => user.id), {data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-sm btn-success', :style => 'margin-top: 3px;', :disabled => @work_day.end_time == nil} do %>
+                  <i class="glyphicon glyphicon-stop"></i>Un-end
+              <% end %><br>
+            <% end %>
+          </div>
+        <% else %>
+          <div class='row' style="background-color: #ffffff;" align='center'>
+            <div class='col-xs-3'><h5><%= user.username %></h5></div>
 
-      <div class='col-xs-2'>
-        <%= button_to '', {:controller => 'work_days', :action => 'un_end_work_day', :work_day => @work_day}, {data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-md btn-primary btn-block', :disabled => @work_day.end_time == nil} do %>
-            <i class="glyphicon glyphicon-stop"></i>Un-end
-        <% end %><br>
-      </div>
-    </div>
-  <% else %>
-            <div class='row' style="background-color: #ffffff;" align='center'>
-              <div class='col-xs-3'><h5><%= user.username %></h5></div>
-              <div class='col-xs-6'><h5>Work day doesn't exist</h5></div>
-              <div class='col-xs-3'>
-                <%= button_to '', {:controller => 'work_days', :action => 'un_end_work_day', :work_day => @work_day}, {data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-md btn-primary btn-block'} do %>
-                    <i class="glyphicon glyphicon-stop"></i>Un-end
-                <% end %><br>
-              </div>
-            </div>
-  <% end %>
+            <div class='col-xs-9'><h5>Not-worked today yet</h5></div>
+          </div>
+        <% end %>
     <% end %>
   </div>
 </div>

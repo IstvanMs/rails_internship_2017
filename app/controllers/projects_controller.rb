@@ -114,6 +114,9 @@ class ProjectsController < ApplicationController
 		@project = Project.find(params[:id]) 
 		@users = User.where.not(:role => 'Client')
 		@user = User.find(params[:client])
+		if !ProjectUser.exists?(:user => @user,:project => @project)
+			ProjectUser.create({:user => @user, :project => @project})
+		end
 
 		if @project.update(project_params)
 			redirect_to @project

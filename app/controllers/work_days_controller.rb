@@ -14,7 +14,7 @@ class WorkDaysController < ApplicationController
     end
 
     def un_end_work_day
-      @work_day = WorkDay.get_work_day(params[:user_id])
+      @work_day = WorkDay.get_work_day_manager(params[:user_id])
       WorkDay.un_end(@work_day)
       redirect_to :controller => 'dashboards' , :action => 'index'
     end
