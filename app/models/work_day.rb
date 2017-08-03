@@ -4,7 +4,9 @@ class WorkDay < ApplicationRecord
 
   def self.pause_all_tasks(user_id)
     @task = Task.find_by(:status => 'Started', :assigned_user => user_id)
+		if @task
     Task.pause(@task)
+		end
   end
 
 	def self.start(work_day, user_id)
