@@ -25,8 +25,10 @@
 			</h4>
 
 			<h4>
-				<strong>Client:</strong>
-				<center><%= @project_infos['client_name'] %></center>
+				<strong>Clients:</strong>
+				<center><h4><% @project_infos['client_name'].each do |c| %>
+							<li><%= c.username %></li>
+						<% end %></h4></center>
 			</h4>
 
 			<h4>
