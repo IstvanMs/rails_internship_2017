@@ -9,14 +9,14 @@
         <div class='row' align='center'>
           <div class="col-xs-6">
             <h4>Start day:</h4>
-            <%= button_to work_days_start_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-success', :disabled => @work_day.status == 'Started'} do%>
+            <%= button_to work_days_start_work_day_path(:work_day => @work_day), {data: { confirm: 'Start new work day?' }, :class => 'btn btn-md btn-success', :disabled => @work_day.status == 'Started'} do%>
                 <i class="glyphicon glyphicon-play"></i>
             <% end %><br>
           </div>
 
           <div class="col-xs-6">
             <h4>End day:</h4>
-            <%= button_to work_days_finish_work_day_path(:work_day => @work_day), {:class => 'btn btn-md btn-danger', :disabled => @work_day.status == 'Finished' || @work_day.status != 'Started'} do %>
+            <%= button_to work_days_finish_work_day_path(:work_day => @work_day), {data: { confirm: 'You are going to finish the current work day. This cannot be undone. Are you sure?' }, :class => 'btn btn-md btn-danger', :disabled => @work_day.status == 'Finished' || @work_day.status != 'Started'} do %>
                 <i class="glyphicon glyphicon-stop"></i>
             <% end %><br>
           </div>
