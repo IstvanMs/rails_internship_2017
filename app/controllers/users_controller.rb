@@ -15,18 +15,24 @@ class UsersController < ApplicationController
 
   def change_email
     @user = User.find(session[:user_id])
-    @old = @user.email
-    if @user.update_attribute(:email, params[:new_email]) 
-      flash[:notice] = "Email saved!"
-      flash[:color] = "valid"
-      @current_user = User.find(@user.id)
-      MailerMailer.change_email(@current_user.email, @current_user, @old).deliver
-      MailerMailer.change_email(@old, @current_user, @old).deliver
-      redirect_to sessions_profile_path
-    else
+    if !params[:new_email].match(/\A.+@.+\.+.+\z/)
       flash[:notice] = "Invalid email!"
       flash[:color] = "invalid"
       redirect_to sessions_profile_path
+    else
+      @old = @user.email
+      if @user.update_attribute(:email, params[:new_email]) 
+        flash[:notice] = "Email saved!"
+        flash[:color] = "valid"
+        @current_user = User.find(@user.id)
+        MailerMailer.change_email(@current_user.email, @current_user, @old).deliver
+        MailerMailer.change_email(@old, @current_user, @old).deliver
+        redirect_to sessions_profile_path
+      else
+        flash[:notice] = "Invalid email!"
+        flash[:color] = "invalid"
+        redirect_to sessions_profile_path
+      end
     end
   end
 
