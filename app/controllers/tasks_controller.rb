@@ -59,36 +59,40 @@ class TasksController < ApplicationController
 	end
 
 	def index
-		@projects = Project.all
 
-		@search_par = params[:search]
+		if params[:advanced_search_id] == nil
+
+			@projects = Project.all
 		
-		if @current_user.role == 'Manager'
-			if @search_par == nil || @search_par == ''
+			if @current_user.role == 'Manager'
+
 				@tasks = Task.all.order(status: :desc, title: :asc)
+
 			else
-				@tasks = Task.where('title like ?', '%' + @search_par + '%').order(status: :desc, title: :asc)
-			end
-		else
-			if @current_user.role != 'Client'
-				if @search_par == nil || @search_par == ''
+
+				if @current_user.role != 'Client'
+
 					@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
+
 				else
-					@tasks= Task.where('assigned_user = ? and title like ?', @current_user.id, '%' + @search_par + '%').order(status: :desc, title: :asc)
-				end
-			else
-				if @search_par == nil || @search_par == ''
+
 					@tasks= Task.where(:project => ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id)).order(status: :desc, title: :asc)
-				else
-					@tasks= Task.where('project_id in (?) and title like ?', ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id), '%' + @search_par + '%').order(status: :desc, title: :asc)
+
 				end
 			end
+
+		else
+
+			@tasks = AdvancedSearch.tasks_filter(params[:advanced_search_id])
+
 		end
+
 		@lengths = {'tasks' => @tasks.length}
 
 		@tasks = @tasks.paginate(:page => params[:page], :per_page => 50)
 
 		@task_infos = Task.create_task_infos(@tasks)
+
 	end
 
 	def start_task
@@ -117,7 +121,8 @@ class TasksController < ApplicationController
 
 	def create_advanced_search
 		@advanced_search = AdvancedSearch.create!(params[:advanced_search])
-		redirect_to @advanced_search
+		redirect_to "/tasks/index/#{@advanced_search.id}"
+		#:controller => 'tasks', :action => 'index', :id => @advanced_search.id
 	end
 
 	def show_advanced_search
