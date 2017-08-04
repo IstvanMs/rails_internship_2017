@@ -6,7 +6,8 @@ class AdvancedSearchesController < ApplicationController
 
   def create
     @advanced_search = AdvancedSearch.create!(params[:advanced_search].permit!)
-    redirect_to @advanced_search
+    redirect_to "/tasks/index/#{@advanced_search.id}"
+
   end
 
   def show

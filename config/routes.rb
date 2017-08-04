@@ -37,6 +37,8 @@ Rails.application.routes.draw do
 
   match 'users/index', :to => 'users#index' , :via => [:get, :post]
 
+  match 'tasks/index/:advanced_search_id', :to => 'tasks#index' , :via => [:get, :post]
+
   match 'tasks/index', :to => 'tasks#index' , :via => [:get, :post]
 
   match 'projects/index', :to => 'projects#index' , :via => [:get, :post]
