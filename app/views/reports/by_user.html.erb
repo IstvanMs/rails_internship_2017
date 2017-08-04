@@ -25,7 +25,7 @@
 			</div>
 		</div>
 	</div>
-
+	<% last = nil %>
 	<div class='row'>
 		<div class='panel panel-success'>
 			<div class="panel-heading">
@@ -77,7 +77,7 @@
     					</div>
     				</div>
     				<div class='col-xs-2'>
-    					<h4>Total Task Time</h4>
+    					<h4>Todays worked time</h4>
     				</div>
     				<div class='col-xs-1'>
     					<h4>Status</h4>
@@ -150,12 +150,12 @@
 		    						</div>
 			    				</div>
 			    				<div class='col-xs-2'>
-			    					<h5><% if @data[i]['tasks'][j].finished_at == nil %>
-			    							<% time = number_with_precision( (Time.now - @data[i]['tasks'][j].started_at)/60, precision: 1) %>
+			    						<% if  last != i %>
+			    					<h5><%= @work_day %>
+			    						<% last = i %>
 			    						<% else %>
-			    							<% time = number_with_precision( (@data[i]['tasks'][j].finished_at - @data[i]['tasks'][j].started_at)/60, precision: 1) %>
+			    						-
 			    						<% end %>
-			    						<%= time.to_s + ' minute'.pluralize(time) %>
 			    					</h5>
 			    				</div>
 			    				<div class='col-xs-1'>
@@ -251,6 +251,8 @@
 						var gantt_data = data.gantt_data;
 						var tasks = data.tasks;
 						var canvas_h = data.helper.gant_len;
+						var work_day_s = data.start_time;
+						var work_day_e = data.end_time;
 
 						$modal.find('.edit-title').html('Day ' + day + ' (user: ' + user.username + ' - month: ' + data.helper.month + ')');
 			            
@@ -304,6 +306,15 @@
 						ctx2.fillStyle = "#f2f9f7";
 						ctx2.fillRect(0, 0, c2.width, c2.height);
 
+						if (work_day_s){
+							ctx.moveTo(work_day_s, 0);
+							ctx.lineTo(work_day_s, c.height);
+						} 
+						if (work_day_e){
+							ctx.moveTo(work_day_e, 0);
+							ctx.lineTo(work_day_e, c.height);
+						} 
+
 						for(var i = 0; i < tasks.length; ++i){
 							var color = getRndColor();
 							var interval = gantt_data[tasks[i].id].intervals;
@@ -329,8 +340,8 @@
 								ctx2.fillText(i + 1, 17, (j2 + 1) * 30 - 4);
 								ctx.fillText(i + 1, 17, i*30 + 25);
 								ctx2.fillStyle = 'black';
-								ctx2.fillText(tasks[i].id, 60, j2*30 + 25);
-								ctx2.fillText(tasks[i].title, 110, j2*30 + 25);
+								ctx2.fillText(tasks[i].id, 50, j2*30 + 25);
+								ctx2.fillText(tasks[i].title.substr(0,10)+'...', 90, j2*30 + 25);
 								ctx2.fillText(st_time, 165, j2*30 + 25);
 								ctx2.fillText(et_time, 227, j2*30 + 25);
 								ctx2.fillText((et_pix - st_pix).toPrecision(2) + ' minutes', 287, j2*30 + 25);

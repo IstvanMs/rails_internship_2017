@@ -39,7 +39,7 @@ class WorkDay < ApplicationRecord
 	end
 
 	def self.get_work_day_manager(user_id)
-		@work_day = WorkDay.where(:user_id => user_id).order(:end_time => 'desc').first
+		@work_day = WorkDay.where(:user_id => user_id).order(:start_time => 'desc').first
 		if @work_day
 			if @work_day.start_time >= Time.new(Time.now.year, Time.now.month, Time.now.day, 0, 0, 0)
 				@work_day
@@ -52,7 +52,7 @@ class WorkDay < ApplicationRecord
 	end
 
 	def self.get_work_day(user_id)
-		@work_day = WorkDay.where(:user_id => user_id).order(:end_time => 'desc').first
+		@work_day = WorkDay.where(:user_id => user_id).order(:start_time => 'desc').first
 		if @work_day
 			if @work_day.status == "Started"
 				@work_day
@@ -63,7 +63,11 @@ class WorkDay < ApplicationRecord
 				if Time.now >= next_start_time
 					WorkDay.new
 				else
-					nil
+					if @work_day.start_time >= Time.new(Time.now.year, Time.now.month, Time.now.day, 0, 0, 0) && !@work_day.end_time
+						@work_day
+					else
+						nil
+					end
 				end
 			end
 		else
