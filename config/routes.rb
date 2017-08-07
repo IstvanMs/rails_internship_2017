@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
+  match 'users/profile', :to => 'users#profile', :via => [:get, :post]
+
   match 'projects/remove_user', :to => 'projects#remove_user', :via => [:get, :post]
 
   match 'projects/add_user', :to => 'projects#add_user', :via => [:get, :post]

@@ -58,7 +58,7 @@
           <% if current_page?(controller: 'tasks', action: 'index')%>
             <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
           <% end %>
-          <div class='col-xs-1'><h5><%= @task_infos[task.id]['assigned'] %></h5></div>
+          <div class='col-xs-1'><h5><% if @task_infos[task.id]['assigned']%> <%= link_to @task_infos[task.id]['assigned'].username, users_profile_path(:id => @task_infos[task.id]['assigned'].id)%>  <% end %></h5></div>
           <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
           <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
           <div class='col-xs-1'><h5><%= task.status %></h5></div>

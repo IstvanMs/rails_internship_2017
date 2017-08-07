@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :admin_user, :only => [:new, :create, :edit, :update, :index]
-  before_action :authenticate_user, :only => [:show]
+  before_action :authenticate_user, :only => [:show, :profile]
   
   def index
     @search_par = params[:search]
@@ -11,6 +11,10 @@ class UsersController < ApplicationController
       @users = User.where('username like ?', '%' + @search_par + '%').order(:role,:username)
     end
     @user = User.new
+  end
+
+  def profile
+    @user = User.find(params[:id])
   end
 
   def change_email
@@ -72,7 +76,11 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@user = User.find(params[:id])
+    if @current_user.id == params[:id] || @current_user.role == 'Admin'
+  	 @user = User.find(params[:id])
+    else
+      redirect_to root_path
+    end
   end
 
   def edit

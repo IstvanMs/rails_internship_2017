@@ -57,7 +57,7 @@
           <div class='col-xs-3'><h5><%= project.text %></h5></div>
         <% end %>
         <div class='col-xs-1'><h5><% @project_infos[project.id]['client_name'].each do |c| %>
-                                        <li><%= c.username %></li>
+                                        <li><%= link_to c.username, users_profile_path(:id => c.id)%></li>
                                       <% end %></h5></div>
         <div class='col-xs-1'><h5><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></h5></div>
         <div class='col-xs-2'><h5><%= @project_infos[project.id]['created_at'] %></h5></div>
@@ -67,6 +67,10 @@
               <%= link_to 'Destroy', project_path(project),
                           method: :delete,
                           data: { confirm: 'Are you sure?' } %></div>
+        <% else %>
+        <div class='col-xs-3'>
+          <%= link_to 'Show', project_path(project) %>
+        </div>
         <% end %>
       </div>
     <% end %>

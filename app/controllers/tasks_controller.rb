@@ -17,10 +17,14 @@ class TasksController < ApplicationController
 
 	def show
 		@task = Task.find(params[:id])
-		if User.exists?(@task.assigned_user)
-			@assigned_user = User.find(@task.assigned_user)
-		else
-			@assigned_user = nil
+		if @task.assigned_user == @current_user.id || @current_user.role == 'Manager'
+			if User.exists?(@task.assigned_user)
+				@assigned_user = User.find(@task.assigned_user)
+			else
+				@assigned_user = nil
+			end
+		else 
+			redirect_to root_path
 		end
 	end
 

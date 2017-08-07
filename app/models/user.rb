@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
 	attr_accessor :password
 	USERNAME_REGEX = /\w\z/i
-	EMAIL_REGEX = /\A.+@.+\.+.+\z/ 
+	EMAIL_REGEX = /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i
 	validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }
 	validates :username, :presence => true, :format => USERNAME_REGEX
 	validates :password, :confirmation => true

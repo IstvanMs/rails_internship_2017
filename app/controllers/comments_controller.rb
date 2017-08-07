@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-	before_action :authenticate_user, :only => [:create]
+	before_action :authenticate_user, :only => [:create, :reply, :destroy]
 
 	def reply
 	end
@@ -13,7 +13,9 @@ class CommentsController < ApplicationController
 	def destroy
 		@task = Task.find(params[:task_id])
 		@comment = @task.comments.find(params[:id])
-		@comment.destroy	
+		if @comment.user == @current_user || @current_user.role == 'Manager'
+			@comment.destroy	
+		end
 		redirect_to task_path(@task)
 	end
 

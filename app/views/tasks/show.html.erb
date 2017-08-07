@@ -34,7 +34,7 @@
 
 								<h4>
 									<strong>Assigned User:</strong>
-									<center><% if @assigned_user %><%= @assigned_user.username %><% else %>-<% end %></center>
+									<center><% if @assigned_user %><%= link_to @assigned_user.username, users_profile_path(:id => @assigned_user.id)%><% else %>-<% end %></center>
 								</h4>
 
 								<h4>

@@ -15,7 +15,7 @@
         <% @work_day = user.get_work_day %>
         <% if @work_day %>
           <div class='row' style="background-color: #ffffff;" align='center'>
-            <div class='col-xs-3'><h5><%= user.username %></h5></div>
+            <div class='col-xs-3'><h5><%= link_to user.username, users_profile_path(:id => user.id)%></h5></div>
 
             <% if  !@work_day.start_time %>
               <div class='col-xs-2'><h5>Not-working</h5></div>
@@ -43,7 +43,7 @@
           </div>
         <% else %>
           <div class='row' style="background-color: #ffffff;" align='center'>
-            <div class='col-xs-3'><h5><%= user.username %></h5></div>
+            <div class='col-xs-3'><h5><%= link_to user.username, users_profile_path(:id => user.id)%></h5></div>
 
             <div class='col-xs-9'><h5>Not-worked today yet</h5></div>
           </div>

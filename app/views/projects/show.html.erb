@@ -27,7 +27,7 @@
 			<h4>
 				<strong>Clients:</strong>
 				<center><h4><% @project_infos['client_name'].each do |c| %>
-							<li><%= c.username %></li>
+							<li><%= link_to c.username, users_profile_path(:id => c.id)%></li>
 						<% end %></h4></center>
 			</h4>
 
@@ -41,10 +41,10 @@
 			</h4>
 			<ul>
 				<% @users_in.each do |user| %>
-					<li><%= user.username%></li>
+					<li><%= link_to user.username, users_profile_path(:id => user.id)%></li>
 				<% end %>
 			</ul>
-
+			<% if @current_user.role == 'Manager' %>
 			<h4>
 				<center><div class='row'>
 					<div class="dropdown">
@@ -58,6 +58,7 @@
 				</div></center>
 			</h4>
 			 <a href="#addUserToProject" data-toggle="modal">(add user)</a>
+			 <% end %>
 		</div>
 	  </div>
 	</div>

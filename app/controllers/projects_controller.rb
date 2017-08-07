@@ -61,21 +61,25 @@ class ProjectsController < ApplicationController
 	end
 
 	def show
-		@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
-		@table = ProjectUser.where(:project_id => params[:id]).collect(&:user_id)
-		if @table.length > 0
-			@users_sel = User.where('id NOT IN (?)', @table)
+		if ProjectUser.exists?(:project_id => params[:id], :user_id => @current_user.id) || @current_user.role == 'Manager'
+			@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
+			@table = ProjectUser.where(:project_id => params[:id]).collect(&:user_id)
+			if @table.length > 0
+				@users_sel = User.where('id NOT IN (?)', @table)
+			else
+				@users_sel = User.all
+			end
+			@clients = User.where(:role => 'Client')
+			@project = Project.find(params[:id])
+			@users = User.where.not(:role => 'Client')
+			client_names = User.joins(:projects).where(:role => 'Client', :projects => {:id => params[:id]})
+			if client_names != nil
+				@project_infos = {'client_name' => client_names,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+			else 
+				@project_infos = {'client_name' => nil,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+			end
 		else
-			@users_sel = User.all
-		end
-		@clients = User.where(:role => 'Client')
-		@project = Project.find(params[:id])
-		@users = User.where.not(:role => 'Client')
-		client_names = User.joins(:projects).where(:role => 'Client', :projects => {:id => params[:id]})
-		if client_names != nil
-			@project_infos = {'client_name' => client_names,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
-		else 
-			@project_infos = {'client_name' => nil,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
+			redirect_to root_path
 		end
 	end	
 

@@ -13,10 +13,9 @@ class NotesController < ApplicationController
       @notes += Note.where(:visibility => @table.collect(&:task_ids).uniq.flatten.collect{|id| 'task-' + id.to_s})
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     else
-      @table = Project.joins(:tasks).where(:tasks => { :assigned_user => @current_user}).uniq
       @notes = Note.where(:visibility => 'general')
-      @notes += Note.where(:visibility => @table.collect{|p| 'project-' + p.id.to_s})
-      @notes += Note.where(:visibility => @table.collect(&:task_ids).uniq.flatten.collect{|id| 'task-' + id.to_s})
+      @notes += Note.where(:visibility => ProjectUser.where(:user_id => @current_user.id).collect{|p| 'project-' + p.project_id.to_s})
+      @notes += Note.where(:visibility => Task.where(:assigned_user => @current_user).collect{|t| 'task-' + t.id.to_s})
       @notes += Note.where(:visibility => 'user-'+ @current_user.id.to_s)
     end
     @notes = Note.where(:id => @notes.collect(&:id)).order(:visibility)
@@ -26,6 +25,13 @@ class NotesController < ApplicationController
 
 	def show
   	@note = Note.find(params[:id])
+    proj = ProjectUser.find_by(:project_id  => @note.visibility.split('-')[1], :user_id => @current_user.id)
+    task = Task.find_by(:id => @note.visibility.split('-')[1], :assigned_user => @current_user)
+    if @current_user.role != 'Manager' 
+      if !proj && @note.visibility != ('user-' + @current_user.id.to_s) && !task && @note.visibility != 'general'
+        redirect_to root_path
+      end
+    end
 	end
 
 	def new
