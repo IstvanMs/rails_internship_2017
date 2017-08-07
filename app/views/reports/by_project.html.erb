@@ -1,18 +1,27 @@
-<%= form_tag :action => 'by_project' do%>
-    <div class='row' style="white-space: nowrap">
+<div class='container' style='min-width: 500px;'>
+  <div class='row'>
+    <div class='panel panel-default'>
+      <div class='panel-body'>
+        <div class='col-xs-12'>
+          <%= form_tag :action => 'by_project' do%>
+              <div class='row' style="white-space: nowrap">
 
-      <p>Date: <input value="<%= @aux['day'] %>" type="text" id="datepicker" name="day"></p>
+                <p>Date: <input value="<%= @aux['day'] %>" type="text" id="datepicker" name="day"></p>
 
-      <label>Project:&nbsp;</label>
-      <%= select_tag "project", options_from_collection_for_select(@projects, "id", "title", @current_filter['project'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label>Project:&nbsp;</label>
+                <%= select_tag "project", options_from_collection_for_select(@projects, "id", "title", @current_filter['project'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-      <%= button_tag(type: "submit", class: "btn btn-success") do %>
-          <i class="glyphicon glyphicon-arrow-right"></i>
-      <% end %>
+                <%= button_tag(type: "submit", class: "btn btn-success") do %>
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                <% end %>
 
+              </div>
+
+          <% end %>
+        </div>
+      </div>
     </div>
-
-<% end %>
+  </div>
 
 <script>
     $( function() {
@@ -138,3 +147,4 @@
       </div>
     </div>
   </div>
+</div>
