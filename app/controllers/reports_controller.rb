@@ -18,20 +18,16 @@
 			@current_filter = {'year' => @years[20], 'month' => Date::MONTHNAMES[Time.now.month] , 'user' => @users.first, 'len' => Time.days_in_month(Date::MONTHNAMES.index(@months[0]))}
 		end
 		@data = Report.generate_data(@current_filter)
-		@work_day = WorkDay.where(:user_id => params[:user]).order(:start_time => 'desc').first
-		if @work_day
-			if @work_day.status == "Started"
-				@work_day = 'Still working'
+
+		@work_days = Hash.new
+		for day in 1..Time.days_in_month(Date::MONTHNAMES.index(@current_filter['month'])) 
+			d = Time.new(@current_filter['year'], Date::MONTHNAMES.index(@current_filter['month']), day, 0, 0, 0)
+			wd = WorkDay.where('user_id = ? and start_time > ?', @current_filter['user'].id, d).order(:start_time).first
+			if wd && wd.start_time.day == d.day
+				@work_days[day] = ((wd.end_time.localtime - wd.start_time.localtime)/60).round(2).to_s + ' minute'.pluralize(((wd.end_time.localtime - wd.start_time.localtime)/60).round(2)) 
 			else
-				next_start_time = Time.new(Time.now.year, Time.now.month, Time.now.day, 0, 0, 0)
-				if @work_day.start_time >= next_start_time
-					@work_day = ((@work_day.end_time - @work_day.start_time)/60).round(2).to_s + ' minute'.pluralize(((@work_day.end_time - @work_day.start_time)/60).round(2)) 
-				else
-					@work_day = ''
-				end
+				@work_days[day] = '-'
 			end
-		else
-			@work_day = ''
 		end
 	end
 
@@ -42,16 +38,16 @@
 		@tasks.each do |t|
 			@nr += @gant_data[t.id]['intervals'].length
 		end
-		@work_day = WorkDay.where(:user_id => params[:user]).order(:start_time => 'desc').first
-		next_start_time = Time.new(Time.now.year, Time.now.month, Time.now.day, 0, 0, 0)
-		if @work_day
+		d = Time.new(params[:year], Date::MONTHNAMES.index(params[:month]), params[:day], 0, 0, 0)
+		@work_day = WorkDay.where('user_id = ? and start_time > ?',params[:user], d).order(:start_time).first
+		if @work_day && @work_day.start_time.day == d.day
 			if @work_day.status == "Started"
-				start_time = (@work_day.start_time - next_start_time)/120
+				start_time = (@work_day.start_time.localtime - next_start_time.localtime)/120
 				end_time = nil
 			else
-				if @work_day.start_time >= next_start_time
-					start_time = (@work_day.start_time - next_start_time)/120
-					end_time = (@work_day.end_time - next_start_time)/120
+				if @work_day.start_time.localtime >= d
+					start_time = (@work_day.start_time.localtime - d.localtime)/120
+					end_time = (@work_day.end_time.localtime - d.localtime)/120
 				else
 					start_time = nil
 					end_time = nil
