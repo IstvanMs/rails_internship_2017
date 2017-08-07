@@ -1,0 +1,30 @@
+<div class="container">
+	<div class='row'>
+		<div class='col-xs-4' style='min-width: 400px;'>
+			<div class="panel-center">
+				<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
+					<div class="panel-heading">
+						<center><h3> User information </h3></center>
+					</div>
+					<div class="panel-body">
+						<center><h4>
+							<strong>Username: </strong><br></br>
+							<%= @user.username %>
+						</h4></center><br>
+
+						<center><h4>
+							<strong>Role: </strong><br></br>
+							<%= @user.role %>
+						</h4></center><br>
+
+						<center><h4>
+							<strong>Email: </strong><br></br>
+							<%= @user.email %><br>
+						</h4></center><br>
+					</div>
+				</div>
+				<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+			</div>
+		</div>
+	</div>
+</div>
