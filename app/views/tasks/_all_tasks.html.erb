@@ -137,8 +137,8 @@
 
             <div class="field">
               <%= f.label :from, "Interval" %><br />
-              <%= f.text_field :from, size: 10 %>
-              <%= f.text_field :to, size: 10 %>
+              <%= f.text_field :from, :class => 'datepicker', size: 10 %>
+              <%= f.text_field :to,  :class => 'datepicker', size: 10 %>
             </div>
 
             <%= button_tag(type: "submit", class: "btn btn-success") do %>
@@ -156,6 +156,8 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();   
+      $('[data-toggle="tooltip"]').tooltip(); 
+      $('#advanced_search_from').datepicker(); 
+      $('#advanced_search_to').datepicker(); 
   });
 </script>
