@@ -31,9 +31,9 @@ class AdvancedSearch < ApplicationRecord
     tasks = tasks.where(assigned_user_id: adv_search.assigned_user_id) if adv_search.assigned_user_id.present?
     tasks = tasks.where(status: adv_search.status) if adv_search.status.present?
     tasks = tasks.where(task_type: adv_search.mode) if adv_search.mode.present?
-    tasks = tasks.where("interval >= ?", adv_search.from) if adv_search.from.present?
-    tasks = tasks.where("interval <= ?", adv_search.to) if adv_search.to.present?
-    tasks
+
+    tasks = tasks.where("created_at >= ?", Time.new(adv_search.from.year, adv_search.from.day, adv_search.from.month,  0,  0,  0)) if adv_search.from.present?
+    tasks = tasks.where("created_at <= ?", Time.new(adv_search.to.year, adv_search.to.day, adv_search.to.month,  23,  59,  59)) if adv_search.to.present?
   end
 
 end
