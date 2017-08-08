@@ -31,6 +31,8 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'bcrypt-ruby', :require => 'bcrypt' 
 
+gem 'bootstrap-datepicker-rails'
+
 gem 'jquery-rails'
 
 gem 'will_paginate'
