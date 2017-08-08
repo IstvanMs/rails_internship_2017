@@ -44,7 +44,7 @@ class Task < ApplicationRecord
         end
       end
 
-      @task_infos[t.id] = {'duration' => @time, 'duration_day' => @time2, 'project_name' => t.project.title}
+      @task_infos[t.id] = {'duration' => @time, 'assigned' => t.user, 'duration_day' => @time2, 'project_name' => t.project.title}
     end
     return @task_infos
   end
