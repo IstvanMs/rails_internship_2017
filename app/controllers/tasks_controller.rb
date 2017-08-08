@@ -64,9 +64,9 @@ class TasksController < ApplicationController
 
 	def index
 
-		if params[:advanced_search_id] == nil
+		@projects = Project.all
 
-			@projects = Project.all
+		if params[:advanced_search_id] == nil
 		
 			if @current_user.role == 'Manager'
 
@@ -86,8 +86,7 @@ class TasksController < ApplicationController
 			end
 
 		else
-
-			@tasks = AdvancedSearch.tasks_filter(params[:advanced_search_id])
+			@tasks = AdvancedSearch.tasks_filter(params[:advanced_search_id], @current_user.id)
 
 		end
 

@@ -1,21 +1,40 @@
 class AdvancedSearch < ApplicationRecord
 
-  def self.tasks_filter(advanced_search_id)
-    @adv_search = AdvancedSearch.where( :id => advanced_search_id )
-    @tasks = find_tasks(@adv_search)
+  def self.tasks_filter(advanced_search_id, user_id)
+    @adv_search = AdvancedSearch.find (advanced_search_id )
+    @tasks = AdvancedSearch.find_tasks(@adv_search, user_id)
   end
 
   private
 
-  def self.find_tasks(adv_search)
-    tasks = Task.order(:title)
-    tasks = tasks.where("title like ?", "%#{keywords}%") if keywords.present?
-    tasks = tasks.where(project_id: project_id) if project_id.present?
-    tasks = tasks.where(assigned_user_id: assigned_user_id) if assigned_user_id.present?
-    #status
-    #mode
-    tasks = tasks.where("interval >= ?", from) if from.present?
-    tasks = tasks.where("interval <= ?", to) if to.present?
+  def self.find_tasks(adv_search, user_id)
+    @user = User.find(user_id)
+
+    if @user.role == 'Manager'
+
+      tasks = Task.all.order(status: :desc, title: :asc)
+
+    else
+
+      if @user.role != 'Client'
+
+        tasks= Task.where(:assigned_user => @user.id).order(status: :desc, title: :asc)
+
+      else
+
+        tasks= Task.where(:project => ProjectUser.joins(:user).where(:user => @user).collect(&:project_id)).order(status: :desc, title: :asc)
+
+      end
+    end
+    tasks = tasks.where("title like ?", "%#{adv_search.keywords}%") if adv_search.keywords.present?
+    tasks = tasks.where(project_id: adv_search.project_id) if adv_search.project_id.present?
+    tasks = tasks.where(assigned_user_id: adv_search.assigned_user_id) if adv_search.assigned_user_id.present?
+    tasks = tasks.where(status: adv_search.status) if adv_search.status.present?
+    tasks = tasks.where(task_type: adv_search.mode) if adv_search.mode.present?
+    tasks = tasks.where("interval >= ?", adv_search.from) if adv_search.from.present?
+    tasks = tasks.where("interval <= ?", adv_search.to) if adv_search.to.present?
+
+    return tasks
   end
 
 end
