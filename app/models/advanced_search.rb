@@ -33,8 +33,7 @@ class AdvancedSearch < ApplicationRecord
     tasks = tasks.where(task_type: adv_search.mode) if adv_search.mode.present?
     tasks = tasks.where("interval >= ?", adv_search.from) if adv_search.from.present?
     tasks = tasks.where("interval <= ?", adv_search.to) if adv_search.to.present?
-
-    return tasks
+    tasks
   end
 
 end
