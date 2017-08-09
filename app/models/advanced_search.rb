@@ -33,9 +33,6 @@ class AdvancedSearch < ApplicationRecord
     tasks = tasks.where(task_type: adv_search.mode) if adv_search.mode.present?
     tasks = tasks.where("created_at >= ?", Time.new(adv_search.from.year, adv_search.from.day, adv_search.from.month,  0,  0,  0)) if adv_search.from.present?
     tasks = tasks.where("created_at <= ?", Time.new(adv_search.to.year, adv_search.to.day, adv_search.to.month,  23,  59,  59)) if adv_search.to.present?
-    if tasks.length == Task.all.length 
-      tasks = nil
-    end
     return tasks
   end
 
