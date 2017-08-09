@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['tasks'].to_s + ' task'.pluralize(@lengths['tasks']) %>"> Task information </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
-        <%= link_to '(view all tasks)',{ :controller => 'tasks', :action => 'index'} %></center>
+        <%= link_to '(View all tasks)',{ :controller => 'tasks', :action => 'index'} %></center>
       <% end %>
       <% if current_page?(controller: 'dashboards', action: 'index') && @current_user.role == 'Manager'%>
       <div class='row'>
