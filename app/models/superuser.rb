@@ -1,0 +1,2 @@
+class Superuser < User
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809130500) do
+ActiveRecord::Schema.define(version: 20170809142451) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(version: 20170809130500) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "company_id"
+    t.string "role_name"
+    t.string "dashboard"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_roles_on_company_id"
+  end
+
   create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "title"
     t.text "requirement"
@@ -88,6 +97,9 @@ ActiveRecord::Schema.define(version: 20170809130500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+    t.bigint "role_id"
+    t.string "type"
+    t.index ["role_id"], name: "role_id"
   end
 
   create_table "work_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -101,5 +113,6 @@ ActiveRecord::Schema.define(version: 20170809130500) do
 
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
+  add_foreign_key "roles", "companies"
   add_foreign_key "tasks", "projects"
 end
