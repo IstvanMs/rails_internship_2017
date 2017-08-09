@@ -65,37 +65,26 @@ class TasksController < ApplicationController
 	def index
 
 		@projects = Project.all
-
-		if params[:advanced_search_id] == nil
-		
-			if @current_user.role == 'Manager'
-
-				@tasks = Task.all.order(status: :desc, title: :asc)
-
-			else
-
-				if @current_user.role != 'Client'
-
-					@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
-
-				else
-
-					@tasks= Task.where(:project => ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id)).order(status: :desc, title: :asc)
-
-				end
-			end
-
+		if @current_user.role == 'Manager'
+			@tasks = Task.all.order(status: :desc, title: :asc)
 		else
-			@tasks = AdvancedSearch.tasks_filter(params[:advanced_search_id], @current_user.id)
-
+			if @current_user.role != 'Client'
+				@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
+			else
+				@tasks= Task.where(:project => ProjectUser.joins(:user).where(:user => @current_user).collect(&:project_id)).order(status: :desc, title: :asc)
+			end
 		end
 
 		@lengths = {'tasks' => @tasks.length}
 
-		@tasks = @tasks.paginate(:page => params[:page], :per_page => 50)
+		if params[:advanced_search_id] != nil
+			@tasks = AdvancedSearch.tasks_filter(params[:advanced_search_id], @current_user.id)
+		end
 
-		@task_infos = Task.create_task_infos(@tasks)
-
+		if @tasks
+			@tasks = @tasks.paginate(:page => params[:page], :per_page => 50)
+			@task_infos = Task.create_task_infos(@tasks)
+		end 
 	end
 
 	def start_task
