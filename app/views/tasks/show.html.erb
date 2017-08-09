@@ -82,7 +82,7 @@
 								  				</div>
 								  				<div class='col-xs-3'>
 								  					<% if comment.user == @current_user || @current_user.role == 'Manager' %>
-									  					<%= link_to 'delete', [comment.task, comment],
+									  					<%= link_to 'Delete', [comment.task, comment],
 											            method: :delete,
 											            data: { confirm: 'Are you sure?' } %>
 										            <% end %>
@@ -96,7 +96,7 @@
 								  			
 								  			<div class='row'>
 												<div class="dropdown">
-												    <a href="#" data-toggle="dropdown" class="dropdown-toggle pull-right">reply <b class="caret"></b></a>
+												    <a href="#" data-toggle="dropdown" class="dropdown-toggle pull-right">Reply <b class="caret"></b></a>
 												    <div class="container dropdown-menu">
 												    	<%= render 'comments/form', :@reply_to => comment.id %>
 												    </div>
@@ -116,12 +116,12 @@
 										  				</div>
 										  				<div class='col-xs-3'>
 										  					<% if c.user == @current_user || @current_user.role == 'Manager' %>
-											  					<%= link_to 'delete', [c.task, c],
+											  					<%= link_to 'Delete', [c.task, c],
 													            method: :delete,
 													            data: { confirm: 'Are you sure?' } %>
 												            <% end %>
 										  				</div>
-										  			</div>
+										  			</div>S
 				  								</div>
 				  								<div class="panel-body" style='background: #fcfcfc;'>
 									  				<div class='row'>
