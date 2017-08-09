@@ -1,5 +1,6 @@
 class Note < ApplicationRecord
 
+	belongs_to :company
 	validates :text, presence: true,
 	            length: { minimum: 6 }
 
