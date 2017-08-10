@@ -1,0 +1,30 @@
+<center><div class="panel panel-default">
+	<%= form_for @role do |f| %>
+		<div class="panel-body">
+			<h4>
+				<%= f.label "Role name" %><br>
+				<%= f.text_field :role_name %>
+			</h4>
+
+			<h4>
+				<%= f.label "Dashboard type" %><br>
+				<%= f.select(:dashboard, ['admin', 'client', 'employee', 'manager'] ) %>
+			</h4>
+				<%= f.hidden_field :company_id, :value => @company.id %>
+		</div>
+
+		<div class="panel-footer clearfix ">
+				<button type="submit" class="btn btn-lg btn-primary btn-block">
+					<i class="glyphicon glyphicon-save"></i> Save
+				</button>
+			</div>
+	<% end %>
+
+	<% if @role.errors.any? %>
+	    <div class="alert alert-warning" class="Signup_Errors">
+	    <% for message_error in @role.errors.full_messages %>
+	      <font color="red"><div class="notice"><li><%= message_error %></li></div></font>
+	    <% end %>
+	    </div>
+	<% end %>
+</div>
