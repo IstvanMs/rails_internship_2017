@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809142451) do
+ActiveRecord::Schema.define(version: 20170810054312) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -65,9 +65,9 @@ ActiveRecord::Schema.define(version: 20170809142451) do
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.bigint "company_id"
     t.string "role_name"
     t.string "dashboard"
+    t.bigint "company_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_roles_on_company_id"
@@ -97,9 +97,7 @@ ActiveRecord::Schema.define(version: 20170809142451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
-    t.bigint "role_id"
     t.string "type"
-    t.index ["role_id"], name: "role_id"
   end
 
   create_table "work_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
