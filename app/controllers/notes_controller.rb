@@ -5,7 +5,7 @@ class NotesController < ApplicationController
 	def index
     case @current_user.role
     when 'Manager'
-      @notes = Note.where
+      @notes = Note.all
     when 'Client'
       @table = Project.joins(:tasks , :projectUsers => :user ).where(:project_users => { :user_id => @current_user}).uniq
       @notes = Note.where(:visibility => 'general')
