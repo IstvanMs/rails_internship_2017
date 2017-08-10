@@ -2,6 +2,12 @@ class DashboardsController < ApplicationController
   before_action :authenticate_user, :only => [:index]
 
   def index
+
+    if @current_user.type == 'Superuser'
+      @companies = Company.all
+      render 'index_superuser'
+    else
+
     @notes = Note.get_notes(@current_user)
     len = @notes.length
     @notes = @notes.first(6)
@@ -86,5 +92,6 @@ class DashboardsController < ApplicationController
         render 'index_client'
       else puts 'Role error!'
       end
-  end
+    end
+    end
 end

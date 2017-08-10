@@ -44,8 +44,12 @@ class SessionsController < ApplicationController
 
   def profile
     @user = User.find(@current_user.id)
-     @role = Role.find(@user.role_id)
-    render 'users/show'
+    if @user.type == 'Superuser'
+      @role = "Superuser"
+    else
+      @role = Role.find(@user.role_id)
+    end
+      render 'users/show'
   end
 
   def setting
