@@ -3,15 +3,12 @@ class UsersController < ApplicationController
   before_action :authenticate_user, :only => [:show, :profile]
   
   def index
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
     @search_par = params[:search]
 
     if @search_par == nil || @search_par == ''
-      @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
+  	  @users = User.all.order(:role,:username)
     else
-      @users = User.where('type = ? and username like ? and company_id = ?',nil, '%' + @search_par + '%', @company.id).order(:role,:username)
+      @users = User.where('username like ?', '%' + @search_par + '%').order(:role,:username)
     end
     @user = User.new
   end
@@ -81,34 +78,24 @@ class UsersController < ApplicationController
   def show
     if @current_user.id == params[:id] || @current_user.role == 'Admin'
   	 @user = User.find(params[:id])
-     @role = Role.find(@user.role_id)
     else
       redirect_to root_path
     end
   end
 
   def edit
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
   	@user = User.find(params[:id])
-    @users = User.where(:type => nil).order(:role,:username)
+    @users = User.all.order(:role,:username)
     render 'index'
   end
 
   def update 
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
-    @user = User.find(params[:id])
-    @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
-    par = user_params
-    role_dash = Role.find(par[:role_id]).dashboard.capitalize
+  	@user = User.find(params[:id])
 
-  	if @user.update({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
+  	if @user.update(user_params)
   	  redirect_to users_path
   	else
-  		render 'index'
+  		render 'edit'
   	end
   end
 
@@ -120,13 +107,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
-    par = user_params
-    role_dash = Role.find(par[:role_id]).dashboard.capitalize
-  	@user = User.new({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
-    @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
+  	@user = User.new(user_params)
+    @users = User.all.order(:role,:username)
 
   	if @user.save 
       MailerMailer.new_user(@user).deliver
@@ -140,8 +122,12 @@ class UsersController < ApplicationController
   	end
   end
 
+  def get_admins(company_id)
+    @admins = U
+  end
+
   private 
   	def user_params
-  		params.require(:user).permit(:username, :password, :password_confirmation, :email, :company_id, :role_id)
+  		params.require(:user).permit(:username, :password, :password_confirmation, :email, :role)
   	end
 end

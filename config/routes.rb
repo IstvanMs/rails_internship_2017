@@ -57,6 +57,10 @@ Rails.application.routes.draw do
 
 	get 'welcome/index'
 
+  resources :companies
+
+  resources :dashboards
+
   resources :advanced_searches
 
   resources :work_days
@@ -64,8 +68,6 @@ Rails.application.routes.draw do
   resources :notes
 
 	resources :projects
-
-  resources :roles
 
   resources :tasks do
     resources :comments

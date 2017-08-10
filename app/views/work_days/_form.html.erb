@@ -36,7 +36,7 @@
             <% end %>
 
             <% if @work_day.start_time && @work_day.end_time %>
-              <%= link_to work_days_un_end_work_day_path(:user_id => user.id), {data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-sm btn-success', :style => 'margin-top: 3px;', :disabled => @work_day.end_time == nil} do %>
+              <%= link_to work_days_un_end_work_day_path(:user_id => user.id), data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-sm btn-success', :style => 'margin-top: 3px;', :disabled => @work_day.end_time == nil do %>
                   <i class="glyphicon glyphicon-stop"></i>Un-end
               <% end %><br>
             <% end %>

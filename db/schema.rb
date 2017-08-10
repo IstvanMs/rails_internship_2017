@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 20170810054312) do
     t.text "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id"
+    t.index ["company_id"], name: "company_id"
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -86,6 +88,8 @@ ActiveRecord::Schema.define(version: 20170810054312) do
     t.datetime "started_at"
     t.datetime "finished_at"
     t.integer "time_worked"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "company_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
@@ -98,6 +102,10 @@ ActiveRecord::Schema.define(version: 20170810054312) do
     t.datetime "updated_at", null: false
     t.string "email"
     t.string "type"
+    t.bigint "role_id"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "company_id"
+    t.index ["role_id"], name: "role_id"
   end
 
   create_table "work_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
