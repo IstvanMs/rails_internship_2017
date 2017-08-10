@@ -23,6 +23,7 @@
 
                 <% if @current_user.role == 'Admin' %>
                     <li <% if current_page?(:controller => 'users') %> class='active' <% end %>><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
+                    <li <% if current_page?(:controller => 'roles') %> class='active' <% end %>><%= link_to 'Roles', :controller => 'roles', :action => 'index' %></li>
                 <% end %>
                 <li <% if current_page?(:controller => 'sessions', :action => 'profile') %> class='active' <% end %>><%= link_to 'Profile', :controller => 'sessions', :action => 'profile' %></li>
             </ul>

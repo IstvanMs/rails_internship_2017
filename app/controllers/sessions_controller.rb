@@ -44,6 +44,7 @@ class SessionsController < ApplicationController
 
   def profile
     @user = User.find(@current_user.id)
+     @role = Role.find(@user.role_id)
     render 'users/show'
   end
 

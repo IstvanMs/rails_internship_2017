@@ -12,6 +12,7 @@
         <span class="form-group-addon"><span class="glyphicon glyphicon-list-alt"></span></span>
         <%= f.text_area :text, :style => 'resize: none; width: 280px; height: 150px;' %>
       </h4>
+        <%= f.hidden_field :company_id, :value => @company.id %>
 
       <label>Client</label><br>
       <span class="glyphicon glyphicon-user"></span>

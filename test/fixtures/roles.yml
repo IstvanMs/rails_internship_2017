@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  role_name: MyString
+  dashboard: MyString
+  company: one
+
+two:
+  role_name: MyString
+  dashboard: MyString
+  company: two

@@ -65,6 +65,8 @@ Rails.application.routes.draw do
 
 	resources :projects
 
+  resources :roles
+
   resources :tasks do
     resources :comments
   end

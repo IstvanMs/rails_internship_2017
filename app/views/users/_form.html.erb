@@ -26,9 +26,14 @@
 			</h4>
 
 			<h4>
+				
+				<%= f.hidden_field :company_id, :value => @company.id %>
+			</h4>
+
+			<h4>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-				<%= f.select(:role, ['Admin', 'Client', 'Employee', 'Manager'] ) %>
+				<%= f.select(:role_id, options_from_collection_for_select(@roles, "id", "role_name") ) %>
 			</h4>
 		</div>
 
@@ -54,3 +59,9 @@
 	    </div>
 	<% end %>
 </div>
+
+<script type="text/javascript">
+	$( "#user_role_id" ).change(function() {
+		var id = $('#user_role_id option:selected').val();
+	});
+</script>

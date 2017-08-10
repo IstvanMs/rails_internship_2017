@@ -5,7 +5,8 @@
 	end
 
 	def by_user
-		@users = User.where('role != ?', 'Client')
+		@company = Company.find(User.find(session[:user_id]).company_id)
+		@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
 		@months = Array.new
 		for i in 1..12
 			@months[i-1] = Date::MONTHNAMES[i]

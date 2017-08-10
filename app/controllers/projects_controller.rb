@@ -3,12 +3,13 @@ class ProjectsController < ApplicationController
 	before_action :authenticate_user, :only => [:index, :show]
 	
 	def index
+		@company = Company.find(@current_user.company_id)
 		@search_par = params[:search]
 		if @current_user.role == 'Manager'
 			if @search_par == nil || @search_par == ''
-				@projects = Project.all.order(:title)
+				@projects = Project.where(:company_id => @company.id).order(:title)
 			else
-				@projects = Project.where('title like ?', '%' + @search_par + '%').order(:title)
+				@projects = Project.where('company_id = ? and title like ?', @company.id, '%' + @search_par + '%').order(:title)
 			end
 		else
 			if @search_par == nil || @search_par == ''
@@ -61,18 +62,19 @@ class ProjectsController < ApplicationController
 	end
 
 	def show
+		@company = Company.find(@current_user.company_id)
 		if ProjectUser.exists?(:project_id => params[:id], :user_id => @current_user.id) || @current_user.role == 'Manager'
 			@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
 			@table = ProjectUser.where(:project_id => params[:id]).collect(&:user_id)
 			if @table.length > 0
-				@users_sel = User.where('id NOT IN (?)', @table)
+				@users_sel = User.where('id NOT IN (?) and company_id = ?', @table, @company.id)
 			else
-				@users_sel = User.all
+				@users_sel = User.where(:company_id => @company.id)
 			end
-			@clients = User.where(:role => 'Client')
+			@clients = User.where(:role => 'Client', :company_id => @company.id)
 			@project = Project.find(params[:id])
-			@users = User.where.not(:role => 'Client')
-			client_names = User.joins(:projects).where(:role => 'Client', :projects => {:id => params[:id]})
+			@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
+			client_names = User.joins(:projects).where(:role => 'Client', :company_id => @company.id, :projects => {:id => params[:id]})
 			if client_names != nil
 				@project_infos = {'client_name' => client_names,'created_at' => @project.created_at.strftime("%F %I:%M%p")  }
 			else 
@@ -84,18 +86,21 @@ class ProjectsController < ApplicationController
 	end	
 
 	def new
-		@clients = User.where(:role => 'Client')
+		@company = Company.find(@current_user.company_id)
+		@clients = User.where(:role => 'Client', :company_id => @company.id)
 		@project = Project.new
 	end
 
 	def edit
-		@clients = User.where(:role => 'Client')
+		@company = Company.find(@current_user.company_id)
+		@clients = User.where(:role => 'Client', :company_id => @company.id)
 		@project = Project.find(params[:id])
-		@users = User.where.not(:role => 'Client')
+		@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
 	end
 
 	def create
-		@clients = User.where(:role => 'Client')
+		@company = Company.find(@current_user.company_id)
+		@clients = User.where(:role => 'Client', :company_id => @company.id)
 		@project = Project.new(project_params)
  
 		if @project.save
@@ -115,8 +120,9 @@ class ProjectsController < ApplicationController
 	end
 
 	def update
+		@company = Company.find(@current_user.company_id)
 		@project = Project.find(params[:id]) 
-		@users = User.where.not(:role => 'Client')
+		@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
 		@user = User.find(params[:client])
 		if !ProjectUser.exists?(:user => @user,:project => @project)
 			ProjectUser.create({:user => @user, :project => @project})
@@ -130,16 +136,17 @@ class ProjectsController < ApplicationController
 	end
 
 	def destroy
+		@company = Company.find(@current_user.company_id)	
 		@project = Project.find(params[:id])
 		@project.destroy
-		@users = User.where.not(:role => 'Client')
+		@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
  
 		redirect_to projects_path
 	end
 
 	private
 	def project_params
-		params.require(:project).permit(:title, :text)
+		params.require(:project).permit(:title, :text, :company_id)
 	end
 
 end

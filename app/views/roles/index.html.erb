@@ -1,0 +1,67 @@
+<div class='container'>
+	<div class='row'>
+		<% if flash[:notice] %>   
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
+	<% end %>
+	</div>
+	<div class='row'>
+		<div class='col-xs-8' >
+			<div class='panel panel-success' style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+				<div class='panel-heading'>
+					<div class='row' align='center'>
+						<h3>Roles</h3>
+					</div>
+					<div class='row' align='left' style='margin-left: 20px;'>
+						<h4>Company: <%= @company.name %> </h4>
+					</div>
+				</div>
+				<div class='container'>
+					<div class='row' style="background-color: #55b25d;" align='center'>
+						<div class='col-xs-4'>
+							<h4>Role name</h4>
+						</div>
+						<div class='col-xs-4'>
+							<h4>Dashboard type</h4>
+						</div>
+					</div>
+					<% @roles.each do |role| %>
+						<div class='row' align='center' style='background-color: <% if role.dashboard == 'admin'%>#c9ffd2<% end %>
+										                    <% if role.dashboard == 'manager'%>#c9f0ff<% end %>
+										                    <% if role.dashboard == 'employee'%>#ffffc9<% end %>
+										                    <% if role.dashboard == 'client'%>#ffc9c9<% end %>;'>
+							<div class='col-xs-4'>
+								<h5><%= role.role_name %></h5>
+							</div>
+							<div class='col-xs-4'>
+								<h5><%= role.dashboard %></h5>
+							</div>
+							<div class='col-xs-4'>
+								<div class='row'>
+									<div class='col-xs-6'><%= link_to 'Edit', edit_role_path(role) %></div>
+									<div class='col-xs-6'><%= link_to 'Destroy', role_path(role),
+					                    method: :delete,
+					                    data: { confirm: 'Are you sure?' } %></div>
+								</div>
+							</div>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-4" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;"><br>
+			<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
+				<div class="panel-heading">
+					<% if @role.role_name == nil %>
+					<center><h2>New Role</h1></center>
+					<% else %>
+					<center><h2>Edit Role</h2></center>
+					<% end %>
+				</div>
+				<%=render 'form' %>
+			</div>
+	    </div>
+	</div>
+</div>

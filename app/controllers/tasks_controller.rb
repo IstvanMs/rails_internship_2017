@@ -3,6 +3,7 @@ class TasksController < ApplicationController
 	before_action :manager_user, :only => [:create, :destroy, :add_task, :edit]
 
 	def create
+		@company = Company.find(@current_user.company_id)
 		@project = Project.find(params[:project_id])
 		@task = @project.tasks.create(task_params)
 		@user = User.find(@task.assigned_user)
@@ -16,6 +17,7 @@ class TasksController < ApplicationController
 	end
 
 	def show
+		@company = Company.find(@current_user.company_id)
 		@task = Task.find(params[:id])
 		if @task.assigned_user == @current_user.id || @current_user.role == 'Manager'
 			if User.exists?(@task.assigned_user)
@@ -29,15 +31,17 @@ class TasksController < ApplicationController
 	end
 
 	def edit
+		@company = Company.find(@current_user.company_id)
 		@task = Task.find(params[:id])
 		@project = Project.find(@task.project_id)
-		@users = User.where('role != ? and role != ?', 'Client', 'Manager')
+		@users = User.where('role != ? and role != ? and company_id = ?', 'Client', 'Manager', @company.id)
 	end
 
 	def update
+		@company = Company.find(@current_user.company_id)
 		@task = Task.find(params[:id])
 		@project = Project.find(@task.project_id)
-		@users = User.where('role != ? and role != ?', 'Client', 'Manager')
+		@users = User.where('role != ? and role != ? and company_id = ?', 'Client', 'Manager', @company.id)
 		
 		if @task.update(task_params)
 			redirect_to @task
@@ -51,6 +55,7 @@ class TasksController < ApplicationController
 	end
 
 	def destroy
+		@company = Company.find(@current_user.company_id)
 		@project = Project.find(params[:project_id])
 		@task = @project.tasks.find(params[:id])
 		@task.destroy
@@ -58,15 +63,17 @@ class TasksController < ApplicationController
 	end
 
 	def add_task
+		@company = Company.find(@current_user.company_id)
 		@project = Project.find(params[:id])
-		@users = User.where('role != ? and role != ?', 'Client', 'Manager')
+		@users = User.where('role != ? and role != ? and company_id = ?', 'Client', 'Manager', @company.id)
 	end
 
 	def index
+		@company = Company.find(@current_user.company_id)
 
-		@projects = Project.all
+		@projects = Project.where(:company_id => @company.id)
 		if @current_user.role == 'Manager'
-			@tasks = Task.all.order(status: :desc, title: :asc)
+			@tasks = Task.where(:company_id => @company.id).order(status: :desc, title: :asc)
 		else
 			if @current_user.role != 'Client'
 				@tasks= Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
@@ -123,7 +130,7 @@ class TasksController < ApplicationController
 
 	private
 		def task_params
-			params.require(:task).permit(:title, :requirement, :task_type, :status, :assigned_user, :intervals)
+			params.require(:task).permit(:title, :requirement, :task_type, :status, :assigned_user, :intervals, :company_id)
 		end
 
 end
