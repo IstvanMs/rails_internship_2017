@@ -1,26 +1,17 @@
-class DashboardsController < ApplicationController	
+class DashboardsController < ApplicationController  
   before_action :authenticate_user, :only => [:index]
 
   def index
-
-    if @current_user.type == 'Superuser'
-
-    @companies = Company.all
-
-    render 'index_superuser'
-
-    else
-
     @notes = Note.get_notes(@current_user)
-    if @notes
-      len = @notes.length
-      @notes = @notes.first(6)
-    end
+    len = @notes.length
+    @notes = @notes.first(6)
     case @current_user.role
-
       #Admin
       when "Admin"
-        @users = User.all.order(:role, :username)
+        @admin = User.find(session[:user_id])
+        @company = Company.find(@admin.company_id)
+        @roles = Role.where(:company_id => @company.id)
+        @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
         @users = @users.first(10)
 
         @tasks = Task.where(:assigned_user => @current_user.id).order(status: :desc, title: :asc)
@@ -57,8 +48,9 @@ class DashboardsController < ApplicationController
 
       #manager
       when 'Manager'
-        @projects = Project.all.order(:title)
-        @tasks = Task.all.order(status: :created_at, status: :desc, title: :asc)
+        @company = Company.find(@current_user.company_id)
+        @projects = Project.where(:company_id => @company.id).order(:title)
+        @tasks = Task.where(:company_id => @company.id).order(status: :created_at, status: :desc, title: :asc)
 
         @lengths = {'notes' => len, 'tasks' => @tasks.length, 'projects' => @projects.length}
 
@@ -69,7 +61,7 @@ class DashboardsController < ApplicationController
         
         @task_infos = Task.create_task_infos(@tasks)
 
-        @users = User.where( :role => 'Employee' )
+        @users = User.where( :role => 'Employee', :company_id => @company.id)
 
         this_time = Time.now
         @today = Time.new(this_time.year, this_time.month, this_time.day, 0, 0, 0)
@@ -93,7 +85,6 @@ class DashboardsController < ApplicationController
 
         render 'index_client'
       else puts 'Role error!'
-    end
-  end
+      end
   end
 end
