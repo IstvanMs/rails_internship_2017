@@ -3,10 +3,12 @@ class CompaniesController < ApplicationController
 
   def new
     @company = Company.new
+    @user = User.new
   end
 
   def show
     @company = Company.find(params[:id])
+    @user = User.new
   end
 
   def create

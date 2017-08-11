@@ -33,7 +33,11 @@
 			<h4>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-				<%= f.select(:role_id, options_from_collection_for_select(@roles, "id", "role_name") ) %>
+        <% if @current_user.role == 'Superuser' %>
+        <%= f.select( :role_id, %w{ Admin } ) %>
+        <% else %>
+				<%= f.select( :role_id, options_from_collection_for_select(@roles, "id", "role_name") ) %>
+        <% end %>
 			</h4>
 		</div>
 
@@ -43,13 +47,6 @@
 				</button>
 			</div>
 	<% end %>
-
-	<!--"INVALID FORM" BEFORE ERRORS-->
-	<!--<% if flash[:notice] %>   
-		<div class="alert alert-warning">
-		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
-		</div>
-	<% end %>-->
 
 	<% if @user.errors.any? %>
 	    <div class="alert alert-warning" class="Signup_Errors">
