@@ -72,6 +72,8 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @company = Company.find(params[:company])
+    @roles = Role.where(:company_id => @company.id, :role_name => 'admin')
   end
 
   def reset
@@ -104,46 +106,83 @@ class UsersController < ApplicationController
   end
 
   def update 
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
-    @user = User.find(params[:id])
-    @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
-    par = user_params
-    role_dash = Role.find(par[:role_id]).dashboard.capitalize
+    if User.find(session[:user_id]).type == 'Superuser'
+      @user = User.find(params[:id])
+      par = user_params
+      @company = Company.find(par[:company_id])
+      role_dash = Role.find(par[:role_id]).dashboard.capitalize
+      @roles = Role.where(:company_id => @company.id)
 
-    if @user.update({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
-      redirect_to users_path
+      if @user.update({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
+        redirect_to company_path(@company)
+      else
+        render 'edit'
+      end
     else
-      render 'index'
+      @admin = User.find(session[:user_id])
+      @company = Company.find(@admin.company_id)
+      @roles = Role.where(:company_id => @company.id)
+      @user = User.find(params[:id])
+      @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
+      par = user_params
+      role_dash = Role.find(par[:role_id]).dashboard.capitalize
+
+      if @user.update({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
+        redirect_to users_path
+      else
+        render 'index'
+      end
     end
   end
 
   def destroy
     @user = User.find(params[:id])
+    @company = Company.find(@user.company_id)
     @user.destroy
 
-    redirect_to users_path
+    if User.find(session[:user_id]).type == 'Superuser'
+      redirect_to company_path(@company)
+    else
+      redirect_to users_path
+    end
   end
 
   def create
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
-    par = user_params
-    role_dash = Role.find(par[:role_id]).dashboard.capitalize
-    @user = User.new({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
-    @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
-
-    if @user.save 
-      MailerMailer.new_user(@user).deliver
-      flash[:notice] = "Saved!"
-      flash[:color] = "valid"
-      redirect_to users_path
+    if @current_user.type == 'Superuser'
+      par = user_params
+      role_dash = Role.find(par[:role_id]).dashboard.capitalize
+      @company = Company.find(par[:company_id])
+      @user = User.new({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
+    
+      if @user.save 
+        MailerMailer.new_user(@user).deliver
+        flash[:notice] = "Saved!"
+        flash[:color] = "valid"
+        redirect_to company_path(@company)
+      else
+        flash[:notice] = "Invalid form!"
+        flash[:color] = "invalid"
+        render 
+      end
     else
-      flash[:notice] = "Invalid form!"
-      flash[:color] = "invalid"
-      render "index"
+      @admin = User.find(session[:user_id])
+      @company = Company.find(@admin.company_id)
+      @roles = Role.where(:company_id => @company.id)
+      par = user_params
+      role_dash = Role.find(par[:role_id]).dashboard.capitalize
+      @user = User.new({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
+      @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
+
+      if @user.save 
+        MailerMailer.new_user(@user).deliver
+        flash[:notice] = "Saved!"
+        flash[:color] = "valid"
+        redirect_to users_path
+      else
+        flash[:notice] = "Invalid form!"
+        flash[:color] = "invalid"
+        render "index"
+      end
     end
   end
 

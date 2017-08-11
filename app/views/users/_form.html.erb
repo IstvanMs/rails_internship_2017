@@ -33,11 +33,7 @@
 			<h4>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-        <% if @current_user.role == 'Superuser' %>
-        <%= f.select( :role_id, %w{ Admin } ) %>
-        <% else %>
 				<%= f.select( :role_id, options_from_collection_for_select(@roles, "id", "role_name") ) %>
-        <% end %>
 			</h4>
 		</div>
 

@@ -1,8 +1,9 @@
 class Company < ApplicationRecord
 
-  has_many :users
-  has_many :projects
-  has_many :notes
+  has_many :users, dependent: :destroy
+  has_many :projects, dependent: :destroy
+  has_many :notes, dependent: :destroy
+  has_many :roles, dependent: :destroy
 
   def self.get_admins(company_id)
     User.where( :role => "Admin", :company_id => company_id )

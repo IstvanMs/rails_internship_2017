@@ -15,7 +15,18 @@ class CompaniesController < ApplicationController
     @company = Company.new(company_params)
 
     if @company.save
-      redirect_to @company
+      @role = Role.new do |r|
+        r.role_name = 'admin'
+        r.dashboard = 'admin'
+        r.company_id = @company.id
+      end
+      
+      if @role.save
+        redirect_to @company
+      else
+        @company.destroy
+        render 'new'
+      end
     else
       render 'new'
     end

@@ -31,9 +31,11 @@
 						<center><h4>
 							<strong>Email: </strong><br></br>
 							<%= @user.email %><br>
+							<% if (@current_user.role != 'Admin' && @current_user.type != 'Superuser') || (@current_user.type == @user.type && @current_user.type == 'Superuser')%>
 							<hr>
 							<a href="#changeEmail" data-toggle="modal">(Change email)</a><br>
 							<a href="#changePassword" data-toggle="modal">(Change password)</a>
+							<% end %>
 						</h4></center><br>
 					</div>
 				</div>
