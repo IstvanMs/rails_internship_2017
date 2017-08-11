@@ -79,7 +79,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    if @current_user.id == params[:id] || @current_user.role == 'Admin'
+    if @current_user.id == params[:id] || @current_user.role == 'Admin' || @current_user.type == 'Superuser'
      @user = User.find(params[:id])
      @role = Role.find(@user.role_id)
     else
@@ -88,12 +88,19 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @admin = User.find(session[:user_id])
-    @company = Company.find(@admin.company_id)
-    @roles = Role.where(:company_id => @company.id)
-    @user = User.find(params[:id])
-    @users = User.where(:type => nil).order(:role,:username)
-    render 'index'
+    if @current_user.type == 'Superuser'
+      @user = User.find(params[:id])
+      @company = Company.find(@user.company_id)
+      @roles = Role.where(:company_id => @company.id)
+      render 'edit'
+    else
+      @admin = User.find(session[:user_id])
+      @company = Company.find(@admin.company_id)
+      @roles = Role.where(:company_id => @company.id)
+      @user = User.find(params[:id])
+      @users = User.where(:type => nil).order(:role,:username)
+      render 'index'
+    end
   end
 
   def update 

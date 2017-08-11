@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   def admin_user
     if authenticate_user
-      if @current_user.role == 'Admin'
+      if @current_user.role == 'Admin' || @current_user.type == 'Superuser'
         return true
       else
         redirect_to(:controller => 'sessions', :action => 'home')
