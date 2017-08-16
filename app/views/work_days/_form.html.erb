@@ -14,7 +14,7 @@
     <% @users.each do |user| %>
         <% @work_day = user.get_work_day %>
         <% if @work_day %>
-          <div class='row' style="background-color: #ffffff;" align='center'>
+          <div class='row' style='border-bottom: 1px solid #e0e0e0;' align='center'>
             <div class='col-xs-3'><h5><%= link_to user.username, users_profile_path(:id => user.id)%></h5></div>
 
             <% if  !@work_day.start_time %>
@@ -36,13 +36,13 @@
             <% end %>
 
             <% if @work_day.start_time && @work_day.end_time %>
-              <%= link_to work_days_un_end_work_day_path(:user_id => user.id), data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-sm btn-success', :style => 'margin-top: 3px;', :disabled => @work_day.end_time == nil do %>
+              <%= link_to work_days_un_end_work_day_path(:user_id => user.id),  method: :post, data: { confirm: 'Un-end this work day?' }, :class => 'btn btn-sm btn-success', :style => 'margin-top: 3px;', :disabled => @work_day.end_time == nil do %>
                   <i class="glyphicon glyphicon-stop"></i>Un-end
               <% end %><br>
             <% end %>
           </div>
         <% else %>
-          <div class='row' style="background-color: #ffffff;" align='center'>
+          <div class='row' style='border-bottom: 1px solid #e0e0e0;' align='center'>
             <div class='col-xs-3'><h5><%= link_to user.username, users_profile_path(:id => user.id)%></h5></div>
 
             <div class='col-xs-9'><h5>Not-worked today yet</h5></div>
