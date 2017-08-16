@@ -27,7 +27,7 @@
 						</div>
 					</div>
 					<% @roles.each do |role| %>
-						<div class='row' align='center' style='background-color: <% if role.dashboard == 'admin'%>#c9ffd2<% end %>
+						<div class='row' align='center' style='border-bottom: 1px solid #e0e0e0; background-color: <% if role.dashboard == 'admin'%>#c9ffd2<% end %>
 										                    <% if role.dashboard == 'manager'%>#c9f0ff<% end %>
 										                    <% if role.dashboard == 'employee'%>#ffffc9<% end %>
 										                    <% if role.dashboard == 'client'%>#ffc9c9<% end %>;'>

@@ -1,26 +1,30 @@
 <div class='container' style='min-width: 700px;'>
 	<div class='row'>
 		<div class='panel panel-default'>
-			<div class='panel-body'>
+			<div class='panel-body' style='background-color: #f9f9f5;'>
 				<div class='row'>
-					<div class='col-xs-2'>
 					<%= form_tag :action => 'by_user' do%>
-						<div class='row' style="white-space: nowrap">
-							<label>&nbsp;&nbsp;&nbsp;&nbsp;Year:&nbsp;</label>
-							<%= select_tag 'year', options_for_select(@years, @current_filter['year']) %>
+						<div class='col-xs-2'>
+							<center><label>Year:</label>
+							<%= select_tag 'year', options_for_select(@years, @current_filter['year']) %></center>
+						</div>
 
-							<label>&nbsp;&nbsp;&nbsp;&nbsp;Month:&nbsp;</label>
-							<%= select_tag 'month', options_for_select(@months, @current_filter['month']) %>
+						<div class='col-xs-2'>
+							<center><label>Month:</label>
+							<%= select_tag 'month', options_for_select(@months, @current_filter['month']) %></center>
+						</div>
 
-							<label>&nbsp;&nbsp;&nbsp;&nbsp;User:&nbsp;</label>
-							<%= select_tag "user", options_from_collection_for_select(@users, "id", "username", @current_filter['user'].id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<div class='col-xs-2'>
+							<center><label>User:</label>
+							<%= select_tag "user", options_from_collection_for_select(@users, "id", "username", @current_filter['user'].id) %></center>
+						</div>
 							
+						<div class='col-xs-6' align='right'>
 							<%= button_tag(type: "submit", class: "btn btn-success") do %>
 		                        <i class="glyphicon glyphicon-arrow-right"></i>
 		                    <% end %>
-						</div>
+		                </div>
 					<% end %>
-					</div>
 	        	</div>
 			</div>
 		</div>
@@ -88,7 +92,7 @@
     			</div>
     			<div class='row' style='overflow-y: hidden; overflow-x: hidden;'>
     			<% for i in 1..@current_filter['len'] %>
-	    			<div class='row' style="background-color: <% if @data[i]['weekend'] == true %>#d1d1d1
+	    			<div class='row' style="border-bottom: 1px solid #e0e0e0; background-color: <% if @data[i]['weekend'] == true %>#d1d1d1
 	    				<% else %>
 	    				<% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %><% end %>" align='center'>
 	    				<% if @data[i]['tasks'].length == 0 %>

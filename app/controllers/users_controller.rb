@@ -100,7 +100,7 @@ class UsersController < ApplicationController
       @company = Company.find(@admin.company_id)
       @roles = Role.where(:company_id => @company.id)
       @user = User.find(params[:id])
-      @users = User.where(:type => nil).order(:role,:username)
+      @users = User.where(:type => nil, :company_id => @company.id).order(:role,:username)
       render 'index'
     end
   end

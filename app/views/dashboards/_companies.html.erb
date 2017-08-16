@@ -1,6 +1,13 @@
 <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
   <div class="panel-heading">
-    <center><h3> Companies </h3></center>
+    <div class='row'>
+      <center><h3> Companies </h3></center>
+    </div>
+    <div class='row'>
+      <%= button_to new_company_path, :class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 1cm;' do%>
+        <i class="glyphicon glyphicon-plus">Create new company</i>
+      <% end %>
+    </div>
   </div>
 
   <div class='container'>
@@ -28,7 +35,7 @@
               </div>
 
               <div class='col-xs-2'>
-                <center><h5><%= link_to 'Show', company_path(company) %></h5></center>
+                <h5 align='right'><%= link_to 'Show', company_path(company) %></h5>
               </div>
 
               <div class='col-xs-2'>
@@ -36,7 +43,7 @@
               </div>
 
               <div class='col-xs-2'>
-                <center><h5><%= link_to 'Destroy', company_path(company), method: :delete, data: { confirm: 'Are you sure?' } %></h5></center>
+                <h5 align='left'><%= link_to 'Destroy', company_path(company), method: :delete, data: { confirm: 'Are you sure?' } %></h5>
               </div>
 
             </div>

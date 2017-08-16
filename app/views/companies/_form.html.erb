@@ -1,12 +1,24 @@
-<%= form_for(@company) do |company| %>
-
-    <p>
+<center><div class="panel panel-default">
+  <%= form_for(@company) do |company| %>
+    <div class="panel-body">
+      <h4>
       <%= company.label :name %><br>
       <%= company.text_field :name %>
-    </p>
+      </h4>
+    </div>
 
-    <p>
-      <%= company.submit %>
-    </p>
+    <div class="panel-footer clearfix ">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </div>
+  <% end %>
 
-<% end %>
+  <% if @company.errors.any? %>
+      <div class="alert alert-warning" class="Signup_Errors">
+      <% for message_error in @company.errors.full_messages %>
+        <font color="red"><div class="notice"><li><%= message_error %></li></div></font>
+      <% end %>
+      </div>
+  <% end %>
+</div>

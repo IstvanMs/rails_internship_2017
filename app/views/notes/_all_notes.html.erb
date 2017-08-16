@@ -50,14 +50,14 @@
           <% if @current_user.role == 'Manager' %>
             <div class='col-xs-2'><h5><%= note.visibility %></h5></div>
             <div class='col-xs-4' style=' white-space: nowrap;'>
-                <%= link_to 'Show', note_path(note) %> | 
+                <h5><%= link_to 'Show', note_path(note) %> | 
                 <%= link_to 'Edit', edit_note_path(note) %> |
                 <%= link_to 'Destroy', note_path(note),
                             method: :delete,
-                            data: { confirm: 'Are you sure?' } %>   
+                            data: { confirm: 'Are you sure?' } %>  </h5> 
               </div>
           <% else %>
-          <div class='col-xs-4'><%= link_to 'Show', note_path(note) %></div>
+          <div class='col-xs-4'><h5><%= link_to 'Show', note_path(note) %></h5></div>
           <% end %>
         </div>
     <% end %>

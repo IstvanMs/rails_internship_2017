@@ -62,14 +62,14 @@
         <div class='col-xs-1'><h5><%= @project_infos[project.id]['duration'] %> <%= 'minute'.pluralize(@project_infos[project.id]['duration']) %></h5></div>
         <div class='col-xs-2'><h5><%= @project_infos[project.id]['created_at'] %></h5></div>
         <% if @current_user.role == 'Manager' %>
-          <div class='col-xs-3'><%= link_to 'Show', project_path(project) %> |
+          <div class='col-xs-3'><h5><%= link_to 'Show', project_path(project) %> |
               <%= link_to 'Edit', edit_project_path(project) %> |
               <%= link_to 'Destroy', project_path(project),
                           method: :delete,
-                          data: { confirm: 'Are you sure?' } %></div>
+                          data: { confirm: 'Are you sure?' } %></h5></div>
         <% else %>
         <div class='col-xs-3'>
-          <%= link_to 'Show', project_path(project) %>
+          <h5><%= link_to 'Show', project_path(project) %></h5>
         </div>
         <% end %>
       </div>
