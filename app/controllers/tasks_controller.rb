@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-	before_action :authenticate_user, :only => [:index, :start_task, :pause_task, :finish_task, :search, :show]
+	before_action :authenticate_user
 	before_action :manager_user, :only => [:create, :destroy, :add_task, :edit]
 
 	def create
@@ -86,6 +86,7 @@ class TasksController < ApplicationController
 
 		if params[:advanced_search_id] != nil
 			@tasks = AdvancedSearch.tasks_filter(params[:advanced_search_id], @current_user.id)
+			@advanced_search = AdvancedSearch.find(params[:advanced_search_id])
 		end
 
 		if @tasks

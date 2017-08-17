@@ -19,6 +19,63 @@
       <div class='row'>
         <h5 class='pull-left' style='margin-left:20px; background-color: #696d6b; border: 1px solid #70877c; border-radius: 5px;'><a href="#advancedSearch" style='color: white; margin: 5px 7px 7px 5px;' data-toggle="modal">Advanced search<b class="caret"></b></a></h5>
       </div> 
+      <% if @advanced_search %>
+        <div class='row'>
+          <div class='col-xs-2'>
+            <h4>Filter:</h4>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-xs-2'>
+            <h5>Keywords: 
+            <% if @advanced_search.keywords%>
+              <%= @advanced_search.keywords %>
+            <% end %></h5>
+          </div>
+
+          <div class='col-xs-1'>
+            <h5>Project:
+            <% if @advanced_search.project_id %>
+              <%= Project.find(@advanced_search.project_id).title %>
+            <% end %></h5>
+          </div>
+
+          <div class='col-xs-2'>
+            <h5>Assigned User: 
+            <% if @advanced_search.assigned_user_id %>
+              <%= User.find(@advanced_search.assigned_user_id).username %>
+            <% end %></h5>
+          </div>
+
+          <div class='col-xs-1'>
+            <h5>Type:
+            <% if @advanced_search.mode %>
+              <%= @advanced_search.mode %>
+            <% end %></h5>
+          </div>
+
+          <div class='col-xs-1'>
+            <h5>Status:
+            <% if @advanced_search.status %>
+              <%= @advanced_search.status %>
+            <% end %></h5>
+          </div>
+
+          <div class='col-xs-2'>
+            <h5>From: 
+            <% if @advanced_search.from %>
+              <%= @advanced_search.from %>
+            <% end %></h5>
+          </div>
+
+          <div class='col-xs-2'>
+            <h5>To: 
+            <% if @advanced_search.to %>
+              <%= @advanced_search.to %>
+            <% end %></h5>
+          </div>
+        </div>
+      <% end %>
   </div>
   
   <div class='container' style='width: 100%;'>
@@ -112,33 +169,58 @@
         <%= form_for AdvancedSearch.new do |f| %>
             <div class="field">
               <%= f.label :keywords %><br />
-              <%= f.text_field :keywords %>
+              <% if @advanced_search %>
+                <%= f.text_field :keywords, :value => @advanced_search.keywords %>
+              <% else %>
+                <%= f.text_field :keywords %>
+              <% end %>
             </div>
 
             <div class="field">
               <%= f.label :project_id %><br />
-              <%= f.collection_select :project_id, Project.order(:title), :id, :title, include_blank: true %>
+              <% if @advanced_search %>
+                <%= f.collection_select :project_id, Project.where(:company_id => @company.id).order(:title), :id, :title, include_blank: true , :selected => @advanced_search.project_id %>
+              <% else %>
+                <%= f.collection_select :project_id, Project.where(:company_id => @company.id).order(:title), :id, :title, include_blank: true %>
+              <% end %>
             </div>
 
             <div class="field">
               <%= f.label :assigned_user_id %><br />
-              <%= f.collection_select :assigned_user_id, User.order(:username), :id, :username, include_blank: true %>
+              <% if @advanced_search %>
+                <%= f.collection_select :assigned_user_id, User.where(:company_id => @company.id).order(:username), :id, :username, include_blank: true , :selected => @advanced_search.assigned_user_id%>
+              <% else %>
+                <%= f.collection_select :assigned_user_id, User.where(:company_id => @company.id).order(:username), :id, :username, include_blank: true %>
+              <% end %>
             </div>
 
             <div class="field">
               <%= f.label :mode %><br />
-              <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true) %>
+              <% if @advanced_search %>
+                <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true, :selected => @advanced_search.mode) %>
+              <% else %>
+                <%= f.select(:mode, %w{ Bug Feature }, :include_blank => true) %>
+              <% end %>
             </div>
 
             <div class="field">
               <%= f.label :status %><br />
-              <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
+              <% if @advanced_search %>
+                <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true, :selected => @advanced_search.status) %>
+              <% else %>
+                <%= f.select(:status, %w{ Not-started Started Paused Finished }, :include_blank => true) %>
+              <% end %>
             </div>
 
             <div class="field">
               <%= f.label :from, "Interval" %><br />
-              <%= f.text_field :from, :class => 'datepicker', size: 10 %>
-              <%= f.text_field :to,  :class => 'datepicker', size: 10 %>
+              <% if @advanced_search %>
+                <%= f.text_field :from, :class => 'datepicker', size: 10, :value => @advanced_search.from %>
+                <%= f.text_field :to,  :class => 'datepicker', size: 10, :value => @advanced_search.to %>
+              <% else %>
+                <%= f.text_field :from, :class => 'datepicker', size: 10 %>
+                <%= f.text_field :to,  :class => 'datepicker', size: 10 %>
+              <% end %>
             </div>
 
             <%= button_tag(type: "submit", class: "btn btn-success") do %>

@@ -4,13 +4,82 @@
 			<h4>
 				<%= f.label "Role name" %><br>
 				<%= f.text_field :role_name %>
-			</h4>
+			</h4><br>
 
 			<h4>
 				<%= f.label "Dashboard type" %><br>
 				<%= f.select(:dashboard, ['admin', 'client', 'employee', 'manager'] ) %>
-			</h4>
+			</h4><br>
 				<%= f.hidden_field :company_id, :value => @company.id %>
+				<%= f.hidden_field :permissions %>
+
+			<h4><%= label_tag 'Permissions' %></h4>
+			<div class='row'>
+				<table class="table table-bordered">
+			        <thead>
+			            <tr>
+			                <th></th>
+			                <th>Show</th>
+			                <th>Crud</th>
+			                <th>Work</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr>
+			                <td>Projects</td>
+			                <td align='center'>
+									<input type="checkbox" id="project1" name="project1">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="project2" name="project2">
+							</td>
+			                <td></td>
+			            </tr>
+			            <tr>
+			                <td>Tasks</td>
+			                <td align='center'>
+									<input type="checkbox" id="task1" name="task1">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="task2" name="task2">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="task3" name="task3">
+							</td>
+			            </tr>
+			            <tr>
+			                <td>Notes</td>
+			                <td align='center'>
+									<input type="checkbox" id="note1" name="note1">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="note2" name="note2">
+							</td>
+							<td></td>
+			            </tr>
+			            <tr>
+			                <td>Users</td>
+			                <td align='center'>
+									<input type="checkbox" id="user1" name="user1">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="user2" name="user2">
+							</td>
+							<td></td>
+			            </tr>
+			            <tr>
+			                <td>Reports</td>
+			                <td align='center'>
+									<input type="checkbox" id="report1" name="report1">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="report2" name="report2">
+							</td>
+							<td></td>
+			            </tr>
+			        </tbody>
+			    </table>
+			</div>
 		</div>
 
 		<div class="panel-footer clearfix ">
@@ -28,3 +97,74 @@
 	    </div>
 	<% end %>
 </div>
+
+<script type="text/javascript">
+	$( document ).ready(function() {
+		var perm = $('#role_permissions').val();
+		if( perm ){
+			var p = parseInt(perm[0]);
+			var t = parseInt(perm[1]);
+			var n = parseInt(perm[2]);
+			var u = parseInt(perm[3]);
+			var r = parseInt(perm[4]);
+			if( p % 2 == 1)
+				$('#project2').prop('checked', true);
+			if( p > 1)
+				$('#project1').prop('checked', true);
+			if( n % 2 == 1)
+				$('#note2').prop('checked', true);
+			if( n > 1)
+				$('#note1').prop('checked', true);
+			if( u % 2 == 1)
+				$('#user2').prop('checked', true);
+			if( u > 1)
+				$('#user1').prop('checked', true);
+			if( r % 2 == 1)
+				$('#report2').prop('checked', true);
+			if( r > 1)
+				$('#report1').prop('checked', true);
+			if( t % 2 == 1)
+				$('#task3').prop('checked', true);
+			if( t == 2 || t == 3 || t == 6 || t == 7)
+				$('#task2').prop('checked', true);
+			if( t > 3)
+				$('#task1').prop('checked', true);
+		}
+	});
+
+	$('[id*="_role"]').on('change', function() {
+		var p = 0;
+		var t = 0;
+		var n = 0;
+		var u = 0;
+		var r = 0;
+		if($("#project1").is(':checked'))
+		    p += 2;
+		if($("#project2").is(':checked'))
+		    p += 1;
+
+		if($("#task1").is(':checked'))
+		    t += 4;
+		if($("#task2").is(':checked'))
+		    t += 2;
+		if($("#task3").is(':checked'))
+		    t += 1;
+
+		if($("#user1").is(':checked'))
+		    u += 2;
+		if($("#user2").is(':checked'))
+		    u += 1;
+
+		if($("#note1").is(':checked'))
+		    n += 2;
+		if($("#note2").is(':checked'))
+		    n += 1;
+
+		if($("#report1").is(':checked'))
+		    r += 2;
+		if($("#report2").is(':checked'))
+		    r += 1;
+		var perm = p.toString()+t.toString()+n.toString()+u.toString()+r.toString();
+		$('#role_permissions').val(perm);
+	});
+</script>

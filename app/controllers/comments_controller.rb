@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-	before_action :authenticate_user, :only => [:create, :reply, :destroy]
+	before_action :authenticate_user
 
 	def reply
 	end

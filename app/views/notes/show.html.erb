@@ -24,7 +24,7 @@
 		</div>
 		
 		<span class="bottomleft">
-			<%= button_to "Back", {:controller => 'notes', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon glyphicon-play pull-left'}%>
+			<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left', :style => 'margin: 0px 0px 10px 0px;'}%>
 		</span>
 	</div>
 </div>

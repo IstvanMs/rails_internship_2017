@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
   before_action :admin_user, :only => [:new, :create, :edit, :update, :index]
-  before_action :authenticate_user, :only => [:show, :profile]
+  before_action :authenticate_user
   
   def index
+    role = Role.find(@current_user.role_id)
+    if role.permissions[3].to_f % 2 == 0
+      redirect_to root_path
+    end
     @admin = User.find(session[:user_id])
     @company = Company.find(@admin.company_id)
     @roles = Role.where(:company_id => @company.id)
@@ -21,6 +25,10 @@ class UsersController < ApplicationController
   end
 
   def change_email
+    role = Role.find(@current_user.role_id)
+    if role.permissions[3] == '0'
+      redirect_to root_path
+    end
     @user = User.find(session[:user_id])
     if !params[:new_email].match(/\A.+@.+\.+.+\z/)
       flash[:notice] = "Invalid email!"
@@ -44,6 +52,10 @@ class UsersController < ApplicationController
   end
 
   def change_password
+    role = Role.find(@current_user.role_id)
+    if role.permissions[3] == '0'
+      redirect_to root_path
+    end
     @user = User.find(session[:user_id])
     if params[:pass1] != params[:pass2]
       flash[:notice] = "Different passwords!"
@@ -67,10 +79,24 @@ class UsersController < ApplicationController
   end
 
   def search
+    role = Role.find(@current_user.role_id)
+    if role.permissions[3] == '0'
+      redirect_to root_path
+    end
+    role = Role.find(@current_user.role_id)
+    if role.permissions[3] == '0'
+      redirect_to root_path
+    end
     redirect_to users_index_path(:search => params[:search])
   end
 
   def new
+    if @current_user.type != 'Superuser'
+      role = Role.find(@current_user.role_id)
+      if role.permissions[3].to_f % 2 == 0
+        redirect_to root_path
+      end
+    end
     @user = User.new
     @company = Company.find(params[:company])
     @roles = Role.where(:company_id => @company.id, :role_name => 'admin')
@@ -96,6 +122,10 @@ class UsersController < ApplicationController
       @roles = Role.where(:company_id => @company.id)
       render 'edit'
     else
+      role = Role.find(@current_user.role_id)
+      if role.permissions[3].to_f % 2 == 0
+        redirect_to root_path
+      end
       @admin = User.find(session[:user_id])
       @company = Company.find(@admin.company_id)
       @roles = Role.where(:company_id => @company.id)
@@ -119,6 +149,10 @@ class UsersController < ApplicationController
         render 'edit'
       end
     else
+      role = Role.find(@current_user.role_id)
+      if role.permissions[3].to_f % 2 == 0
+        redirect_to root_path
+      end
       @admin = User.find(session[:user_id])
       @company = Company.find(@admin.company_id)
       @roles = Role.where(:company_id => @company.id)
@@ -136,13 +170,19 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
-    @company = Company.find(@user.company_id)
-    @user.destroy
-
     if User.find(session[:user_id]).type == 'Superuser'
+      @user = User.find(params[:id])
+      @company = Company.find(@user.company_id)
+      @user.destroy
       redirect_to company_path(@company)
     else
+      role = Role.find(@current_user.role_id)
+      if role.permissions[3].to_f % 2 == 0
+        redirect_to root_path
+      end
+      @user = User.find(params[:id])
+      @company = Company.find(@user.company_id)
+      @user.destroy
       redirect_to users_path
     end
   end
@@ -165,6 +205,10 @@ class UsersController < ApplicationController
         render 
       end
     else
+      role = Role.find(@current_user.role_id)
+      if role.permissions[3].to_f % 2 == 0
+        redirect_to root_path
+      end
       @admin = User.find(session[:user_id])
       @company = Company.find(@admin.company_id)
       @roles = Role.where(:company_id => @company.id)

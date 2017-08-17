@@ -8,26 +8,35 @@
                 <span class="icon-bar"></span>  
             </button>
         </div>
-
         <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li style='height: 50px;'> <%= link_to image_tag("logo.png", size: "170x50", :style => 'margin: -15px 50px 0px 0px;', :class => "pull-left", :alt => "Logo"), :controller => 'dashboards', :action => 'index' %></li>
               <% if @current_user.type == 'Superuser' %>
                   <li <% if current_page?(:controller => 'dashboards') %> class='active' <% end %>><%= link_to 'Companies', :controller => 'dashboards', :action => 'index' %></li>
               <% else %>
+                <% role = Role.find(@current_user.role_id) %>
                 <li <% if current_page?(:controller => 'dashboards') %> class='active' <% end %>><%= link_to 'Dashboard', :controller => 'dashboards', :action => 'index' %></li>
-                <li <% if current_page?(:controller => 'projects') %> class='active' <% end %>><%= link_to 'Projects', :controller => 'projects', :action => 'index' %></li>
-                <li <% if current_page?(:controller => 'tasks') %> class='active' <% end %>><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
-                <li <% if current_page?(:controller => 'notes') %> class='active' <% end %>><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
-              <% end %>
-              <% if @current_user.role == 'Manager' %>
+                <% if role.permissions[0] != '0' %>
+                    <li <% if current_page?(:controller => 'projects') %> class='active' <% end %>><%= link_to 'Projects', :controller => 'projects', :action => 'index' %></li>
+                <% end %>
+                <% if role.permissions[1] != '0' %>
+                    <li <% if current_page?(:controller => 'tasks') %> class='active' <% end %>><%= link_to 'Tasks', :controller => 'tasks', :action => 'index' %></li>
+                <% end %>
+                <% if role.permissions[2] != '0' %>
+                    <li <% if current_page?(:controller => 'notes') %> class='active' <% end %>><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
+                <% end %>
+                 <% if role.permissions[4] != '0' %>
                     <li <% if current_page?(:controller => 'reports') %> class='active' <% end %>><%= link_to 'Reports', :controller => 'reports'%></li>
                 <% end %>
 
-                <% if @current_user.role == 'Admin' %>
+                <% if role.permissions[3].to_f % 2 != 0 && %>
                     <li <% if current_page?(:controller => 'users') %> class='active' <% end %>><%= link_to 'Users', :controller => 'users', :action => 'index' %></li>
+                <% end %>
+
+                <% if @current_user.role == 'Admin' %>
                     <li <% if current_page?(:controller => 'roles') %> class='active' <% end %>><%= link_to 'Roles', :controller => 'roles', :action => 'index' %></li>
                 <% end %>
+              <% end %>
                 <li <% if current_page?(:controller => 'sessions', :action => 'profile') %> class='active' <% end %>><%= link_to 'Profile', :controller => 'sessions', :action => 'profile' %></li>
             </ul>
 

@@ -1,8 +1,12 @@
 class ProjectsController < ApplicationController
 	before_action :manager_user, :only => [:new, :edit, :create, :update, :destroy]
-	before_action :authenticate_user, :only => [:index, :show]
+	before_action :authenticate_user
 	
 	def index
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0] == '0'
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)
 		@search_par = params[:search]
 		if @current_user.role == 'Manager'
@@ -24,6 +28,10 @@ class ProjectsController < ApplicationController
 	end	
 
 	def add_user
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@project = Project.find(params[:id])
 		@user = User.find(params[:selected_id])
 		@project_user = ProjectUser.new do |u|
@@ -43,6 +51,10 @@ class ProjectsController < ApplicationController
 	end
 
 	def remove_user
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@project = Project.find(params[:project_id])
 		@user = User.find(params[:user_id])
 		@project_user = ProjectUser.find_by('user_id = ? and project_id = ? ', @user.id, @project.id)
@@ -58,10 +70,18 @@ class ProjectsController < ApplicationController
 	end
 
 	def search
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0] == '0'
+	      redirect_to root_path
+	    end
 		redirect_to projects_index_path(:search => params[:search])
 	end
 
 	def show
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0] == '0'
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)
 		if ProjectUser.exists?(:project_id => params[:id], :user_id => @current_user.id) || @current_user.role == 'Manager'
 			@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
@@ -86,12 +106,20 @@ class ProjectsController < ApplicationController
 	end	
 
 	def new
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)
 		@clients = User.where(:role => 'Client', :company_id => @company.id)
 		@project = Project.new
 	end
 
 	def edit
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)
 		@clients = User.where(:role => 'Client', :company_id => @company.id)
 		@project = Project.find(params[:id])
@@ -99,6 +127,10 @@ class ProjectsController < ApplicationController
 	end
 
 	def create
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)
 		@clients = User.where(:role => 'Client', :company_id => @company.id)
 		@project = Project.new(project_params)
@@ -120,6 +152,10 @@ class ProjectsController < ApplicationController
 	end
 
 	def update
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)
 		@project = Project.find(params[:id]) 
 		@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
@@ -136,6 +172,10 @@ class ProjectsController < ApplicationController
 	end
 
 	def destroy
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[0].to_f % 2 == 0
+	      redirect_to root_path
+	    end
 		@company = Company.find(@current_user.company_id)	
 		@project = Project.find(params[:id])
 		@project.destroy

@@ -1,19 +1,24 @@
 class RolesController < ApplicationController
-	before_action :admin_user, :only => [:create, :edit, :update, :index]
+  	before_action :authenticate_user
+	before_action :admin_user, :only => [:create, :edit, :update, :index, :new]
 
 	def edit
 		@admin = User.find(session[:user_id])
 
 		@role = Role.find(params[:id])
 		@company = Company.find(@admin.company_id)
-		@roles = Role.where(:company_id => @company).order(:dashboard)
 
 		if @role.role_name == 'admin'
         	flash[:notice] = "Modify denied!"
         	flash[:color] = "invalid"
         	@role = Role.new
 		end
-		render 'index'
+	end
+
+	def new
+		@admin = User.find(session[:user_id])
+		@role = Role.new
+		@company = Company.find(@admin.company_id)
 	end
 
 	def update
@@ -60,7 +65,6 @@ class RolesController < ApplicationController
 
 	def index
 		@admin = User.find(session[:user_id])
-		@role = Role.new
 
 		@company = Company.find(@admin.company_id)
 		@roles = Role.where(:company_id => @company).order(:dashboard)
@@ -68,6 +72,6 @@ class RolesController < ApplicationController
 
 	private 
 	  	def role_params
-	  		params.require(:role).permit(:role_name, :dashboard, :company_id)
+	  		params.require(:role).permit(:role_name, :dashboard, :company_id, :permissions)
 	  	end
 end

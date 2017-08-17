@@ -12,9 +12,5 @@
 		</div>
 	</div>
 	
-	<% if request.referer == 'http://localhost:3000/dashboards/index' %>
-		<%= link_to "Back", {:controller => 'dashboards', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
-	<% else %>
-		<%= link_to "Back", {:controller => 'notes', :action => 'index'}, {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
-	<% end %>
+	<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left', :style => 'margin: 0px 0px 10px 0px;'}%>
 </div>

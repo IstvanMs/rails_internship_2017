@@ -1,10 +1,19 @@
  class ReportsController < ApplicationController
+  	before_action :authenticate_user
 	before_action :manager_user, :only => [:index, :by_user, :by_project, :get_gantt]
 
 	def index
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[4] == '0'
+	      redirect_to root_path
+	    end
 	end
 
 	def by_user
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[4] == '0'
+	      redirect_to root_path
+	    end
 		@company = Company.find(User.find(session[:user_id]).company_id)
 		@users = User.where('role != ? and company_id = ?', 'Client', @company.id)
 		@months = Array.new
@@ -33,6 +42,10 @@
 	end
 
 	def get_gantt
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[4] == '0'
+	      redirect_to root_path
+	    end
 		@tasks = Task.where('id in (?)',params[:tasks].tr('[]', '').split(',').map(&:to_i))
 		@gant_data = Task.generate_gant_data(@tasks, Time.parse(params[:day].to_s + '-' + Date::MONTHNAMES.index(params[:month]).to_s + '-' + params[:year].to_s), Time.parse(params[:day].to_s + '-' + Date::MONTHNAMES.index(params[:month]).to_s + '-' + params[:year].to_s + ' 23:59:59'))
 		@nr = 0
@@ -65,6 +78,10 @@
 	end
 
 	def by_project
+	    role = Role.find(@current_user.role_id)
+	    if role.permissions[4] == '0'
+	      redirect_to root_path
+	    end
 		@projects = Project.all
 
 		@days=Array.new

@@ -1,5 +1,5 @@
 class CompaniesController < ApplicationController
-  before_action :authenticate_user, :only => [:show, :edit, :new ]
+  before_action :authenticate_user
 
   def new
     @company = Company.new
@@ -18,6 +18,7 @@ class CompaniesController < ApplicationController
       @role = Role.new do |r|
         r.role_name = 'admin'
         r.dashboard = 'admin'
+        r.permissions = '00233'
         r.company_id = @company.id
       end
       

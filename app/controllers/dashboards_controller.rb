@@ -1,5 +1,5 @@
 class DashboardsController < ApplicationController  
-  before_action :authenticate_user, :only => [:index]
+  before_action :authenticate_user
 
   def index
 
@@ -7,6 +7,7 @@ class DashboardsController < ApplicationController
       @companies = Company.all
       render 'index_superuser'
     else
+    @company = Company.find(@current_user.company_id)
 
     @notes = Note.get_notes(@current_user)
     len = @notes.length

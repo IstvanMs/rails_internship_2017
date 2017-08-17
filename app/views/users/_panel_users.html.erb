@@ -9,15 +9,15 @@
           <% end %>
     </div>
     <% end %>
-    <% if current_page?(controller: 'users', action: 'index') %>
+    <% if !current_page?(controller: 'dashboards', action: 'index') %>
         <div class='row'>
           <div class='col-xs-2'>
             <%= form_tag :action => 'search' do%>
               <div class="input-group">
-                <%= text_field_tag 'search', nil, placeholder: 'Search term...' %>
+                <%= text_field_tag 'search', nil, placeholder: 'Search term...', :class => 'form-control', :style => 'width: 150px;' %>
   
                 <span class="input-group-btn">
-                  <%= button_tag(type: "submit", class: "btn btn-sm btn-default") do %>
+                  <%= button_tag(type: "submit", class: "btn btn-md btn-default") do %>
                       <i class="glyphicon glyphicon-search"></i>
                   <% end %>
                 </span>

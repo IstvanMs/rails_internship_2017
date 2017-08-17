@@ -1,8 +1,12 @@
 class NotesController < ApplicationController
 	before_action :manager_user, :only => [:new, :edit, :create, :destroy, :update]
-  before_action :authenticate_user, :only => [:show, :index]
+  before_action :authenticate_user
 	
 	def index
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2] == '0'
+      redirect_to root_path
+    end
     @company = Company.find(@current_user.company_id)
     case @current_user.role
     when 'Manager'
@@ -25,6 +29,10 @@ class NotesController < ApplicationController
   end
 
 	def show
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2] == '0'
+      redirect_to root_path
+    end
     @company = Company.find(@current_user.company_id)
   	@note = Note.find(params[:id])
     proj = ProjectUser.find_by(:project_id  => @note.visibility.split('-')[1], :user_id => @current_user.id)
@@ -37,6 +45,10 @@ class NotesController < ApplicationController
 	end
 
 	def new
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2].to_f % 2 == 0
+      redirect_to root_path
+    end
     @company = Company.find(@current_user.company_id)
     @users = User.where('id != ? and company_id = ?', @current_user.id, @company.id)
     @projects = Project.where(:company_id => @company.id)
@@ -45,6 +57,10 @@ class NotesController < ApplicationController
 	end
 
 	def edit
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2].to_f % 2 == 0
+      redirect_to root_path
+    end
     @company = Company.find(@current_user.company_id)
     @users = User.where('id != ? and company_id = ?', @current_user.id, @company.id)
     @projects = Project.where(:company_id => @company.id)
@@ -53,6 +69,10 @@ class NotesController < ApplicationController
 	end
 
 	def create
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2].to_f % 2 == 0
+      redirect_to root_path
+    end
     @company = Company.find(@current_user.company_id)
     @users = User.where('id != ? and company_id = ?', @current_user.id, @company.id)
     @projects = Project.where(:company_id => @company.id)
@@ -79,6 +99,10 @@ class NotesController < ApplicationController
 	end
 
 	def update
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2].to_f % 2 == 0
+      redirect_to root_path
+    end
 		@note = Note.find(params[:id])
 
 		if @note.update(note_params)
@@ -89,6 +113,10 @@ class NotesController < ApplicationController
 	end
 
 	def destroy
+    role = Role.find(@current_user.role_id)
+    if role.permissions[2].to_f % 2 == 0
+      redirect_to root_path
+    end
 		@note = Note.find(params[:id])
 		@note.destroy
 
