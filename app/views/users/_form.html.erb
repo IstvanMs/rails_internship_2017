@@ -33,7 +33,11 @@
 			<h4>
 				<%= f.label "Role" %><br>
 				<span class="form-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-				<%= f.select( :role_id, options_from_collection_for_select(@roles, "id", "role_name") ) %>
+				<% if !@user.role_id %>
+					<%= f.select( :role_id, options_from_collection_for_select(@roles, "id", "role_name") ) %>
+				<% else %>
+					<%= f.select( :role_id, options_from_collection_for_select(@roles, "id", "role_name", @user.role_id) ) %>
+				<% end %>
 			</h4>
 		</div>
 
@@ -54,7 +58,19 @@
 </div>
 
 <script type="text/javascript">
+	$( document ).ready(function() {
+		var user_id = $('#user_user_id').val();
+	    var id = $('#user_role_id').val();
+	    $.getJSON('get_user_fields',{ user_id: user_id}, function(data) {
+
+		});
+	});
+
 	$( "#user_role_id" ).change(function() {
-		var id = $('#user_role_id option:selected').val();
+		var user_id = $('#user_user_id').val();
+	    var id = $('#user_role_id').val();
+	    $.getJSON('get_user_fields',{ user_id: user_id}, function(data) {
+
+		});
 	});
 </script>

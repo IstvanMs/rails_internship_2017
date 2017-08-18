@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170810054312) do
+ActiveRecord::Schema.define(version: 20170818063652) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 20170810054312) do
     t.string "visibility"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id"
+    t.index ["company_id"], name: "company_id"
   end
 
   create_table "project_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -66,12 +68,23 @@ ActiveRecord::Schema.define(version: 20170810054312) do
     t.index ["company_id"], name: "company_id"
   end
 
+  create_table "role_fields", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "role_id"
+    t.string "name"
+    t.string "field_type"
+    t.text "values"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_role_fields_on_role_id"
+  end
+
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "role_name"
     t.string "dashboard"
     t.bigint "company_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "permissions", limit: 20
     t.index ["company_id"], name: "index_roles_on_company_id"
   end
 
@@ -91,6 +104,15 @@ ActiveRecord::Schema.define(version: 20170810054312) do
     t.bigint "company_id"
     t.index ["company_id"], name: "company_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
+  end
+
+  create_table "user_fields", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_fields_on_user_id"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -119,6 +141,8 @@ ActiveRecord::Schema.define(version: 20170810054312) do
 
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
+  add_foreign_key "role_fields", "roles"
   add_foreign_key "roles", "companies"
   add_foreign_key "tasks", "projects"
+  add_foreign_key "user_fields", "users"
 end

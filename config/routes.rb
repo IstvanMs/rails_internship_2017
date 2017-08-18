@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   match 'users/profile', :to => 'users#profile', :via => [:get, :post]
 
+  match 'users/get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
+
   match 'projects/remove_user', :to => 'projects#remove_user', :via => [:get, :post]
 
   match 'projects/add_user', :to => 'projects#add_user', :via => [:get, :post]
@@ -66,6 +68,8 @@ Rails.application.routes.draw do
   resources :work_days
 
   resources :notes
+
+  resources :role_fields
 
 	resources :projects
 

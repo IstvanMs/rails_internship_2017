@@ -102,6 +102,14 @@ class UsersController < ApplicationController
     @roles = Role.where(:company_id => @company.id, :role_name => 'admin')
   end
 
+  def get_user_fields
+    puts params[:id]
+    puts params.inspect
+    respond_to do |format|
+      format.json { render json:  {'len': 0}}
+    end
+  end
+
   def reset
     redirect_to index
   end
