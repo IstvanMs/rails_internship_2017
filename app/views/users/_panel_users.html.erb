@@ -44,9 +44,11 @@
     </div>
     <% @label = '' %>
     <% @users.each do |user| %>
-    <% if @label != @roles.find(user.role_id).role_name.capitalize %>
-      <div class='row' style='background-color: #eaeaea;'><center><b><%= @roles.find(user.role_id).role_name.capitalize %><b></div>
-      <% @label = @roles.find(user.role_id).role_name.capitalize %>
+    <% if @roles.exists?(:id => user.role_id) %>
+      <% if @label != @roles.find(user.role_id).role_name.capitalize %>
+        <div class='row' style='background-color: #eaeaea;'><center><b><%= @roles.find(user.role_id).role_name.capitalize %><b></div>
+        <% @label = @roles.find(user.role_id).role_name.capitalize %>
+      <% end %>
     <% end %>
       <div class='row' style='background-color: <% if user.role == 'Admin'%>#c9ffd2<% end %>
                     <% if user.role == 'Manager'%>#c9f0ff<% end %>
@@ -56,7 +58,9 @@
           <center><h5><%= user.username %></h5></center>
         </div>
         <div class='col-xs-2'>
-          <center><h5><%= @roles.find(user.role_id).role_name %></h5></center>
+          <% if @roles.exists?(:id => user.role_id) %>
+            <center><h5><%= @roles.find(user.role_id).role_name %></h5></center>
+          <% end %>
         </div>
         <div class='col-xs-3'>
           <center><h5 style='word-wrap: break-word;'><%= user.email %></h5></center>

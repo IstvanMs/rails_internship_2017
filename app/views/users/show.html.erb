@@ -21,11 +21,9 @@
 
 						<center><h4>
 							<strong>Role: </strong><br></br>
-              <% if @role != 'Superuser' %>
-							  <%= @role.role_name %>
-              <% else %>
-                <%= @role %>
-              <% end %>
+				              <% if @role != 'Superuser' && @role %>
+							  	<%= @role.role_name %>
+				              <% end %>
 						</h4></center><br>
 
 						<center><h4>

@@ -1,0 +1,24 @@
+<div class='container' style='min-width: 500px;'>
+	<div class='row'>
+		<% if flash[:notice] %>   
+		<div class="alert alert-warning">
+		    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+		</div>
+	<% else %>
+	<div class='col-md-5 col-lg-5' style="float: none; margin: 0 auto;">
+		<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;">
+			<div class="panel-heading">
+				<center><h3>Create new role</h3></center>
+			</div>
+			<div class="panel-body">
+				<div class='row' >
+					<%= render 'form' %>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+  <%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+
+</div>
