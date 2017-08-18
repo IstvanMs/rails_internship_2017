@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  role: one
+  name: MyString
+  field_type: MyString
+  values: MyText
+
+two:
+  role: two
+  name: MyString
+  field_type: MyString
+  values: MyText

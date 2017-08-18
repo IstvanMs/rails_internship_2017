@@ -1,0 +1,167 @@
+<div class='container'>
+	<div class='row'>
+		<div class='col-xs-7 pull-left' style='background-color: #eff6f7; border: 2px solid lightgrey; border-radius: 5px; margin-left: 10px; min-width: 500px;'>
+			<div class='panel panel-success' style='margin: 1cm 0cm 1cm 0cm;'>
+				<div class='panel-heading'>
+					<center><h3>Role: <%= @role.role_name %></h3></center>
+				</div>
+				<div class='container'>
+					<div class='row' style="background-color: #55b25d;" align='center'>
+						<div class='col-xs-3'>
+							<center><h4>Field Name</h4></center>
+						</div>
+						<div class='col-xs-3'>
+							<center><h4>Type</h4></center>
+						</div>
+						<div class='col-xs-3'>
+							<center><h4>Dropdown values</h4></center>
+						</div>
+				    </div>
+				    <% if @role_fields.length > 0 %>
+					    <% i = 1 %>
+					    <% @role_fields.each do |field| %>
+					    	<div class='row' style='background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>' align='center'>
+					    		<div class='col-xs-3'>
+									<h5><%= field.name %></h5>
+								</div>
+								<div class='col-xs-3'>
+									<h5><%= field.field_type %></h5>
+								</div>
+								<div class='col-xs-3'>
+									<% if field.field_type == 'dropdown' %>
+										<% obj = JSON.parse(field.values).values %>
+										<% obj[1].each do |v| %>
+											<h6><li><%= v %></li></h6>
+										<% end %>
+									<% else %>
+										<h5>-</h5>
+									<% end %> 
+								</div>
+								<div class='col-xs-3'>
+									<h5><%= link_to 'Destroy', role_field_path(field),
+					                    method: :delete,
+					                    data: { confirm: 'Are you sure?' } %> |  <%= link_to 'Edit', role_fields_path(:t => 'edit', :id => field, :role => @role.id) %></h5>
+								</div>
+					    	</div>
+					    	<% i = i + 1 %>
+					    <% end %>
+				    <% else %>
+				    	<div class='row'>
+				    		<center><h1>No extra fields</h1></center>
+				    	</div>
+				    <% end %>
+				</div>
+			</div>
+		</div>
+		<div class='col-xs-4 pull-right'  style='background-color: #eff6f7; border: 2px solid lightgrey; border-radius: 5px; margin-right: 10px; min-width: 300px;'>
+			<div class='panel panel-success' style='margin: 1cm 0cm 1cm 0cm;'>
+				<div class='panel-heading'>
+					<% if @role_field.name == nil %>
+						<div class='row'>
+							<center><h3>New field</h3></center>
+						</div>
+					<% else %>
+						<div class='row'>
+							<center><h3>Edit field</h3></center>
+						</div>
+						<div class='row'>
+							<%= link_to "new field", {:controller => 'role_fields', :action => 'index', :id => @role.id}, {:class => 'btn btn-sm btn-primary pull-right'}%>
+						</div>
+					<% end %>
+				</div>
+				<%= form_for @role_field do |f| %>
+					<div class="panel-body" align='center'>
+						<h4>
+							<%= f.label "Field Name:" %><br>
+							<%= f.text_field :name %>
+						</h4>
+						<%= f.hidden_field :values, :value => @role_field.values %>
+						<%= f.hidden_field :role_id, :value => @role.id %>
+
+						<h4>
+							<%= f.label "Type:" %><br>
+							<%= f.select( :field_type, options_for_select([ "string", "date", "dropdown", "integer" ]) ) %>
+						</h4>
+						<div id='values_div'></div>
+						<div id='new_div'></div>
+					</div>
+
+					<div class="panel-footer clearfix ">
+						<button type="submit" class="btn btn-lg btn-primary btn-block">
+							<i class="glyphicon glyphicon-save"></i> Save
+						</button>
+					</div>
+			<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var def = '<%= @role_field.values.html_safe %>';
+	$('#role_field_values').val(def);
+	$( document ).ready(function() {
+	    if ($('#role_field_field_type').val() == 'dropdown'){
+	    	document.getElementById('values_div').innerHTML = '';
+	    	document.getElementById('new_div').innerHTML = '';
+			if ($('#role_field_field_type').val() == 'dropdown'){
+		    	var obj = JSON.parse($('#role_field_values').val());
+				var newDiv = document.createElement('div');
+		    	var html = '';
+		    	html += '<h4><b>Choices:<b></h4>';
+		    	for(var i = 0; i < obj.len; ++i){
+	    			html += '<li>' + obj.values[i] + '&nbsp;<a class="glyphicon glyphicon-remove-sign" onclick="removeChoice(' + i.toString() + ')"></a></li>';
+		    	}
+		    	html += '<a onclick="add_new()">(add more)</a>'
+		    	newDiv.innerHTML = html;
+				document.getElementById('values_div').appendChild(newDiv);
+		    }
+	    }
+	});
+
+	$('#role_field_field_type').change(function() {
+    	document.getElementById('values_div').innerHTML = '';
+    	document.getElementById('new_div').innerHTML = '';
+		if ($('#role_field_field_type').val() == 'dropdown'){
+	    	var obj = JSON.parse($('#role_field_values').val());
+			var newDiv = document.createElement('div');
+	    	var html = '';
+	    	html += '<h4><b>Choices:<b></h4>';
+	    	for(var i = 0; i < obj.len; ++i){
+    			html += '<li>' + obj.values[i] + '&nbsp;<a class="glyphicon glyphicon-remove-sign" onclick="removeChoice(' + i.toString() + ')"></a></li>';
+	    	}
+	    	html += '<a onclick="add_new()">(add more)</a>'
+	    	newDiv.innerHTML = html;
+			document.getElementById('values_div').appendChild(newDiv);
+	    }
+	});
+
+	function add_new(){
+    	document.getElementById('new_div').innerHTML = '';
+		var newDiv = document.createElement('div');
+    	var html = '';
+    	html += '<input id="value_name" type="text" style="line-height: 15px; margin-right: 5px;"></input>';
+    	html += '<a class="glyphicon glyphicon-plus-sign" onclick="create_choice()"></a>';
+    	newDiv.innerHTML = html;
+		document.getElementById('new_div').appendChild(newDiv);
+	}
+
+	function create_choice(){
+		var name = $('#value_name').val();
+		if (name != ''){
+	    	var obj = JSON.parse($('#role_field_values').val());
+	    	obj.values.push(name);
+	    	++obj.len;
+	    	$('#role_field_values').val(JSON.stringify(obj));
+	    	$('#role_field_field_type').trigger("change");
+	    }
+	}	
+
+	function removeChoice(index){
+    	var obj = JSON.parse($('#role_field_values').val());
+		obj.values.splice(index,1);
+    	--obj.len;
+		$('#role_field_values').val(JSON.stringify(obj));
+    	$('#role_field_field_type').trigger("change");
+	}
+</script>
