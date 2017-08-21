@@ -33,3 +33,7 @@ function rgbSum(rgb){
 	s = parseInt(str[0]) + parseInt(str[1]) + parseInt(str[2]);
 	return s;
 }
+
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

@@ -39,6 +39,7 @@
 					<%= f.select( :role_id, options_from_collection_for_select(@roles, "id", "role_name", @user.role_id) ) %>
 				<% end %>
 			</h4>
+			<div id='extra_div'></div>
 		</div>
 
 		<div class="panel-footer clearfix ">
@@ -59,10 +60,16 @@
 
 <script type="text/javascript">
 	$( document ).ready(function() {
+		document.getElementById('extra_div').innerHTML = '';
 		var user_id = $('#user_user_id').val();
 	    var id = $('#user_role_id').val();
-	    $.getJSON('get_user_fields',{ user_id: user_id}, function(data) {
-
+	    $.getJSON('get_user_fields',{ user_id: user_id, role_id: id}, function(data) {
+	    	var role_fields = data.role_fields;
+	    	var field_values = data.field_values;
+	    	if( role_fields.length > 0){
+	    		var newDiv = document.createElement('div');
+		    	var html = '';
+	    	}
 		});
 	});
 

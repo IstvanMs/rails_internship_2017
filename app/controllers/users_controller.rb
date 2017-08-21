@@ -103,10 +103,18 @@ class UsersController < ApplicationController
   end
 
   def get_user_fields
-    puts params[:id]
-    puts params.inspect
-    respond_to do |format|
-      format.json { render json:  {'len': 0}}
+    role = Role.find(@current_user.role_id)
+    if role.permissions[3].to_f % 2 != 0
+      role_fields = RoleField.where(:role_id => params[:role_id])
+      field_values = UserField.where(:user_id => params[:user_id])
+
+      respond_to do |format|
+        format.json { render json:  {'role_fields': role_fields, 'field_values': field_values}}
+      end
+    else
+      respond_to do |format|
+        format.json { render json:  {'nope': '_@_/"'}}
+      end
     end
   end
 

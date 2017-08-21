@@ -7,6 +7,10 @@ Rails.application.routes.draw do
 
   match 'users/get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
 
+  match 'get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
+
+  match 'users/(*user_id)/get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
+
   match 'projects/remove_user', :to => 'projects#remove_user', :via => [:get, :post]
 
   match 'projects/add_user', :to => 'projects#add_user', :via => [:get, :post]
