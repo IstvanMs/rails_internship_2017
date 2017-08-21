@@ -83,6 +83,10 @@ class ProjectsController < ApplicationController
 	      redirect_to root_path
 	    end
 		@company = Company.find(@current_user.company_id)
+		
+		@milestones = Milestone.where(:project_id => params[:id])
+		@milestone_infos = Milestone.milestone_infos(@milestones)
+
 		if ProjectUser.exists?(:project_id => params[:id], :user_id => @current_user.id) || @current_user.role == 'Manager'
 			@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)
 			@table = ProjectUser.where(:project_id => params[:id]).collect(&:user_id)

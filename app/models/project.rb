@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
 	has_many :projectUsers, dependent: :destroy
 	has_many :users, through: :projectUsers
+	has_many :milestones, dependent: :destroy
 	belongs_to :company
 
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818063652) do
+ActiveRecord::Schema.define(version: 20170821122341) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -39,6 +39,15 @@ ActiveRecord::Schema.define(version: 20170818063652) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "milestones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "project_id"
+    t.string "name"
+    t.date "due_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_milestones_on_project_id"
   end
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -102,7 +111,9 @@ ActiveRecord::Schema.define(version: 20170818063652) do
     t.datetime "finished_at"
     t.integer "time_worked"
     t.bigint "company_id"
+    t.bigint "milestone_id"
     t.index ["company_id"], name: "company_id"
+    t.index ["milestone_id"], name: "index_tasks_on_milestone_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
@@ -141,6 +152,7 @@ ActiveRecord::Schema.define(version: 20170818063652) do
 
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
+  add_foreign_key "milestones", "projects"
   add_foreign_key "role_fields", "roles"
   add_foreign_key "roles", "companies"
   add_foreign_key "tasks", "projects"

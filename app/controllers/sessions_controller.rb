@@ -44,6 +44,7 @@ class SessionsController < ApplicationController
 
   def profile
     @user = User.find(@current_user.id)
+    @user_fields = UserField.where(:user_id => @user.id)
     if @user.type == 'Superuser'
       @role = "Superuser"
     else

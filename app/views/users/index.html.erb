@@ -1,4 +1,13 @@
 <div class="container" style='min-width: 510px;'>
+  <div class='row'>
+    <% if flash[:notice] %>
+      <div class='row'>
+        <div class="alert alert-warning">
+            <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
+        </div>
+      </div>
+    <% end %>
+  </div>
   <div class="row">
     <div class="col-sm-7" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
       <%= render 'panel_users' %>

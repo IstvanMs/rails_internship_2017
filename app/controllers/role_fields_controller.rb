@@ -2,28 +2,28 @@ class RoleFieldsController < ApplicationController
 	before_action :admin_user, :only => [:index, :create, :destroy]
   	before_action :authenticate_user
 
-  	def update
-  		@role_field = RoleField.find(params[:id])
+	def update
+		@role_field = RoleField.find(params[:id])
 		@role_field.update(role_field_params)
   		
-  		redirect_to role_fields_path(:id => @role_field.role_id)
-  	end
+		redirect_to role_fields_path(:id => @role_field.role_id)
+	end
 
-  	def create
-  		@role_field = RoleField.new(role_field_params)
-		@role_field.save
-  		
-  		redirect_to role_fields_path(:id => @role_field.role_id)
-  	end
+	def create
+		@role_field = RoleField.new(role_field_params)
+	  @role_field.save
+		
+		redirect_to role_fields_path(:id => @role_field.role_id)
+	end
 
-  	def destroy
-  		@role_field = RoleField.find(params[:id])
-  		@role = Role.find(@role_field.role_id)
+	def destroy
+		@role_field = RoleField.find(params[:id])
+		@role = Role.find(@role_field.role_id)
 
-  		@role_field.destroy
+		@role_field.destroy
 
-  		redirect_to role_fields_path(:id => @role.id)
-  	end
+		redirect_to role_fields_path(:id => @role.id)
+	end
 
 	def index
 		if params[:t] == 'edit'

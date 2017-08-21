@@ -34,7 +34,16 @@
 							<a href="#changeEmail" data-toggle="modal">(Change email)</a><br>
 							<a href="#changePassword" data-toggle="modal">(Change password)</a>
 							<% end %>
-						</h4></center><br>
+						</h4>
+					</center><br>
+						<% if @user.type != 'Superuser' %>
+							<% @user_fields.each do |uf| %>
+								<center><h4>
+									<strong><%= uf.name.capitalize %>:</strong><br></br>
+						              	<%= uf.value %>
+								</h4></center><br>
+							<% end %>
+						<% end %>
 					</div>
 				</div>
 			</div>
