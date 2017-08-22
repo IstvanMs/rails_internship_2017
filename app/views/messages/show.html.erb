@@ -1,0 +1,20 @@
+<div class="panel-center" style='width: 300px; float: none; margin: 0 auto;'>
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			<center><h3> Message </h3></center>
+		</div>
+		<div class="panel-body" align='center'>
+			<h4><b>Sender:</b></h4>
+			<h4><%= link_to @sender.username, users_profile_path(:id => @sender.id) %></h4><br>
+
+			<h4><b>Recipient:</b></h4>
+			<h4><%= link_to @recipient.username, users_profile_path(:id => @recipient.id) %></h4><br>
+
+			<h4><b>Subject:</b></h4>
+			<h4><%= @message.subject %></h4></br>
+
+			<h4><b>Content:</b></h4>
+			<h4><%= @message.content %></h4></br>
+		</div>
+	</div>
+</div>

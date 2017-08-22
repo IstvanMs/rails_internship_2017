@@ -1,0 +1,121 @@
+<div class='container'>
+	<div class='row'>
+		<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+			<div class="panel-heading">
+				<center><h2>Inbox</h2></center>
+			</div>
+
+			<div class='container'>
+				<div class='row' style="background-color: #55b25d;" align='center'>
+					<div class='col-xs-2'>
+						<h4>Subject</h4>
+					</div>
+					<div class='col-xs-4'>
+						<h4>Content</h4>
+					</div>
+					<div class='col-xs-2'>
+						<h4>Sender</h4>
+					</div>
+					<div class='col-xs-2'>
+						<h4>Recipient</h4>
+					</div>
+					<div class='col-xs-1'>
+						<h4>Status</h4>
+					</div>
+					<div class='col-xs-1'>
+					</div>
+				</div>
+				<% i = 0 %>
+				<% if !@inbox || @inbox.length == 0 %>
+					<div class='row' align='center'>
+						<h1>Empty</h1>
+					</div>
+				<% else %>
+				<% i = 0 %>
+					<% @inbox.each do |inbox| %>
+						<div class='row' style="border-bottom: 1px solid #e0e0e0; background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>" align='center'>
+							<div class='col-xs-2'>
+								<h5><%= inbox.subject %></h5>
+							</div>
+							<div class='col-xs-4'>
+								<h5><%= inbox.content %></h5>
+							</div>
+							<div class='col-xs-2'>
+								<h5><%= link_to @users.find(inbox.sender_id).username, users_profile_path(:id => @users.find(inbox.sender_id).id) %></h5>
+							</div>
+							<div class='col-xs-2'>
+								<h5><%= link_to @users.find(inbox.recipient_id).username, users_profile_path(:id => @users.find(inbox.recipient_id).id) %></h5>
+							</div>
+							<div class='col-xs-1'>
+								<h5><%= inbox.status %></h5>
+							</div>
+							<div class='col-xs-1'>
+								<h5><%= link_to 'Show', message_path(inbox) %></h5>
+							</div>
+						</div>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+
+	<div class='row'>
+		<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+			<div class="panel-heading">
+				<center><h2>Outbox</h2></center>
+			</div>
+
+			<div class='container'>
+				<div class='row' style="background-color: #55b25d;" align='center'>
+					<div class='col-xs-2'>
+						<h4>Subject</h4>
+					</div>
+					<div class='col-xs-4'>
+						<h4>Content</h4>
+					</div>
+					<div class='col-xs-2'>
+						<h4>Sender</h4>
+					</div>
+					<div class='col-xs-2'>
+						<h4>Recipient</h4>
+					</div>
+					<div class='col-xs-1'>
+						<h4>Status</h4>
+					</div>
+					<div class='col-xs-1'>
+					</div>
+				</div>
+
+				<% if !@outbox || @outbox.length == 0 %>
+					<div class='row' align='center'>
+						<h1>Empty</h1>
+					</div>
+				<% else %>
+					<% i = 0 %>
+					<% @outbox.each do |o| %>
+						<div class='row' style="border-bottom: 1px solid #e0e0e0; background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>" align='center'>
+							<div class='col-xs-2'>
+								<h5><%= o.subject %></h5>
+							</div>
+							<div class='col-xs-4'>
+								<h5><%= o.content %></h5>
+							</div>
+							<div class='col-xs-2'>
+								<h5><%= link_to @users.find(o.sender_id).username, users_profile_path(:id => @users.find(o.sender_id).id) %></h5>
+							</div>
+							<div class='col-xs-2'>
+								<h5><%= link_to @users.find(o.recipient_id).username, users_profile_path(:id => @users.find(o.recipient_id).id) %></h5>
+							</div>
+							<div class='col-xs-1'>
+								<h5><%= o.status %></h5>
+							</div>
+							<div class='col-xs-1'>
+								<h5><%= link_to 'Show', message_path(o) %></h5>
+							</div>
+						</div>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

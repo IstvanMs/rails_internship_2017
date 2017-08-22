@@ -1,0 +1,83 @@
+<div class='container'>
+  <div class='row'>  
+    <div class='panel panel-success' style='width: 300px; float: none; margin: 0 auto;'>
+    	<div class='panel-heading' align='center'>
+    		<h2>Edit</h2>
+    	</div>
+    	<%= form_for @milestone do |f| %>
+    		<div class='panel-body' align='center'>
+    			<h4>
+    				<%= f.label :name %><br>
+    				<%= f.text_field :name %>
+    			</h4>
+    			<h4>
+    				<%= f.label :due_date %><br>
+    				<%= f.text_field :due_date, :class => 'datepicker', size: 10 %>
+    			</h4>
+    			<%= f.hidden_field :project_id, :value => @project.id %>
+    			<input type='hidden' id='task_ids' name='task_ids' value='<%= @ids %>'>
+    			<h4>Tasks:</h4>
+    			<% @tasks.each do |t| %>
+    				<h6 id='h_<%= t.id %>'><%= t.title %> &nbsp;<a id='i_<%= t.id %>' onclick='magic(<%= t.id %>)'></a></h6>
+    			<% end %>
+    		</div>
+    		<div class="panel-footer clearfix ">
+    			<button type="submit" class="btn btn-lg btn-primary btn-block">
+    				<i class="glyphicon glyphicon-save"></i> Save
+    			</button>
+    		</div>
+    	<% end %>
+    </div>
+  </div>
+
+  <div class='row'>
+    <%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+	  $('#task_ids').val('<%= @ids %>');
+      $('.datepicker').datepicker({format: 'dd/mm/yyyy'});
+      setColorAndIcon();
+  });
+
+  function setColorAndIcon(){
+  	var ids = '<%= @tasks.collect{|t| t.id} %>';
+      var cur = $('#task_ids').val();
+      ids = ids.substr(1,ids.length - 2);
+      ids = ids.split(',');
+      for(var i = 0; i < ids.length; ++i){
+      	if( cur.indexOf(ids[i].trim()) >= 0){
+      		$('#h_' + ids[i].trim()).css({"color": 'green'});
+      		$('#i_' + ids[i].trim()).removeClass();
+      		$('#i_' + ids[i].trim()).addClass('glyphicon glyphicon-remove-sign');
+      		$('#i_' + ids[i].trim()).css({"color": 'red'});
+      		$('#i_' + ids[i].trim()).val('remove');
+
+      	}else{
+      		$('#h_' + ids[i].trim()).css({"color": 'red'});
+      		$('#i_' + ids[i].trim()).removeClass();
+      		$('#i_' + ids[i].trim()).addClass('glyphicon glyphicon-plus-sign');
+      		$('#i_' + ids[i].trim()).css({"color": 'green'});
+      		$('#i_' + ids[i].trim()).val('add');
+      	}
+      }
+  }
+
+  function magic(id){
+  	var classname =  $('#i_' + id).attr('class');
+  	var ids = JSON.parse($('#task_ids').val());
+  	if(classname.indexOf('plus') >= 0){
+  		ids.push(id);
+  	}else{
+  		for(var i = 0; i < ids.length; ++i){
+  			if(ids[i] == id){
+  				ids.splice(i,1);
+  			}
+  		}
+  	}
+  	$('#task_ids').val(JSON.stringify(ids));
+  	setColorAndIcon();
+  }
+</script>
