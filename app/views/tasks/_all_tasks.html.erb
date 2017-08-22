@@ -82,12 +82,13 @@
     <div class='row' style="background-color: #55b25d;" align='center'>
       <div class='col-xs-2'><h4>Title</h4></div>
       <% if current_page?(controller: 'tasks', action: 'index')%>
-        <div class='col-xs-3'><h4>Requirement</h4></div>
+        <div class='col-xs-2'><h4>Requirement</h4></div>
       <% end %>
       <div class='col-xs-1'><h4>Assigned User</h4></div>
       <div class='col-xs-1'><h4>Project</h4></div>
       <div class='col-xs-1'><h4>Type</h4></div>
       <div class='col-xs-1'><h4>Status</h4></div>
+      <div class='col-xs-1'><h4>Milestone</h4></div>
       <% if @current_user.role == 'Employee' %>
         <div class='col-xs-3'></div>
       <% end %>
@@ -113,12 +114,19 @@
                     <% if @label == 'Finished'%>#ffc9c9<% end %>; border-bottom: 1px solid #e0e0e0;' align='center'>
           <div class='col-xs-2'><h5><%= task.title %></h5></div>
           <% if current_page?(controller: 'tasks', action: 'index')%>
-            <div class='col-xs-3'><h5><%= task.requirement %></h5></div>
+            <div class='col-xs-2'><h5><%= task.requirement %></h5></div>
           <% end %>
           <div class='col-xs-1'><h5><% if @task_infos[task.id]['assigned']%> <%= link_to @task_infos[task.id]['assigned'].username, users_profile_path(:id => @task_infos[task.id]['assigned'].id)%>  <% end %></h5></div>
           <div class='col-xs-1'><h5><%= @task_infos[task.id]['project_name'] %></h5></div>
           <div class='col-xs-1'><h5><%= task.task_type %></h5></div>
           <div class='col-xs-1'><h5><%= task.status %></h5></div>
+          <div class='col-xs-1'><h5><% if task.milestone_id %>
+            <% milestone = Milestone.find(task.milestone_id) %>
+            <%= milestone.name %><% if milestone.due_date < Time.now && task.status != 'Finished' %><i style='color: red;' class='glyphicon glyphicon-exclamation-sign'></i><% end %>
+            <% else %>
+            -
+            <% end %>
+          </h5></div>
           <% if @current_user.role == 'Manager' %>
             <div class='col-xs-3'>
             <h5 class='pull-right'><%= link_to 'Show', task_path(task) %> | 

@@ -46,6 +46,52 @@
                 <li><%= link_to 'Log Out', :controller => 'sessions', :action => 'logout' %></li>
             </ul>
         </div>
+        <% messages = Message.where(:recipient_id => @current_user.id, :status => 'sent') %>
+        <div id='chatWindow' style="border: 1px solid #7f7f7f; border-radius: 7px; z-index: 10; width: 27px; height: 200px; background-color: #d7e0de; position: fixed; top: 300px; left: -7px;" onmouseover="popOut()" onmouseout="popIn()">
+            <div style='margin-top: 10px; width: 26px;'>
+                <h6 style='margin-left: 10px;'>M</h6>
+                <h6 style='margin-left: 10px;'>E</h6>
+                <h6 style='margin-left: 10px;'>S</h6>
+                <h6 style='margin-left: 10px;'>S</h6>
+                <h6 style='margin-left: 10px;'>A</h6>
+                <h6 style='margin-left: 10px;'>G</h6>
+                <h6 style='margin-left: 10px;'>E</h6>
+                <h6 style='margin-left: 10px;'>S</h6>
+            </div>
+            <div id='chatForm' style='border: 1px solid #7f7f7f; background-color: #edf2ed; position: fixed; top: 300px; left: 20px; width: 160px; height: 200px; display: none;'>
+                <div class='container' style='width: 100%;' align='center'>
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <div class='row'>
+                                <h4>Compose:</h4>
+                            </div>
+                            <div class='row'>
+                                <%= link_to 'Compose message', new_message_path, :class => 'btn btn-sm btn-default' %>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style='border: 1px solid #ccc;'>
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <div class='row'>
+                                <h4>Inbox:</h4>
+                            </div>
+                            <div class='row'>
+                                <div class="dropdown">
+                                    <a data-target="#" href="page.html" data-toggle="dropdown" class="dropdown-toggle"><% if messages && messages.length > 0 %>messages<% else %>empty<% end %><b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <% messages.each do |m| %>
+                                            <center><li><%= link_to m.subject, message_path(m) %></li></center>
+                                        <% end %>
+                                        <center><li><%= link_to '(see all)', messages_path %></li></center>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
 

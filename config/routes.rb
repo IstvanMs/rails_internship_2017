@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   match 'users/profile', :to => 'users#profile', :via => [:get, :post]
 
   match 'users/get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
+  
+  match 'projects/milestone_edit', :to => 'projects#milestone_edit', :via => [:get, :post]
 
   match 'get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
 
@@ -67,6 +69,8 @@ Rails.application.routes.draw do
 
   resources :dashboards
 
+  resources :milestones
+
   resources :advanced_searches
 
   resources :work_days
@@ -78,6 +82,9 @@ Rails.application.routes.draw do
 	resources :projects
 
   resources :roles
+
+  resources :messages
+
 
   resources :tasks do
     resources :comments

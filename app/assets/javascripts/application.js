@@ -37,3 +37,13 @@ function rgbSum(rgb){
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+function popOut(){
+	$('#chatWindow').width(200);
+	$('#chatForm').show();
+}
+
+function popIn(){
+	$('#chatWindow').width(27);
+	$('#chatForm').hide();
+}

@@ -84,8 +84,10 @@ class ProjectsController < ApplicationController
 	    end
 		@company = Company.find(@current_user.company_id)
 		
+		@milestone = Milestone.new
 		@milestones = Milestone.where(:project_id => params[:id])
 		@milestone_infos = Milestone.milestone_infos(@milestones)
+		@tasks = Task.where(:project_id => params[:id], :company_id => @company.id)
 
 		if ProjectUser.exists?(:project_id => params[:id], :user_id => @current_user.id) || @current_user.role == 'Manager'
 			@users_in = ProjectUser.where(:project_id => params[:id]).collect(&:user)

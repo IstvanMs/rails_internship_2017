@@ -1,13 +1,50 @@
 <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
 	<div class="panel-heading">
-		<center><h2>Milestones</h1></center>
+		<div class='row'>
+			<center><h2>Milestones</h1></center>
+		</div>
+		<div class='row'>
+			<div class="dropdown">
+				<a href="#" data-toggle="dropdown" class="dropdown-toggle" style='margin-left: 20px;'>New milestone <b class="glyphicon glyphicon-plus-sign"></b></a>
+				<div class="dropdown-menu" style="width: 300px;">
+					<div class='panel panel-info'>
+						<div class='panel-heading' align='center'>
+							<h2>Create</h2>
+						</div>
+						<%= form_for @milestone do |f| %>
+							<div class='panel-body' align='center'>
+								<h4>
+									<%= f.label :name %><br>
+									<%= f.text_field :name %>
+								</h4>
+								<h4>
+									<%= f.label :due_date %><br>
+                					<%= f.text_field :due_date, :class => 'datepicker', size: 10 %>
+                				</h4>
+								<%= f.hidden_field :project_id, :value => @project.id %>
+								<input type='hidden' id='task_ids' name='task_ids' value='[]'>
+								<h4>Tasks:</h4>
+								<% @tasks.each do |t| %>
+									<h6 id='h_<%= t.id %>'><%= t.title %> &nbsp;<a id='i_<%= t.id %>' onclick='magic(<%= t.id %>)'></a></h6>
+								<% end %>
+							</div>
+							<div class="panel-footer clearfix ">
+								<button type="submit" class="btn btn-lg btn-primary btn-block">
+									<i class="glyphicon glyphicon-save"></i> Save
+								</button>
+							</div>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div class='container'>
 		<div class='row' style="background-color: #55b25d;" align='center'>
 			<div class='col-xs-3'>
 				<h4>Name</h4>
 			</div>
-			<div class='col-xs-3'>
+			<div class='col-xs-2'>
 				<h4>Due Date</h4>
 			</div>
 			<div class='col-xs-5'>
@@ -17,15 +54,17 @@
 					</div>
 				</div>
 				<div class='row'>
-					<div class='col-xs-6'>
+					<div class='col-xs-5'>
 						<h5>Title</h5>
 					</div>
-					<div class='col-xs-6'>
+					<div class='col-xs-5'>
 						<h5>Status</h5>
+					</div>
+					<div class='col-xs-2'>
 					</div>
 				</div>
 			</div>
-			<div class='col-xs-1'>
+			<div class='col-xs-2'>
 			</div>
 		</div>
 		<% if !@milestones || @milestones.length == 0%>
@@ -36,8 +75,84 @@
 			<% i = 0 %>
 			<% @milestones.each do |milestone| %>
 				<div class='row' style="border-bottom: 1px solid #e0e0e0; background-color: <% if i % 2 == 0 %> #f2f4f7; <% else %> #f9fbff; <% end %>" align='center'>
+					<div class='col-xs-3'>
+						<h5><%= milestone.name %></h5>
+					</div>
+					<div class='col-xs-2'>
+						<h5><%= milestone.due_date %></h5>
+					</div>
+					<div class='col-xs-5'>
+						<% @milestone_infos[milestone.id][:tasks].each do |info| %>
+							<div class='row' align='center'>
+								<div class='col-xs-5'>
+									<h5><%= info.title %></h5>
+								</div>
+								<div class='col-xs-5'>
+									<h5><%= info.status %></h5>
+								</div>
+								<div class='col-xs-2'>
+									<% if info.status != 'Finished' && milestone.due_date < Time.now %>
+										<i style='color: red;' class='glyphicon glyphicon-exclamation-sign'></i>
+									<% end %>
+								</div>
+							</div>
+						<% end %>
+					</div>
+					<div class='col-xs-2'>
+						<h5>
+						<%= link_to 'Edit', edit_milestone_path(milestone) %> |
+						<%= link_to 'Destroy', milestone_path(milestone),
+						          method: :delete,
+						          data: { confirm: 'Are you sure?' } %></h5>
+					</div>
 				</div>
 			<% end %>
 		<% end %>
 	</div>
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+	  $('#task_ids').val('[]');
+      $('.datepicker').datepicker({format: 'dd/mm/yyyy'});
+      setColorAndIcon();
+  });
+
+  function setColorAndIcon(){
+  	var ids = '<%= @tasks.collect{|t| t.id} %>';
+      var cur = $('#task_ids').val();
+      ids = ids.substr(1,ids.length - 2);
+      ids = ids.split(',');
+      for(var i = 0; i < ids.length; ++i){
+      	if( cur.indexOf(ids[i].trim()) >= 0){
+      		$('#h_' + ids[i].trim()).css({"color": 'green'});
+      		$('#i_' + ids[i].trim()).removeClass();
+      		$('#i_' + ids[i].trim()).addClass('glyphicon glyphicon-remove-sign');
+      		$('#i_' + ids[i].trim()).css({"color": 'red'});
+      		$('#i_' + ids[i].trim()).val('remove');
+
+      	}else{
+      		$('#h_' + ids[i].trim()).css({"color": 'red'});
+      		$('#i_' + ids[i].trim()).removeClass();
+      		$('#i_' + ids[i].trim()).addClass('glyphicon glyphicon-plus-sign');
+      		$('#i_' + ids[i].trim()).css({"color": 'green'});
+      		$('#i_' + ids[i].trim()).val('add');
+      	}
+      }
+  }
+
+  function magic(id){
+  	var classname =  $('#i_' + id).attr('class');
+  	var ids = JSON.parse($('#task_ids').val());
+  	if(classname.indexOf('plus') >= 0){
+  		ids.push(id);
+  	}else{
+  		for(var i = 0; i < ids.length; ++i){
+  			if(ids[i] == id){
+  				ids.splice(i,1);
+  			}
+  		}
+  	}
+  	$('#task_ids').val(JSON.stringify(ids));
+  	setColorAndIcon();
+  }
+</script>
