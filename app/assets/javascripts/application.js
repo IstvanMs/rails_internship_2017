@@ -39,11 +39,11 @@ function capitalize(string) {
 }
 
 function popOut(){
-	$('#chatWindow').width(200);
+	$('#chatWindow').height(240);
 	$('#chatForm').show();
 }
 
 function popIn(){
-	$('#chatWindow').width(27);
+	$('#chatWindow').height(35);
 	$('#chatForm').hide();
 }
