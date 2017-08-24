@@ -73,7 +73,7 @@ class SessionsController < ApplicationController
   	else
   		flash[:notice] = "Invalid username or password!"
   		flash[:color] = "invalid"
-  		render 'login'
+  		redirect_to root_path
   	end
   end
 

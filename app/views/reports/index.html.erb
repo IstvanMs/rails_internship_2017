@@ -2,7 +2,7 @@
 	<div class='row' style="height: 50vh; min-height: 200px; min-width: 400px;">
 		<%= link_to :controller => 'reports', :action => 'by_user' do%>
 			<div class='col-xs-6' style='height: 100%;' onmouseover='changeColorBlue("by_user","title_user","first")' onmouseout='changeColorWhite("by_user","title_user","first")'>
-				<div id='by_user' class='container' style='border: 1px solid #cbd2d3; height: 100%; background-color: #ffffff;'>
+				<div id='by_user' class='container' style='box-shadow: 0px 0px 5px rgba(0, 0, 0, .9); height: 100%; background-color: #ffffff;'>
 					<div class='row' style='margin-top: 8%; margin-bottom: 20px; height: 50%;' align='center'>
 						<%= image_tag("chart_icon.png", :id => 'first', :size => '130x130', :alt => "Logo1") %>
 					</div>
@@ -15,7 +15,7 @@
 
 		<%= link_to :controller => 'reports', :action => 'by_project' do%>
 			<div class='col-xs-6' style='height: 100%;' onmouseover='changeColorBlue("by_project","title_proj","second")' onmouseout='changeColorWhite("by_project","title_proj","second")'>
-				<div id='by_project' class='container' style='border: 1px solid #cbd2d3; height: 100%; background-color: #ffffff;'>
+				<div id='by_project' class='container' style='box-shadow: 0px 0px 5px rgba(0, 0, 0, .9);  height: 100%; background-color: #ffffff;'>
 					<div class='row' style='margin-top: 8%; margin-bottom: 20px; height: 50%;' align='center'>
 						<%= image_tag("chart_icon.png", :id => 'second' ,:size => '130x130', :alt => "Logo2") %>
 					</div>
@@ -30,7 +30,7 @@
 
 <script type="text/javascript">
 	function changeColorBlue(name1, name2, name3){
-		document.getElementById(name1).style.backgroundColor = "#00cef2";
+		document.getElementById(name1).style.backgroundColor = "#29ad46";
 		document.getElementById(name2).style.color = "#ffffff";
 		document.getElementById(name3).style.filter = "brightness(0) invert(1)";
 	}

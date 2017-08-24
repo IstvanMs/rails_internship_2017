@@ -9,19 +9,19 @@
     <% end %>
   </div>
   <div class="row">
-    <div class="col-sm-7" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
+    <div class="col-sm-7" style="margin: 1cm 0cm 1cm 0cm;">
       <%= render 'panel_users' %>
     </div>
     
-    <div class="col-sm-4" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm;"><br>
-      <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
-        <div class="panel-heading">
+    <div class="col-sm-4" style="margin: 1cm 1cm 1cm 1cm;"><br>
+      <div class="panel panel-success"  style=' box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen; margin: 1cm 0cm 1cm 0cm;'>
+        <div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
           <% if @user.username == nil %>
-          <center><h2>New User</h1></center>
+          <center><h2><font color='white'>New User</font></h1></center>
           <% else %>
-          <center><h2>Edit User</h2></center>
+          <center><h2><font color='white'>Edit User</font></h2></center>
           <div class='row'>
-            <%= button_to "New User", {:controller => 'users', :action => 'reset'}, {:class => 'btn btn-sm btn-primary pull-right'}%>
+            <%= button_to "New User", {:controller => 'users', :action => 'reset'}, {:class => 'ourButton pull-right', :style => 'color: #000554;'}%>
           </div>
           <% end %>
         </div>

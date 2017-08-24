@@ -1,11 +1,13 @@
-<div class="col-md-3" style="background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
-  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
-    <div class="panel-heading">
-      <center><h2>Edit Project(<%= @project.title %>)</h1></center>
-    </div>
+<div class='container'>
+	<div class="col-xs-4" style="width: 450px;margin: 1cm 1cm 1cm 1cm; float: none; margin: 0 auto;"><br>
+	  <div class="panel panel-success" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen;margin: 1cm 1cm 1cm 1cm;">
+				<div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+	      <center><h2>Edit Project(<%= @project.title %>)</h1></center>
+	    </div>
 
-    <%= render 'form' %>
-  </div>
+	    <%= render 'form' %>
+	  </div>
+	</div>
+
+	<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
 </div>
-
-<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>

@@ -1,36 +1,35 @@
-<div class="container">
-	<div class="col-xs-3" style="float: none; margin: 0 auto; width: 300px;">
-		<center><div class="panel panel-default" style="background: #edefee">
-			<%= form_tag(:action => 'login_attempt') do %>
-				<div class="panel-body">
-					<h1>Log in</h1><hr style="background-color: #709674; height: 1px; border: 0;">
-
-					<div class="form-group">
-						<%= label_tag "Username" %><br>
-						<span class="form-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-						<%= text_field_tag :username %>
+<div id='outerDiv'>
+	<div class='container' id='login_container'>
+		<div class='row'>
+			<div id='login_icon_holder'><i id='login_container_icon' class='glyphicon glyphicon-user'></i></div>
+		</div><br>
+		<%= form_tag(:action => 'login_attempt') do %>
+			<div class='container' align='center'>
+				<div class='row'>
+					<div class="inner-addon left-addon">
+						<i class="glyphicon glyphicon-user"></i>
+						<%= text_field_tag :username, nil, placeholder: 'Username', :class => 'form-control', :style => 'font-size: 20px;' %>
 					</div>
+				</div><br>
 
-					<div class="form-group">
-						<%= label_tag "Password" %><br>
-						<span class="form-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-						<%= password_field_tag :login_password %>
+				<div class='row'>
+					<div class="inner-addon left-addon">
+						<i class="glyphicon glyphicon-lock"></i>
+						<%= password_field_tag :login_password , nil, placeholder: 'Password', :class => 'form-control', :style => 'font-size: 20px;' %>
 					</div>
-					<%= link_to 'Forgot password?', sessions_forgot_password_path %>
-					<% if flash[:notice] %>
-						<div class="alert alert-warning">
-						    <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
-						</div>
-					<% end %>
-
 				</div>
-	 			
-	 			<div class="panel-footer clearfix " style="background: #c7d6cd;">
-					<button type="submit" class="btn btn-lg btn-success btn-block">
-					  <i class="glyphicon glyphicon-share"></i> Sign in
-					</button>
-				</div>
-			<% end %>
-		</div></center>
+			</div>
+			<hr>
+			<button type="submit" class="btn btn-lg btn-success btn-block">
+		  		<i class="glyphicon glyphicon-share"></i> Sign in
+			</button>
+			<h5 align='right'><%= link_to 'Forgot password?', sessions_forgot_password_path, :style => 'color: white;' %></h5>
+		<% end %>
 	</div>
 </div>
+
+<% if flash[:notice] %>
+	<script>
+		alert('<%= flash[:notice] %>');
+	</script>
+<% end %>

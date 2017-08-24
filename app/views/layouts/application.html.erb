@@ -9,14 +9,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
   </head>
 
-  <body style="background: #e8f2ef;">
-  	<div class="jumbotron" style="background: #e8f2ef;">
-  		<% if current_page?(:controller => 'sessions', :action => 'login') || current_page?(:controller => 'sessions', :action => 'forgot_password')%>
-		  	<div class="row" style="background: #d5e2de;" >
-		  		<%= link_to image_tag("logo.png", :class => "pull-left", :style => 'margin: 0px 0px 0px 5px;', :alt => "Logo"), :controller => 'dashboards', :action => 'index' %>
-		  	</div>
-	  	<% end %>
-
+  <body <% if current_page?(:controller => 'sessions', :action => 'login') || current_page?(:controller => 'sessions', :action => 'forgot_password')  %>
+  			style='background-image: url(<%= asset_path 'login_back.jpg' %>); background-size: 1920px 1080px; background-repeat: no-repeat;'
+  		<% else %>
+  			style='background-image: url(<%= asset_path 'login_back.jpg' %>); background-size: cover; background-repeat: no-repeat;'
+  		<% end %>>
+  	<div class="jumbotron" style="background-color: transparent !important;">
 	  	<div class="row" >
 	  		<% if @current_user != nil %>
 	  			<%= render(:partial => 'layouts/header', :formats => [:html])  %>

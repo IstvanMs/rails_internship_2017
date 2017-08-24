@@ -1,3 +1,24 @@
 // Place all the styles related to the Projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.ourButton{
+	height: 30px;
+	widht: auto;
+	background-image: url('button1.png'); 
+	background-size: 100% 100%;
+	border-radius: 10px;
+	border: 1px solid #1b60d3;
+}
+
+.ourButton-addon{
+	color: #000554;
+}
+
+.ourButton:hover {
+	box-shadow: 0px 0px 10px rgba(0, 40, 105, 1);
+	filter: brightness(90%);
+	cursor: pointer; 
+	cursor: hand;
+}

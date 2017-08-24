@@ -1,11 +1,11 @@
-<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
-  <div class="panel-heading">
-    <center><h3> Users </h3>
+<div class="panel panel-success"  style="background: white; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+  <div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+    <center><h3> <font color='white'>Users</font> </h3>
     <% if current_page?(controller: 'dashboards', action: 'index') %>
-      <%= link_to '(view all users)',{ :controller => 'users', :action => 'index'} %>
+      <%= link_to '(view all users)',{ :controller => 'users', :action => 'index'}, :style => 'color: #d2efeb;' %>
     <div class='row'>
-      <%= button_to users_index_path, {:class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 10px;'} do%>
-          <i class='glyphicon glyphicon-plus'>Add</i>
+      <%= button_to users_index_path, {:class => 'ourButton pull-right', :style => 'margin-right: 10px;'} do%>
+          <i class='glyphicon glyphicon-plus ourButton-addon'>Add</i>
           <% end %>
     </div>
     <% end %>

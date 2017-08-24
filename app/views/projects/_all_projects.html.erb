@@ -1,13 +1,13 @@
-<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 800px;">
-	<div class="panel-heading">
-		<center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['projects'].to_s + ' project'.pluralize(@lengths['projects']) %>"> Project information </h3>
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; min-width: 800px;">
+	<div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+		<center><h3 data-toggle="tooltip" title="<%= 'Total: ' + @lengths['projects'].to_s + ' project'.pluralize(@lengths['projects']) %>"> <font color='white'>Project information</font> </h3>
       <% if current_page?(controller: 'dashboards', action: 'index')%>
-        <%= link_to '(View all projects)',{ :controller => 'projects', :action => 'index'} %></center>
+        <%= link_to '(View all projects)',{ :controller => 'projects', :action => 'index'}, :style => 'color: #d2efeb;' %></center>
       <% end %>
       <% if current_page?(controller: 'dashboards', action: 'index') && @current_user.role == 'Manager'%>
       <div class='row'>
-          <%= button_to new_project_path , :class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 10px;' do%>
-            <i class="glyphicon glyphicon-plus">Create</i>
+          <%= button_to new_project_path , :class => 'ourButton pull-right', :style => 'margin-right: 20px;' do%>
+            <i class="glyphicon glyphicon-plus ourButton-addon">Create</i>
           <% end %>
       </div>
       <% end %>

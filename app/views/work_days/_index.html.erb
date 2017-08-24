@@ -1,7 +1,7 @@
 <% if @current_user.role == "Employee" %>
-<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm; border: 2px solid lightgrey; min-width: 300px;">
-  <div class="panel-heading">
-    <center><h3>Workday</h3></center>
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; min-width: 300px;">
+  <div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+    <center><h3><font color='white'>Workday</font></h3></center>
   </div>
 
   <div class='container' style='width: 100%;'>

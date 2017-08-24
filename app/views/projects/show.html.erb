@@ -7,10 +7,10 @@
 	</div>
 	<% end %>
 	<div class='row'>
-	<div class="col-xs-4 pull-left" style="min-width: 400px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin-left: 20px;"><br>
-	  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm;">
-	    <div class="panel-heading">
-	      <center><h2>Project(<%= @project.title %>)</h1></center>
+	<div class="col-xs-4 pull-left" style="min-width: 400px; margin-left: 20px;"><br>
+	  <div class="panel panel-success" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen;margin: 1cm 0cm 1cm 0cm;">
+			<div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+	      <center><h2><font color='white'>Project(<%= @project.title %>)</font></h1></center>
 	    </div>
 
 	    <div class="panel-body">
@@ -62,7 +62,7 @@
 		</div>
 	  </div>
 	</div>
-	<div class='col-xs-7 pull-right' style="min-width: 600px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;margin-right: 20px;">
+	<div class='col-xs-7 pull-right' style="min-width: 600px;margin-right: 20px;">
 		<%= render 'milestones_form' %>
 	</div>
 </div>

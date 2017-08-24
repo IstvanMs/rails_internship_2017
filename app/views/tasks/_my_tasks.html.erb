@@ -1,12 +1,12 @@
 <% if @current_user.role == 'Manager' %>
 <center><div class="col-md-2" style='width: 250px;'>
-	<div class="panel panel-primary">
-        <div class="panel-heading">
+	<div class="panel panel-primary" style=' box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen;'>
+        <div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
             <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span>Create new task:</h3>
         </div>
         <div class="panel-body">
 	        <div class="dropdown">
-            <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle"><i class="glyphicon glyphicon-plus"></i>Add task to project<b class="caret"></b></a>
+            <button data-toggle="dropdown" class="ourButton dropdown-toggle"><i class="glyphicon glyphicon-plus ourButton-addon">Projects<b class="caret"></b></i></button>
             <ul class="dropdown-menu">
                 <% @projects.each do |project| %>
                   <li><%= link_to project.title, :controller => 'tasks', :action => 'add_task', :id => project.id %></li>

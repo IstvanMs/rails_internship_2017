@@ -7,19 +7,19 @@
 	<% end %>
 	</div>
 	<div class='row'>
-			<div class='panel panel-success' style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
-				<div class='panel-heading'>
+			<div class='panel panel-success' style="background: white; border: 2px solid darkgreen; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+				<div class='panel-heading' style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
 					<div class='row' align='center'>
-						<h3>Roles</h3>
+						<h3><font color='white'>Roles</h3>
 					</div>
 					<div class='row' align='left' style='margin-left: 20px;'>
 						<h4>Company: <%= @company.name %> </h4>
 					</div>
 					<div class='row'>
-				      <%= button_to new_role_path, :class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 1cm;' do%>
-				        <i class="glyphicon glyphicon-plus">Create</i>
+				      <%= button_to new_role_path, :class => 'ourButton pull-right', :style => 'margin-right: 1cm;' do%>
+				        <i class="glyphicon glyphicon-plus ourButton-addon">Create</i>
 				      <% end %>
-				    </div>
+				    </div></font>
 				</div>
 				<div class='container'>
 					<div class='row' style="background-color: #55b25d;" align='center'>
