@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" style=' box-shadow: 0px 0px 5px rgba(0, 0, 0, .9); '>
+<nav class="navbar navbar-inverse" style=' box-shadow: 0px 0px 5px rgba(0, 0, 0, .9); '>
     <div class="container">
         <div class="navbar-header">
             <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
@@ -9,8 +9,10 @@
             </button>
         </div>
         <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-left">
+                <li style='height: 50px;'> <%= link_to image_tag("logo.png", size: "170x50", :style => 'margin: -15px 50px 0px 0px; filter: brightness(120%);', :class => "pull-left", :alt => "Logo"), :controller => 'dashboards', :action => 'index' %></li>
+            </ul>
             <ul class="nav navbar-nav">
-              <li style='height: 50px;'> <%= link_to image_tag("logo.png", size: "170x50", :style => 'margin: -15px 50px 0px 0px; filter: brightness(70%);', :class => "pull-left", :alt => "Logo"), :controller => 'dashboards', :action => 'index' %></li>
               <% if @current_user.type == 'Superuser' %>
                   <li <% if current_page?(:controller => 'dashboards') %> class='active' <% end %>><%= link_to 'Companies', :controller => 'dashboards', :action => 'index' %></li>
               <% else %>
@@ -42,17 +44,16 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li><%= link_to 'Hello '+@current_user.username+'!', :controller => 'sessions', :action => 'profile' %></a>
-                <li><a>|</a></li>
                 <li><%= link_to 'Log Out', :controller => 'sessions', :action => 'logout' %></li>
             </ul>
         </div>
         <% messages = Message.where(:recipient_id => @current_user.id, :status => 'sent') %>
         
-        <div id='chatWindow' style="border: 1px solid #93a59d; border-radius: 7px; z-index: 10; width: 200px; height: 37px; background-color: #d7e0de; position: fixed; top: -7px; left: 1vw;" onmouseover="popOut()" onmouseout="popIn()">
+        <div id='chatWindow' class='chatWindow' onmouseover="popOut()" onmouseout="popIn()">
             <div class='row' align='center'>
-                <h4><% if messages && messages.length > 0 %><i style='color: orange;' class='glyphicon glyphicon-exclamation-sign'></i><% end %>Messages</h4>
+                <font color='#fafff7'><h4><% if messages && messages.length > 0 %><i style='color: orange;' class='glyphicon glyphicon-exclamation-sign'></i><% end %>Messages</h4></font>
             </div>
-            <div id='chatForm' style='border-top: 2px solid #d7e0de; border-bottom: 2px solid #d7e0de; margin-left: 1px; background-color: #edf2ed; position: fixed; top: 30px; left: 1vw; width: 198px; height: 200px; display: none;'>
+            <div id='chatForm' class='messageForm'>
                 <div class='container' style='width: 100%;' align='center'>
                     <div class='row'>
                         <div class='col-xs-12'>
@@ -60,11 +61,11 @@
                                 <h4>Compose:</h4>
                             </div>
                             <div class='row'>
-                                <%= link_to 'Compose message', new_message_path, :class => 'btn btn-sm btn-default' %>
+                                <%= button_to 'Compose message', new_message_path, :class => 'messageButton' %>
                             </div>
                         </div>
                     </div>
-                    <hr style='border: 1px solid #ccc;'>
+                    <hr style='border: 1px solid #510124;'>
                     <div class='row'>
                         <div class='col-xs-12'>
                             <div class='row'>
@@ -73,9 +74,9 @@
                             <div class='row'>
                                 <center>
                                     <% if messages && messages.length > 0 %>
-                                        <a href="#inboxModal" class="btn btn-sm btn-default" data-toggle="modal"><%= messages.length.to_s + ' new message' %></a>
+                                        <button href="#inboxModal" class="messageButton" data-toggle="modal"><%= messages.length.to_s + ' new message' %></button>
                                     <% else %>
-                                        <%= link_to '(see all messages)', messages_path %>
+                                        <%= link_to '<button class="messageButton" style="color: #510124">(see all messages)</button>'.html_safe, messages_path %>
                                     <% end %>
                                 </center>
                             </div>
@@ -86,7 +87,6 @@
         </div>
     </div>
 </nav>
-
 
 <div id="inboxModal" class="modal fade">
         <div class="modal-dialog" style='width: 200px;'>

@@ -1,12 +1,12 @@
-<div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
-  <div class="panel-heading">
+<div class="panel panel-success"  style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+  <div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
     <div class='row'>
-      <center><h3> Companies </h3></center>
+      <center><h3><font color='white'> Companies </font></h3></center>
     </div>
     <div class='row'>
-      <%= button_to new_company_path, :class => 'btn btn-md btn-success pull-right', :style => 'margin-right: 1cm;' do%>
-        <i class="glyphicon glyphicon-plus">Create new company</i>
-      <% end %>
+      <%= button_to new_company_path , :class => 'ourButton pull-right', :style => 'margin-right: 20px;' do%>
+            <i class="glyphicon glyphicon-plus ourButton-addon">Create</i>
+          <% end %>
     </div>
   </div>
 

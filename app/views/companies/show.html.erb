@@ -1,7 +1,7 @@
 <div class='container'>
-  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px;margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
-    <div class="panel-heading">
-      <div class='row'>
+  <div class="panel panel-success"  style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; margin: 1cm 0cm 1cm 0cm; min-width: 400px;">
+    <div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+      <div class='row'><font color='white'>
         <p style='margin-left: 15px;'>
           <strong>Name:</strong>
           <%= @company.name %>
@@ -11,10 +11,10 @@
         <center><h3> Admins </h3></center>
       </div>
       <div class='row'>
-        <%= link_to '(create new admin)',  new_user_path(:company => @company.id), :style => 'margin-left: 20px;'%>
+        <%= link_to '(create new admin)',  new_user_path(:company => @company.id), :style => 'margin-left: 20px; color: white;'%>
       </div>
     </div>
-
+  </font>
     <div class='container'>
       <div class='row' style="background-color: #55b25d;" align='center'>
         <div class='col-xs-6'>
@@ -43,5 +43,5 @@
   </div>
 </div>
 
-  <%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
   </div>

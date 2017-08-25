@@ -1,6 +1,6 @@
 <div class='container' style='min-width: 700px;'>
 	<div class='row'>
-		<div class='panel panel-default'>
+		<div class='panel panel-default' style='box-shadow: 0px 0px 5px rgba(0, 0, 0, .9);'>
 			<div class='panel-body' style='background-color: #f9f9f5;'>
 				<div class='row'>
 					<%= form_tag :action => 'by_user' do%>
@@ -31,7 +31,7 @@
 	</div>
 	<% last = nil %>
 	<div class='row'>
-		<div class='panel panel-success' style="border: 2px solid darkgreen; border-radius: 7px;">
+		<div class='panel panel-success' style="border: 2px solid darkgreen; border-radius: 7px; box-shadow: 0px 0px 5px rgba(0, 0, 0, .9);">
 			<div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
 				<center><h3><font color='white'>Reports</h3></center>
 				<div class='row' style="white-space: nowrap">

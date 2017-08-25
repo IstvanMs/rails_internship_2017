@@ -1,9 +1,9 @@
 <div class='container'>
 	<div class='row'>
 		<div class='col-xs-4' style="float: none; margin: 0 auto;">
-			<div class='panel panel-success'>
-				<div class='panel-heading' align='center'>
-					<h2>Edit company</h2>
+			<div class='panel panel-success' style='box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px;'>
+				<div class='panel-heading' align='center' style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+					<h2><font color='white'>Edit company</font></h2>
 				</div>
 				<div class='panel-body'>
 					<%= render 'form' %>
@@ -12,5 +12,5 @@
 		</div>
 	</div>
 
-<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
 </div>

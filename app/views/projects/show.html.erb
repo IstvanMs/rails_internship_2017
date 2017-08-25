@@ -67,7 +67,7 @@
 	</div>
 </div>
 <div class='row'>
-	<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left'}%>
+	<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
 </div>
 
 <div id="addUserToProject" class="modal fade">

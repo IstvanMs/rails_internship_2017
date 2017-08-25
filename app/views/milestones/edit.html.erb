@@ -1,8 +1,9 @@
 <div class='container'>
   <div class='row'>  
-    <div class='panel panel-success' style='width: 300px; float: none; margin: 0 auto;'>
-    	<div class='panel-heading' align='center'>
-    		<h2>Edit</h2>
+    	<div class="panel panel-success" style="width: 300px; float: none; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen;">
+      <div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+        <center><font color='white'>
+    		<h2>Edit</h2></font>
     	</div>
     	<%= form_for @milestone do |f| %>
     		<div class='panel-body' align='center'>
@@ -22,9 +23,9 @@
     			<% end %>
     		</div>
     		<div class="panel-footer clearfix ">
-    			<button type="submit" class="btn btn-lg btn-primary btn-block">
-    				<i class="glyphicon glyphicon-save"></i> Save
-    			</button>
+    			<button type="submit" class="submitButton">
+            <i class="glyphicon glyphicon-save submitButton-addon">Save</i> 
+          </button>
     		</div>
     	<% end %>
     </div>

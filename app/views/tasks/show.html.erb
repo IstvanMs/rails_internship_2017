@@ -1,6 +1,6 @@
-<div class='container' style="min-width: 420px; background: #eff6f7; border: 2px solid lightgrey; border-radius: 5px;">
+<div class='container'>
 	<div class='row'>
-		<div class='col-xs-8'>
+		<div class='col-xs-7'>
 			<div class='row'>
 				<div class='col-xs-12'>
 					<% if flash[:notice] %>
@@ -13,9 +13,9 @@
 
 					<div class='row'>
 						<div class="col-xs-12" style="min-width: 400px;"><br>
-						  <div class="panel panel-success"  style="background: white; border: 2px solid lightgrey; border-radius: 5px; margin: 1cm 0cm 1cm 0cm;">
-						    <div class="panel-heading">
-						      <center><h2>Task(<%= @task.title %>)</h1></center>
+						  	<div class="panel panel-success" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen;margin: 1cm 0cm 1cm 0cm;">
+							<div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+						      <center><h2><font color='white'>Task(<%= @task.title %>)</font></h1></center>
 						    </div>
 
 						    <div class="panel-body" style='background-color: <% if @task.status == 'Started'%>#c9ffd2<% end %>
@@ -56,85 +56,21 @@
 
 			<div class='row'>
 				<div class='col-xs-12'>
-					<%= link_to 'Back', url_for(:back), {:class => 'btn btn-md btn-primary glyphicon pull-left', :style => 'margin: 0px 0px 10px 0px;'}%>
+					<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
 				</div>
 			</div>
 		</div>
 
-		<div class='col-xs-4' style='min-width: 270px; margin-bottom: 58px;'>
+		<div class='col-xs-5' style='min-width: 450px; margin-bottom: 58px; '>
 			<div class='row'>
-				<div class='col-xs-12' style="background: #ffffff; border: 1px solid lightgrey; border-radius: 5px; margin-top: 58px; min-height: 377px;">
+				<div class='col-xs-12' style="background: #f4f7ef; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen; margin-top: 58px; min-height: 377px;">
 					<div class='row'>
 						<%= render '/comments/form', :@reply_to => nil %>
 					</div>
-					<hr style=' border: 1px solid #ccc;'>
-					<h4>Comments:</h4>
-					<div class='row' style='width: 100%;'>
-						<div class='container' style='margin: 0px 0px 10px 15px; background: #ffffff; border: 1px solid lightgrey;'>
-							<% @task.comments.each do |comment| %>
-							  <% if comment.user && comment.reply_to == nil %>
-							  	<div class='row'>
-							  		<div class='panel'>
-							  			<div class="panel-heading" style='background: #b5c6ad;'>
-							  				<div class='row'>
-							  					<div class='col-xs-9'>
-								  					<strong><i class='glyphicon glyphicon-user'></i><%= comment.user.username %>:</strong><br>
-								  				</div>
-								  				<div class='col-xs-3'>
-								  					<% if comment.user == @current_user || @current_user.role == 'Manager' %>
-									  					<%= link_to 'Delete', [comment.task, comment],
-											            method: :delete,
-											            data: { confirm: 'Are you sure?' } %>
-										            <% end %>
-								  				</div>
-							  				</div>
-							  			</div>
-							  			<div class="panel-body" style='background: #f0f2ef;'>
-							  				<div class='row'>
-								  				<center><%= comment.text %></center>
-								  			</div>
-								  			
-								  			<div class='row'>
-												<div class="dropdown">
-												    <a href="#" data-toggle="dropdown" class="dropdown-toggle pull-right">Reply <b class="caret"></b></a>
-												    <div class="container dropdown-menu">
-												    	<%= render 'comments/form', :@reply_to => comment.id %>
-												    </div>
-												</div>
-											</div>
-								  		</div>
-							  		</div>
-						  		</div>
-						  		<% @task.comments.each do |c| %>
-									<%if c.reply_to == comment.id %>
-										<div class='row'  style='margin-left: 20px;'>
-											<div class='panel'>
-				  								<div class="panel-heading" style='background: #dbe0d9;'>
-				  									<div class='row'>
-					  									<div class='col-xs-9'>
-										  					<strong><i class='glyphicon glyphicon-user'></i><%= c.user.username %>(reply):</strong><br>
-										  				</div>
-										  				<div class='col-xs-3'>
-										  					<% if c.user == @current_user || @current_user.role == 'Manager' %>
-											  					<%= link_to 'Delete', [c.task, c],
-													            method: :delete,
-													            data: { confirm: 'Are you sure?' } %>
-												            <% end %>
-										  				</div>
-										  			</div>
-				  								</div>
-				  								<div class="panel-body" style='background: #fcfcfc;'>
-									  				<div class='row'>
-										  				<center><%= c.text %></center>
-										  			</div>
-										  		</div>
-				  							</div>
-										</div>
-									<% end %>
-								<% end %>
-							  <% end %>
-							<% end %>
-						</div>
+					<div class='comments-holder'>
+						<% @task.comments.each do |comment| %>
+							<% if comment.user_id && !comment.reply_to %> <%= render 'comment_show', :@comment => comment %> <% end %>
+						<% end %>
 					</div>
 				</div>
 			</div>

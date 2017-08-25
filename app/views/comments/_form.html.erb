@@ -1,24 +1,15 @@
-<div class='container' style='margin-top: 10px;'>
-  <%= form_for([@task, @task.comments.build]) do |f| %>
-    <div class='row'>
-      <div class='col-xs-9'>
-        <%= f.hidden_field :user, :value => @current_user.id %>
-        <%= f.hidden_field :reply_to, :value => @reply_to %>
-        <p>
-        <% if @reply_to == nil %>
-          <h4>New comment:</h4>
-        <% else %>
-          <h4>Reply:</h4>
-        <% end %>
-        <%= f.text_area :text, :style => 'resize: none; width: 250px; height: 100px;' %>
-        </p>
-      </div>
+<div class='newCommentForm'>
+  <div class='col-avatar'>
+    <i class='glyphicon glyphicon-user' style='margin-left: 3px;'></i>
+  </div>
+  <div class='col-form-area'>
+    <%= form_for([@task, @task.comments.build]) do |f| %>
+      <%= f.hidden_field :user, :value => @current_user.id %>
+      <%= f.hidden_field :reply_to, :value => @reply_to %>
+      
+      <%= f.text_area :text, :class => 'comment-textarea', :placeholder => "Add a comment..."  %>
 
-      <div class='col-xs-1' style='margin-top: 125px;'>
-        <button type="submit" class="btn btn-xs">
-        <i class="glyphicon glyphicon-save"></i> Add
-        </button>
-      </div>
-    </div>
-  <% end %>
+      <button type="submit" class="btn btn-sm btn-primary pull-right comment-button">Comment</button>
+    <% end %>
+  </div>
 </div>

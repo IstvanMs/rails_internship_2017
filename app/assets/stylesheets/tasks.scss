@@ -1,3 +1,33 @@
 // Place all the styles related to the Tasks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.comments-holder{
+	height: auto;
+	width: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.comment-area{
+	margin-left: 110px;
+	margin-top: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	width: auto;
+	height: auto;
+	min-height: 120px;
+	border: 1px solid #d5d6cd;
+	border-radius: 5px;
+	background-color: #e4e5dc;
+	padding: 5px 5px 5px 5px;
+}
+
+.replies-area{
+	margin-left: 110px;
+	height: auto;
+	width: auto;
+	margin-top: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}

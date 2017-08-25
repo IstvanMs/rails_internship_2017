@@ -12,7 +12,7 @@
   <body <% if current_page?(:controller => 'sessions', :action => 'login') || current_page?(:controller => 'sessions', :action => 'forgot_password')  %>
   			style='background-image: url(<%= asset_path 'login_back.jpg' %>); background-size: 1920px 1080px; background-repeat: no-repeat;'
   		<% else %>
-  			style='background-image: url(<%= asset_path 'login_back.jpg' %>); background-size: cover; background-repeat: no-repeat;'
+  			style='background-image: url(<%= asset_path 'login_back.jpg' %>); background-size: cover; background-repeat: no-repeat; min-height: 100vh;'
   		<% end %>>
   	<div class="jumbotron" style="background-color: transparent !important;">
 	  	<div class="row" >
