@@ -1,0 +1,32 @@
+<div class='row' style='padding-bottom: 5px; margin-bottom: 5px;'>
+	<div class='col-avatar'>
+		<i class='glyphicon glyphicon-user' style='margin-left: 3px;'></i>
+		<h5 style='color: black; margin-top: -25px;' align='center'><%= link_to @comment.user.username, users_profile_path(id: @comment.user_id) %></h5>
+	</div>
+	<div class='comment-area'>
+		<h5><%= @comment.text %><h5>
+	</div>
+	<div class='row'>
+		<div class='col-xs-12'>
+			<% if @comment.user == @current_user || @current_user.role == 'Manager' %>
+				<%= link_to 'Delete', [@comment.task, @comment],
+	            method: :delete,
+	            data: { confirm: 'Are you sure?' }, :class => 'btn btn-xs btn-primary pull-right', :style => 'margin-right: 10px;' %>
+            <% end %>
+		</div>
+		
+		<div class='col-xs-12'>
+			<div class="dropdown">
+			    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-xs btn-primary pull-left" style='margin-left: 10px;'>Add reply <b class="caret"></b></a>
+			    <div class="container dropdown-menu" >
+			    	<%= render 'comments/form', :@reply_to => @comment.id %>
+			    </div>
+			</div>
+		</div>
+	</div>
+
+	<div class='replies-area'>
+		<% replies = Comment.where(:reply_to => @comment.id) %>
+		<%= render 'replies', :@replies => replies %>
+	</div>
+</div>

@@ -1,0 +1,20 @@
+<% @replies.each do |comment| %>
+	<div class='row' style='width: 100%;'>
+		<div class='col-avatar'>
+			<i class='glyphicon glyphicon-user' style='margin-left: 3px;'></i>
+			<h5 style='color: black; margin-top: -25px;' align='center'><%= link_to comment.user.username, users_profile_path(id: comment.user_id) %></h5>
+		</div>
+		<div class='comment-area'>
+			<h5><%= comment.text %><h5>
+		</div>
+		<div class='row'>
+			<div class='col-xs-12'>
+				<% if comment.user == @current_user || @current_user.role == 'Manager' %>
+					<%= link_to 'Delete', [comment.task, comment],
+		            method: :delete,
+		            data: { confirm: 'Are you sure?' }, :class => 'btn btn-xs btn-primary pull-right', :style => 'margin-right: 10px;' %>
+	            <% end %>
+			</div>
+		</div>
+	</div>
+<% end %>
