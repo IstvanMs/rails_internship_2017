@@ -1,10 +1,9 @@
 class ProjectsController < ApplicationController
-	before_action :manager_user, :only => [:new, :edit, :create, :update, :destroy]
 	before_action :authenticate_user
 	
 	def index
-	    role = Role.find(@current_user.role_id)
-	    if role.permissions[0] == '0'
+	    @role = Role.find(@current_user.role_id)
+	    if @role.permissions[0] == '0'
 	      redirect_to root_path
 	    end
 		@company = Company.find(@current_user.company_id)
@@ -78,8 +77,8 @@ class ProjectsController < ApplicationController
 	end
 
 	def show
-	    role = Role.find(@current_user.role_id)
-	    if role.permissions[0] == '0'
+	    @role = Role.find(@current_user.role_id)
+	    if @role.permissions[0] == '0'
 	      redirect_to root_path
 	    end
 		@company = Company.find(@current_user.company_id)

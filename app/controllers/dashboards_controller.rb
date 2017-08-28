@@ -7,6 +7,7 @@ class DashboardsController < ApplicationController
       @companies = Company.all
       render 'index_superuser'
     else
+    @role = Role.find(@current_user.role_id)
     @company = Company.find(@current_user.company_id)
 
     @notes = Note.get_notes(@current_user)

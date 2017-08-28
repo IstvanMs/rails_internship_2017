@@ -141,30 +141,62 @@
 		if($("#project1").is(':checked'))
 		    p += 2;
 		if($("#project2").is(':checked'))
-		    p += 1;
+		    p = 3;
 
 		if($("#task1").is(':checked'))
 		    t += 4;
 		if($("#task2").is(':checked'))
-		    t += 2;
+		    if($("#task1").is(':checked')){
+		    	t += 2;
+		    }else{
+		    	t = 6;
+		    }
 		if($("#task3").is(':checked'))
-		    t += 1;
+		    if($("#task2").is(':checked')){
+		    	t += 1;
+		    }else{
+		    	t = 5;
+		    }
 
 		if($("#user1").is(':checked'))
 		    u += 2;
 		if($("#user2").is(':checked'))
-		    u += 1;
+		    u = 3;
 
 		if($("#note1").is(':checked'))
 		    n += 2;
 		if($("#note2").is(':checked'))
-		    n += 1;
+		    n = 3;
 
 		if($("#report1").is(':checked'))
 		    r += 2;
 		if($("#report2").is(':checked'))
-		    r += 1;
+		    r = 3;
 		var perm = p.toString()+t.toString()+n.toString()+u.toString()+r.toString();
 		$('#role_permissions').val(perm);
+		if( perm ){
+			if( p % 2 == 1)
+				$('#project2').prop('checked', true);
+			if( p > 1)
+				$('#project1').prop('checked', true);
+			if( n % 2 == 1)
+				$('#note2').prop('checked', true);
+			if( n > 1)
+				$('#note1').prop('checked', true);
+			if( u % 2 == 1)
+				$('#user2').prop('checked', true);
+			if( u > 1)
+				$('#user1').prop('checked', true);
+			if( r % 2 == 1)
+				$('#report2').prop('checked', true);
+			if( r > 1)
+				$('#report1').prop('checked', true);
+			if( t % 2 == 1)
+				$('#task3').prop('checked', true);
+			if( t == 2 || t == 3 || t == 6 || t == 7)
+				$('#task2').prop('checked', true);
+			if( t > 3)
+				$('#task1').prop('checked', true);
+		}
 	});
 </script>

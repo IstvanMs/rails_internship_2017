@@ -3,8 +3,8 @@ class NotesController < ApplicationController
   before_action :authenticate_user
 	
 	def index
-    role = Role.find(@current_user.role_id)
-    if role.permissions[2] == '0'
+    @role = Role.find(@current_user.role_id)
+    if @role.permissions[2] == '0'
       redirect_to root_path
     end
     @company = Company.find(@current_user.company_id)

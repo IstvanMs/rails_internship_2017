@@ -57,9 +57,18 @@
 	    <% end %>
 	    </div>
 	<% end %>
+	<% if @user.errors.any? %>
+	    <div class="alert alert-warning" class="Signup_Errors">
+	    <% for message_error in @user.errors.full_messages %>
+	      <font color="red"><div class="notice"><li><%= message_error %></li></div></font>
+	    <% end %>
+	    </div>
+	<% end %>
 </div>
 
 <script type="text/javascript">
+    $('.datepicker').datepicker();
+
 	$( document ).ready(function() {
 		document.getElementById('extra_div').innerHTML = '';
 		var user_id = $('#user_user_id').val();
@@ -67,6 +76,9 @@
 	    $.getJSON('get_user_fields',{ user_id: user_id, role_id: id}, function(data) {
 	    	var role_fields = data.role_fields;
 	    	var field_values = data.field_values;
+	    	var values = '<%= raw @values.as_json %>';
+	    	if(!values) values = '{}';
+	    	values = JSON.parse(values);
 	    	if( role_fields.length > 0){
 	    		var newDiv = document.createElement('div');
 		    	var html = '<hr>';
@@ -74,10 +86,16 @@
 		    		html+='<h4><b>' + capitalize(role_fields[i].name) + '</b><h4>';
 		    		switch(role_fields[i].field_type){
 		    			case 'string':
-		    				html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
+		    				if(values[role_fields[i].name])
+		    					html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']" value="' + values[role_fields[i].name] + '">';
+		    				else
+		    					html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
 		    			break;
 		    			case 'date':
-		    				html += '<input type="date" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
+		    				if(values[role_fields[i].name])
+		    					html += '<input type="text" data-provide="datepicker" class="datepicker" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']" value="' + values[role_fields[i].name] + '">';
+		    				else
+		    					html += '<input type="text" data-provide="datepicker" class="datepicker" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
 		    			break;
 		    			case 'integer':
 		    				html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
@@ -86,7 +104,10 @@
 		    				html += '<select id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
 		    				var options = JSON.parse(role_fields[i].values);
 		    				for(var j = 0; j < options.len; ++j){
-		    					html += '<option>' + options.values[j] + '</options>';
+		    					if( options.values[j] == values[role_fields[i].name])
+		    						html += '<option selected>' + options.values[j] + '</options>';
+		    					else
+		    						html += '<option>' + options.values[j] + '</options>';
 		    				}
 		    				html += '</select>';
 		    			break;
@@ -108,6 +129,9 @@
 	    $.getJSON('get_user_fields',{ user_id: user_id, role_id: id}, function(data) {
 	    	var role_fields = data.role_fields;
 	    	var field_values = data.field_values;
+	    	var values = '<%= raw @values.as_json %>';
+	    	if(!values) values = '{}';
+	    	values = JSON.parse(values);
 	    	if( role_fields.length > 0){
 	    		var newDiv = document.createElement('div');
 		    	var html = '<hr>';
@@ -115,10 +139,16 @@
 		    		html+='<h4><b>' + capitalize(role_fields[i].name) + '</b><h4>';
 		    		switch(role_fields[i].field_type){
 		    			case 'string':
-		    				html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
+		    				if(values[role_fields[i].name])
+		    					html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']" value="' + values[role_fields[i].name] + '">';
+		    				else
+		    					html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
 		    			break;
 		    			case 'date':
-		    				html += '<input type="date" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
+		    				if(values[role_fields[i].name])
+		    					html += '<input type="text" data-provide="datepicker" class="datepicker" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']" value="' + values[role_fields[i].name] + '">';
+		    				else
+		    					html += '<input type="text" data-provide="datepicker" class="datepicker" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
 		    			break;
 		    			case 'integer':
 		    				html += '<input type="text" id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
@@ -127,7 +157,10 @@
 		    				html += '<select id="user_' + role_fields[i].name + '" name="user[' + role_fields[i].name + ']">';
 		    				var options = JSON.parse(role_fields[i].values);
 		    				for(var j = 0; j < options.len; ++j){
-		    					html += '<option>' + options.values[j] + '</options>';
+		    					if( options.values[j] == values[role_fields[i].name])
+		    						html += '<option selected>' + options.values[j] + '</options>';
+		    					else
+		    						html += '<option>' + options.values[j] + '</options>';
 		    				}
 		    				html += '</select>';
 		    			break;

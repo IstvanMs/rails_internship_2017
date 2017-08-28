@@ -1,17 +1,17 @@
 class RoleFieldsController < ApplicationController
-	before_action :admin_user, :only => [:index, :create, :destroy]
+	before_action :admin_user, :only => [:index, :create, :destroy, :update]
   	before_action :authenticate_user
 
 	def update
 		@role_field = RoleField.find(params[:id])
-		@role_field.update(role_field_params)
+		@role_field.update({:role_id => role_field_params[:role_id], :name => role_field_params[:name].capitalize, :field_type => role_field_params[:field_type], :values => role_field_params[:values], :mandatory => role_field_params[:mandatory]})
   		
 		redirect_to role_fields_path(:id => @role_field.role_id)
 	end
 
 	def create
-		@role_field = RoleField.new(role_field_params)
-	  @role_field.save
+		@role_field = RoleField.new({:role_id => role_field_params[:role_id], :name => role_field_params[:name].capitalize, :field_type => role_field_params[:field_type], :values => role_field_params[:values], :mandatory => role_field_params[:mandatory]})
+	  	@role_field.save
 		
 		redirect_to role_fields_path(:id => @role_field.role_id)
 	end
@@ -40,6 +40,6 @@ class RoleFieldsController < ApplicationController
 
 	private 
     def role_field_params
-		params.require(:role_field).permit(:role_id, :name, :field_type, :values)
+		params.require(:role_field).permit(:role_id, :name, :field_type, :values, :mandatory)
     end
 end

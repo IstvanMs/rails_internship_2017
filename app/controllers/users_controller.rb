@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  before_action :admin_user, :only => [:new, :create, :edit, :update, :index]
   before_action :authenticate_user
   
   def index
@@ -184,9 +183,15 @@ class UsersController < ApplicationController
         end
       end
 
+      role_fields = RoleField.where(:role_id => @user.role_id)
+      @values = Hash.new
+      role_fields.each do |rf|
+        @values[rf.name.capitalize] = params[:user][rf.name.capitalize]
+      end
+      @values = @values.to_json
+
 
       if @user.update({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
-        role_fields = RoleField.where(:role_id => @user.role_id)
         role_fields.each do |rf|
           if UserField.exists?(:user_id => @user.id, :name => rf.name.capitalize)
             user_field = UserField.find_by(:user_id => @user.id, :name => rf.name.capitalize)
@@ -251,13 +256,19 @@ class UsersController < ApplicationController
       role_dash = Role.find(par[:role_id]).dashboard.capitalize
       @user = User.new({:username => par[:username], :password => par[:password], :password_confirmation => par[:password_confirmation], :email => par[:email], :role => role_dash, :company_id => par[:company_id], :role_id => par[:role_id]})
       @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
+      
+      role_fields = RoleField.where(:role_id => @user.role_id)
+      @values = Hash.new
+      role_fields.each do |rf|
+        @values[rf.name.capitalize] = params[:user][rf.name.capitalize]
+      end
+      @values = @values.to_json
 
       if @user.save 
         MailerMailer.new_user(@user).deliver
         flash[:notice] = "Saved!"
         flash[:color] = "valid"
 
-        role_fields = RoleField.where(:role_id => @user.role_id)
         role_fields.each do |rf|
           if UserField.exists?(:user_id => @user.id, :name => rf.name.capitalize)
             user_field = UserField.find_by(:user_id => @user.id, :name => rf.name.capitalize)

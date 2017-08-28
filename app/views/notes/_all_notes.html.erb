@@ -4,7 +4,7 @@
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(View all notes)',{ :controller => 'notes', :action => 'index'} , :style => 'color: #d2efeb;'%></center>
       <% end %>
-      <% if current_page?(controller: 'dashboards', action: 'index') && @current_user.role == 'Manager'%>
+      <% if current_page?(controller: 'dashboards', action: 'index') &&  @role.permissions[2].to_f % 2 == 1 %>
       <div class='row'>
           <%= button_to new_project_path , :class => 'ourButton pull-right', :style => 'margin-right: 20px;' do%>
             <i class="glyphicon glyphicon-plus ourButton-addon">Create</i>
@@ -47,7 +47,7 @@
           <% if !current_page?(:controller => 'dashboards', :action => 'index') %>
             <div class='col-xs-2'><h5><%= note.created_at %></h5></div>
           <% end %>
-          <% if @current_user.role == 'Manager' %>
+          <% if @role.permissions[2].to_f % 2 == 1 %>
             <div class='col-xs-2'><h5><%= note.visibility %></h5></div>
             <div class='col-xs-4' style=' white-space: nowrap;'>
                 <h5><%= link_to 'Show', note_path(note) %> | 

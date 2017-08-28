@@ -1,12 +1,16 @@
 <div class='row'>
 	<div class='col-xs-5' style='margin-left: 180px;'>
-		<div class='row'>
-			<%= render '/users/panel_users' %>
-		</div>
+		<% if @role.permissions[3] != '0' %>
+			<div class='row'>
+				<%= render '/users/panel_users' %>
+			</div>
+		<% end %>
 	</div>
 	<div class='col-xs-5'>
-		<div class='row'>
-			<%= render '/notes/all_notes' %>
-		</div>
+		<% if @role.permissions[2] != '0' %>
+			<div class='row'>
+				<%= render '/notes/all_notes' %>
+			</div>
+		<% end %>
 	</div>
 </div>
