@@ -1,0 +1,42 @@
+<div class='container'>
+  <div class='row'>  
+    	<div class="panel panel-success" style="width: 300px; float: none; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border-radius: 7px; border: 2px solid darkgreen;">
+                <div class="panel-heading" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+    		<center><h2><font color='white'>Reply</font></h2></center>
+    	</div>
+    	<%= form_for @message do |f| %>
+    		<div class='panel-body' align='center'>
+                <%= f.hidden_field :recipient_id, :value => @rep.sender_id%>
+
+    			<h4>
+    				<%= f.label :subject %><br>
+    				<%= f.text_field :subject, :value => 'Re: ' + @rep.subject %>
+    			</h4>
+    			
+                <h4>
+                    <%= f.label :content %><br>
+                    <%= f.text_area :content, :style => 'resize: none; width: 250px; height: 100px;' %>
+                </h4>
+                <%= f.hidden_field :status, :value => 'sent' %>
+                <%= f.hidden_field :sender_id, :value => @current_user.id %>
+    		</div>
+    		<div class="panel-footer clearfix ">
+    			<button type="submit" class="submitButton">
+                  <i class="glyphicon glyphicon-save submitButton-addon">Save</i> 
+                </button>
+    		</div>
+    	<% end %>
+    <% if @message.errors.any? %>
+        <div class="alert alert-warning" class="Signup_Errors">
+        <% for message_error in @message.errors.full_messages %>
+          <font color="red"><div class="notice"><li><%= message_error %></li></div></font>
+        <% end %>
+        </div>
+    <% end %>
+    </div>
+  </div>
+
+  <div class='row'>
+    <%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
+  </div>
+</div>
