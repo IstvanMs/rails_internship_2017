@@ -1,8 +1,71 @@
 class SessionsController < ApplicationController
   before_action :authenticate_user, :only => [:home, :profile, :setting, :logout]
   before_action :save_login_state, :only => [:login, :login_attempt]
+  skip_before_action :verify_authenticity_token, :only => [:ipn_notification]
 
   def forgot_password
+  end
+
+  def sign_up
+    @values = {}
+  end
+
+  def create_company
+    @errors = Hash.new
+    if params[:company_name].blank?
+      @errors['Company name'] = " can't be blank!"
+    end
+    if Company.exists?(:name => params[:company_name])
+      @errors['Company name'] = ' already taken!'
+    end
+    if params[:username].blank?
+      @errors['Username'] = " can't be blank!"
+    end
+    if User.exists?(:username => params[:username])
+      @errors['Username'] = ' already taken!'
+    end
+    if params[:password].blank?
+      @errors['Password'] = " can't be blank!"
+    end
+    if params[:password2].blank?
+      @errors['Password confimartion'] = " can't be blank!"
+    end
+    if params[:email].blank?
+      @errors['Email'] = " can't be blank!"
+    end
+    if params[:password] != params[:password2]
+      @errors['Password'] = " confirmation doesn't match!"
+    end
+    if params[:email].present?
+      if !params[:email].match(/\A.+@.+\.+.+\z/)
+        @errors['Email'] = " invalid format!"
+      end
+    end
+  
+    @values = params    
+
+    if @errors.length > 0
+      render 'sign_up'
+    else
+      pay_request = PaypalAdaptive::Request.new
+
+      data = {
+      "returnUrl" => "http://localhost:3000/", 
+      "requestEnvelope" => {"errorLanguage" => "en_US"},
+      "currencyCode"=>"USD",  
+      "receiverList"=>{"receiver"=>[{"email"=>"meszarosistvan97-facilitator@gmail.com", "amount"=>"99.00"}]},
+      "cancelUrl"=>"http://localhost:3000/",
+      "actionType"=>"PAY",
+      "ipnNotificationUrl"=>"http://localhost:3000/payments/ipn_notification"
+      }
+
+      pay_response = pay_request.pay(data)
+      puts pay_response
+    end
+  end
+
+  def ipn_notification
+    puts params.inspect
   end
 
   def reset

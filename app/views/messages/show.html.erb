@@ -16,5 +16,6 @@
 			<h4><b>Content:</b></h4>
 			<h4><%= @message.content %></h4></br>
 		</div>
+		<center><h5><%= button_to 'Reply', messages_reply_path(:id => @message.id), :class => 'ourButton' %></h5></center>
 	</div>
 </div>

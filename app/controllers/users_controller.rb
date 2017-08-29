@@ -258,32 +258,42 @@ class UsersController < ApplicationController
       @users = User.where(:type => nil,:company_id => @company.id).order(:role,:username)
       
       role_fields = RoleField.where(:role_id => @user.role_id)
+      @errors = Hash.new
       @values = Hash.new
       role_fields.each do |rf|
         @values[rf.name.capitalize] = params[:user][rf.name.capitalize]
+        if params[:user][rf.name.capitalize].blank? && rf.mandatory
+          @errors[rf.name] = "can't be blank"
+        end
       end
       @values = @values.to_json
 
-      if @user.save 
-        MailerMailer.new_user(@user).deliver
-        flash[:notice] = "Saved!"
-        flash[:color] = "valid"
-
-        role_fields.each do |rf|
-          if UserField.exists?(:user_id => @user.id, :name => rf.name.capitalize)
-            user_field = UserField.find_by(:user_id => @user.id, :name => rf.name.capitalize)
-            user_field.update_attribute(:value, params[:user][rf.name.capitalize])
-          else
-            user_field = UserField.create({:user_id => @user.id, :name => rf.name.capitalize, :value => params[:user][rf.name.capitalize]})
-            user_field.save
-          end
-        end
-
-        redirect_to users_path
-      else
+      if @errors.length > 0
         flash[:notice] = "Invalid form!"
         flash[:color] = "invalid"
         render "index"
+      else 
+        if @user.save 
+          MailerMailer.new_user(@user).deliver
+          flash[:notice] = "Saved!"
+          flash[:color] = "valid"
+
+          role_fields.each do |rf|
+            if UserField.exists?(:user_id => @user.id, :name => rf.name.capitalize)
+              user_field = UserField.find_by(:user_id => @user.id, :name => rf.name.capitalize)
+              user_field.update_attribute(:value, params[:user][rf.name.capitalize])
+            else
+              user_field = UserField.create({:user_id => @user.id, :name => rf.name.capitalize, :value => params[:user][rf.name.capitalize]})
+              user_field.save
+            end
+          end
+
+          redirect_to users_path
+        else
+          flash[:notice] = "Invalid form!"
+          flash[:color] = "invalid"
+          render "index"
+        end
       end
     end
   end

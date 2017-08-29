@@ -17,6 +17,16 @@ class MessagesController < ApplicationController
 		end
 	end
 
+	def reply
+		@rep = Message.find(params[:id])
+		@message = Message.new
+	end
+
+	def set_read
+		@message = Message.find(params[:id])
+		@message.update_attribute(:status, 'read')
+	end
+
 	def index
 		@outbox = Message.where(:sender_id => @current_user.id)
 		@inbox = Message.where(:recipient_id => @current_user.id)
@@ -31,7 +41,7 @@ class MessagesController < ApplicationController
 			redirect_to root_path
 		end
 		if @recipient == @current_user
-			@message.update_attribute(:status, 'received') 
+			@message.update_attribute(:status, 'read') 
 		end
 	end
 

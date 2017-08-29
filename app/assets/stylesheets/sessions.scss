@@ -58,3 +58,32 @@
 
 .left-addon input  { padding-left:  40px; }
 .right-addon input { padding-right: 40px; }
+
+.boxShaderedCont{
+	min-width: 600px;
+	width: 100%;
+	height: auto;
+	background: rgba(0, 0, 0, .3);
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, .9);
+}
+
+.midle-delimiter{
+	border-left: 2px solid #a8c4af;
+	height: auto;
+	width: 5%;
+	margin-left: 4%;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.container-45-left{	
+	width: 45%;
+	height: auto;
+	margin-bottom: 30px;
+}
+
+.container-45-right{
+	width: 45%;
+	height: auto;
+	margin-bottom: 30px;
+}

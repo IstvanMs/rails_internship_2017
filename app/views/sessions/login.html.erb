@@ -23,7 +23,14 @@
 			<button type="submit" class="btn btn-lg btn-success btn-block">
 		  		<i class="glyphicon glyphicon-share"></i> Sign in
 			</button>
-			<h5 align='right'><%= link_to 'Forgot password?', sessions_forgot_password_path, :style => 'color: white;' %></h5>
+			<div class='row'>
+				<div class='col-xs-6'>
+					<h5 align='left'><%= link_to 'Company Sign Up', sessions_sign_up_path, :style => 'color: white;' %></h5>
+				</div>
+				<div class='col-xs-6'>
+					<h5 align='right'><%= link_to 'Forgot password?', sessions_forgot_password_path, :style => 'color: white;' %></h5>
+				</div>
+			</div>
 		<% end %>
 	</div>
 </div>

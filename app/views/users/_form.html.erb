@@ -57,10 +57,10 @@
 	    <% end %>
 	    </div>
 	<% end %>
-	<% if @user.errors.any? %>
+	<% if @errors.present? %>
 	    <div class="alert alert-warning" class="Signup_Errors">
-	    <% for message_error in @user.errors.full_messages %>
-	      <font color="red"><div class="notice"><li><%= message_error %></li></div></font>
+	    <% @errors.each do |error| %>
+	      <font color="red"><div class="notice"><li><%= error[0] + ' ' + error[1] %></li></div></font>
 	    <% end %>
 	    </div>
 	<% end %>

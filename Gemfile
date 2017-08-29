@@ -35,6 +35,8 @@ gem 'bootstrap-datepicker-rails'
 
 gem 'jquery-rails'
 
+gem 'paypal_adaptive'
+
 gem 'will_paginate'
 
 gem 'bootstrap-sass', '~> 3.2.0'

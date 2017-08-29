@@ -3,6 +3,12 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
+  match 'payments/ipn_notification', :to => 'sessions#ipn_notification', :via => [:get, :post]
+
+  match 'messages/set_read', :to => 'messages#set_read', :via => [:get, :post]
+
+  match 'messages/reply', :to => 'messages#reply', :via => [:get, :post]
+
   match 'users/profile', :to => 'users#profile', :via => [:get, :post]
 
   match 'users/get_user_fields', :to => 'users#get_user_fields', :via => [:get, :post]
@@ -24,6 +30,10 @@ Rails.application.routes.draw do
   match 'work_days/start_work_day', :to => 'work_days#start_work_day' , :via => [:get, :post]
 
   match 'work_days/finish_work_day', :to => 'work_days#finish_work_day' , :via => [:get, :post]
+
+  match 'sessions/create_company', :to => 'sessions#create_company' , :via => [:get, :post]
+
+  match 'sessions/sign_up', :to => 'sessions#sign_up' , :via => [:get, :post]
 
   match 'sessions/profile', :to => 'sessions#profile' , :via => [:get, :post]
 

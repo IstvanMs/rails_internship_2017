@@ -1,7 +1,7 @@
 class Task < ApplicationRecord
   belongs_to :project
-  belongs_to :milestone
   validates :title, :presence => true, :uniqueness => true, :length => { :in => 1..20 }
+  validates :milestone_id, presence: true, allow_nil: true
   belongs_to :user, :foreign_key => 'assigned_user'
   has_many :comments, dependent: :destroy
 

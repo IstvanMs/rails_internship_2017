@@ -1,3 +1,4 @@
+<% @milestones = Milestone.where(:project_id => @project) %>
 <center><div class="panel panel-default">
       <%= form_for @task do |f| %>
         <div class="panel-body">
@@ -18,6 +19,10 @@
           <h4>
             <%= f.label "Assigned User" %><br>
             <%= f.select :assigned_user, options_for_select(@users.map{ |u| [u.username, u.id] }, selected_key = f.object.assigned_user) %>
+          </h4>
+          <h4>
+            <%= f.label "Milestone" %><br>
+            <%= f.select :milestone_id, options_from_collection_for_select(@milestones, "id", "name", @task.milestone_id), :include_blank => true %>
           </h4>
             <%= f.hidden_field :intervals, :value => "[]" %>
             <%= f.hidden_field :status, :value => "Not-started" %>

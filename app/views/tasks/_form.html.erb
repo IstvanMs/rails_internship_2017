@@ -1,3 +1,4 @@
+<% @milestones = Milestone.where(:project_id => @project) %>
 <div class="row"> 
     <center><div class="panel panel-default">
       <%= form_for([@project, @project.tasks.build]) do |f| %>
@@ -20,6 +21,11 @@
             <%= f.label "Assigned User" %><br>
             <%= f.select :assigned_user, options_for_select(@users.map{ |u| [u.username, u.id] }, selected_key = f.object.assigned_user) %>
           </p>
+
+          <p>
+            <%= f.label "Milestone" %><br>
+            <%= f.select :milestone_id, options_from_collection_for_select(@milestones, "id", "name"), :include_blank => true  %>
+          </p>
             <%= f.hidden_field :intervals, :value => "[]" %>
             <%= f.hidden_field :status, :value => "Not-started" %>
             <%= f.hidden_field :company_id, :value => @company.id %>
@@ -32,13 +38,6 @@
             </button>
           </div>
       <% end %>
-
-      <!--"INVALID FORM" BEFORE ERRORS-->
-      <!--<% if flash[:notice] %>
-        <div class="alert alert-warning">
-            <font color="red"><div class="notice"><%= flash[:notice] %></div></font>
-        </div>
-      <% end %>-->
 
       <% if @task != nil %>
         <% if @task.errors.any? %>

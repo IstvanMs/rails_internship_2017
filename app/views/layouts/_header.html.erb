@@ -98,11 +98,37 @@
                 </div>
                 <div class="modal-body" align='center'>
                     <% messages.each do |message| %>
-                        <h5><%= link_to message.subject, message_path(message.id) %></h5>
+                        <div class="dropdown">
+                            <a data-target="#" href="page.html" data-toggle="dropdown" class="dropdown-toggle" onclick='setRead(<%= message.id %>)'><%= message.subject %><b class="caret"></b></a>
+                            <div class="dropdown-menu">
+                                <div class="panel-body" align='center' style='width: 300px;'>
+                                    <% sender = User.find(message.sender_id) %>
+                                    <% recipient = User.find(message.recipient_id) %>
+                                    <h4><b>Sender:</b></h4>
+                                    <h4><%= link_to sender.username, users_profile_path(:id => sender.id) %></h4><br>
+
+                                    <h4><b>Recipient:</b></h4>
+                                    <h4><%= link_to recipient.username, users_profile_path(:id => recipient.id) %></h4><br>
+
+                                    <h4><b>Subject:</b></h4>
+                                    <h4><%= message.subject %></h4></br>
+
+                                    <h4><b>Content:</b></h4>
+                                    <h4><%= message.content %></h4></br>
+                                </div>
+                                <center><h5><%= button_to 'Reply', messages_reply_path(:id => message.id), :class => 'ourButton' %></h5></center>
+                            </div>
+                        </div>
                     <% end %>
                 </div>
             </div>
         </div>
     </div>
 
-        
+<script type="text/javascript">
+    function setRead(id){
+        $.ajax({
+            url: "/messages/set_read/?id=" + id
+        });
+    }
+</script>
