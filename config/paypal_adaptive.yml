@@ -1,23 +1,23 @@
 development:
   environment: "sandbox"
-  username: "meszarosistvan97-facilitator_api1.gmail.com"
-  password: "QKACGBS49HYSBVDU"
-  signature: "AFcWxV21C7fd0v3bYYYRCpSSRl31AgnnB.ZvgVrCNTjFBt-pkIoc4Eow"
+  username: "artsoftPm_api1.business.com"
+  password: "8KSTGGPBPL4WLFXH"
+  signature: "AFcWxV21C7fd0v3bYYYRCpSSRl31AmA8V.iyHwboZRLjPVUWiUl0wLfw"
   application_id: "APP-80W284485P519543T"
   api_cert_file:
 
 test:
   environment: "sandbox"
-  username: "meszarosistvan97-facilitator_api1.gmail.com"
-  password: "QKACGBS49HYSBVDU"
-  signature: "AFcWxV21C7fd0v3bYYYRCpSSRl31AgnnB.ZvgVrCNTjFBt-pkIoc4Eow"
+  username: "artsoftPm_api1.business.com"
+  password: "8KSTGGPBPL4WLFXH"
+  signature: "AFcWxV21C7fd0v3bYYYRCpSSRl31AmA8V.iyHwboZRLjPVUWiUl0wLfw"
   application_id: "APP-80W284485P519543T"
   api_cert_file: "/path/to_cert"
 
 production:
   environment: "production"
-  username: "meszarosistvan97-facilitator_api1.gmail.com"
-  password: "QKACGBS49HYSBVDU"
-  signature: "AFcWxV21C7fd0v3bYYYRCpSSRl31AgnnB.ZvgVrCNTjFBt-pkIoc4Eow"
+  username: "artsoftPm_api1.business.com"
+  password: "8KSTGGPBPL4WLFXH"
+  signature: "AFcWxV21C7fd0v3bYYYRCpSSRl31AmA8V.iyHwboZRLjPVUWiUl0wLfw"
   application_id: "APP-80W284485P519543T"
   api_cert_file: "/path/to_cert"

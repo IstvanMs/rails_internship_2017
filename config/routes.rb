@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
-  match 'payments/ipn_notification', :to => 'sessions#ipn_notification', :via => [:get, :post]
+  match 'payments/return/(*company_id)', :to => 'sessions#return', :via => [:get, :post]
+
+  match 'payments/cancel/(*company_id)', :to => 'sessions#cancel', :via => [:get, :post]
+
+  match 'payments/ipn_notification/(*company_id)', :to => 'sessions#ipn_notification', :via => [:get, :post]
 
   match 'messages/set_read', :to => 'messages#set_read', :via => [:get, :post]
 

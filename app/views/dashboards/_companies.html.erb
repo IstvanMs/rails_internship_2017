@@ -12,8 +12,11 @@
 
   <div class='container'>
     <div class='row' style="background-color: #55b25d;" align='center'>
-      <div class='col-xs-6'>
+      <div class='col-xs-4'>
         <center><h4>Company</h4></center>
+      </div>
+      <div class='col-xs-2'>
+        <center><h4>Status</h4></center>
       </div>
       <div class='col-xs-2'>
         <center><h4></h4></center>
@@ -30,8 +33,13 @@
 
             <div class='row' style='background-color: #c9ffd2; border-bottom: 1px solid #e0e0e0;'>
 
-              <div class='col-xs-6'>
+              <div class='col-xs-4'>
                 <center><h5><%= company.name %></h5></center>
+              </div>
+
+
+              <div class='col-xs-2'>
+                <center><h5><% if Subscription.exists?(:company_id => company.id)%><%= Subscription.find_by(:company_id => company.id).status %><% else %>older versio<% end %></h5></center>
               </div>
 
               <div class='col-xs-2'>

@@ -47,25 +47,82 @@ class SessionsController < ApplicationController
     if @errors.length > 0
       render 'sign_up'
     else
-      pay_request = PaypalAdaptive::Request.new
+      @company = Company.new({:name => params[:company_name]})
 
-      data = {
-      "returnUrl" => "http://localhost:3000/", 
-      "requestEnvelope" => {"errorLanguage" => "en_US"},
-      "currencyCode"=>"USD",  
-      "receiverList"=>{"receiver"=>[{"email"=>"meszarosistvan97-facilitator@gmail.com", "amount"=>"99.00"}]},
-      "cancelUrl"=>"http://localhost:3000/",
-      "actionType"=>"PAY",
-      "ipnNotificationUrl"=>"http://localhost:3000/payments/ipn_notification"
-      }
+      if @company.save
+        @role = Role.new({:role_name => 'admin', :company_id => @company.id, :dashboard => 'admin', :permissions => '00233'})
+        @role.save
+        @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
 
-      pay_response = pay_request.pay(data)
-      puts pay_response
+        if @user.save
+          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-veryfied'})
+          if @subscription.save
+            @payment = Payment.new({:subscription_id => @subscription.id, :amount => 0})
+            if @payment.save
+              pay_request = PaypalAdaptive::Request.new
+
+              data = {
+              "returnUrl" => request.base_url + '/payments/return/' + @company.id.to_s,
+              "requestEnvelope" => {"errorLanguage" => "en_US"},
+              "currencyCode"=>"USD",  
+              "receiverList"=>{"receiver"=>[{"email"=>"artsoftPm@business.com", "amount"=>"99.00"}]},
+              "cancelUrl"=>request.base_url + '/payments/cancel/' + @company.id.to_s,
+              "actionType"=>"PAY",
+              "ipnNotificationUrl" => request.base_url + "/payments/ipn_notification/" + @company.id.to_s
+              }
+
+              pay_response = pay_request.pay(data)
+              if pay_response.success?
+                if pay_response['paymentExecStatus'] == 'CREATED'
+                  paykey = pay_response['payKey']
+                  redirect_to 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=' + paykey
+                else
+                  puts 'create error!'
+                end
+              else
+                puts 'success error!'
+              end
+            else
+              @company.destroy
+              @errors['Payment'] = ' error in save!'
+              render sign_up
+            end
+          else
+            @company.destroy
+            @errors['Subscription'] = ' error in save!'
+            render sign_up
+          end
+        else
+          @company.destroy
+          @errors['User'] = ' error in save!'
+          render sign_up
+        end
+      else
+        @errors['Company'] = ' error in save!'
+        render sign_up
+      end
     end
   end
 
+  def return
+    @company = Company.find(params[:company_id])
+  end
+
+  def cancel
+    @company = Company.find(params[:company_id])
+    @company.destroy
+  end
+
   def ipn_notification
-    puts params.inspect
+    if params[:status] == 'COMPLETED'
+      if Company.exists?(:id => params[:company_id])
+        @company = Company.find(params[:company_id])
+        @subscription = Subscription.find_by(:company_id => @company.id)
+        @subscription.update_attribute(:status, 'veryfied')
+        @payments = Payment.where(:subscription_id => @subscription.id).order(:created_at => 'desc').first
+        @payments.update_attribute(:amount, 99)
+      end
+    end
   end
 
   def reset
@@ -132,7 +189,36 @@ class SessionsController < ApplicationController
 
   	if authorized_user
   		session[:user_id] = authorized_user.id
-  		redirect_to(:action => 'home')
+      if authorized_user.type != 'Superuser'
+        role = Role.find(authorized_user.role_id)
+        subscription = Subscription.find_by(:company_id => authorized_user.company_id)
+        payments = Payment.where(:subscription_id => subscription.id).order(:created_at => 'desc').first
+
+        if subscription.status != 'suspended'
+          if DateTime.now > payments.created_at.next_month && subscription.status == 'not-veryfied'
+            subscription.update_attribute(:status, 'suspended')
+            flash[:notice] = "Your company has been suspended!"
+            flash[:color] = "invalid"
+            redirect_to :action => 'logout'
+          else 
+            if role.role_name == 'admin'
+              if subscription
+                if subscription.status == 'not-veryfied'
+                  superuser = User.find_by(:type => 'Superuser')
+                  message = Message.new({:sender_id => superuser.id, :recipient_id => authorized_user.id, :subject => 'Payment validation', :content => 'Please verify your payment transaction!', :status => 'sent'})
+                  message.save
+                end
+              end
+            end
+          end
+        else
+          flash[:notice] = "Your company has been suspended!"
+          flash[:color] = "invalid"
+          redirect_to :action => 'logout'
+        end
+      else
+  		  redirect_to(:action => 'home')
+      end
   	else
   		flash[:notice] = "Invalid username or password!"
   		flash[:color] = "invalid"

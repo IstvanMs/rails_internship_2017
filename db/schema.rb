@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170828131508) do
+ActiveRecord::Schema.define(version: 20170830112124) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -69,6 +69,14 @@ ActiveRecord::Schema.define(version: 20170828131508) do
     t.index ["company_id"], name: "company_id"
   end
 
+  create_table "payments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "subscription_id"
+    t.integer "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_payments_on_subscription_id"
+  end
+
   create_table "project_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.bigint "user_id"
     t.bigint "project_id"
@@ -106,6 +114,14 @@ ActiveRecord::Schema.define(version: 20170828131508) do
     t.datetime "updated_at", null: false
     t.string "permissions", limit: 20
     t.index ["company_id"], name: "index_roles_on_company_id"
+  end
+
+  create_table "subscriptions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "company_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_subscriptions_on_company_id"
   end
 
   create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -164,8 +180,10 @@ ActiveRecord::Schema.define(version: 20170828131508) do
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
   add_foreign_key "milestones", "projects"
+  add_foreign_key "payments", "subscriptions"
   add_foreign_key "role_fields", "roles"
   add_foreign_key "roles", "companies"
+  add_foreign_key "subscriptions", "companies"
   add_foreign_key "tasks", "projects"
   add_foreign_key "user_fields", "users"
 end
