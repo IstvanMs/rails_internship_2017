@@ -68,9 +68,10 @@
 	</div>
 	<% end %>
 </div>
-<div class='row'>
-	<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
-</div>
+
+	<div class='row' align='left' style='margin-top: 100px;'>
+  		<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Back</i></button>".html_safe, url_for(:back)%>
+	</div>
 
 <div id="addUserToProject" class="modal fade">
     <div class="modal-dialog">

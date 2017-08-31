@@ -39,7 +39,7 @@
 
 
               <div class='col-xs-2'>
-                <center><h5><% if Subscription.exists?(:company_id => company.id)%><%= Subscription.find_by(:company_id => company.id).status %><% else %>older versio<% end %></h5></center>
+                <center><h5><% if Subscription.exists?(:company_id => company.id)%><%= Subscription.find_by(:company_id => company.id).status %><% else %>older version<% end %></h5></center>
               </div>
 
               <div class='col-xs-2'>

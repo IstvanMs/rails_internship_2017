@@ -4,7 +4,7 @@
       <% if current_page?(controller: 'dashboards', action: 'index')%>
         <%= link_to '(View all tasks)',{ :controller => 'tasks', :action => 'index'}, :style => 'color: #d2efeb;' %></center>
       <% end %>
-      <% if current_page?(controller: 'dashboards', action: 'index') && (@role.permissions[1].to_f / 2) % 2 == 1%>
+      <% if current_page?(controller: 'dashboards', action: 'index') && (@role.permissions[1].to_i / 2) % 2 == 1%>
       <div class='row'>
         <div class="dropdown pull-right">
             <button data-toggle="dropdown" class="ourButton dropdown-toggle" style='margin-right: 10px;'><i class="glyphicon glyphicon-plus ourButton-addon">Projects<b class="caret"></b></i></button>
@@ -132,7 +132,7 @@
             -
             <% end %>
           </h5></div>
-          <% if (@role.permissions[1].to_f / 2) % 2 == 1 %>
+          <% if (@role.permissions[1].to_i / 2) % 2 == 1 %>
             <div class='col-xs-3'>
             <h5 class='pull-right'><%= link_to 'Show', task_path(task) %> | 
               <%= link_to 'Edit', edit_task_path(task) %> | 
@@ -141,12 +141,12 @@
               data: { confirm: 'Are you sure?' } %></h5>
             </div>
           <% end %>
-          <% if @role.permissions[1].to_f > 0 && @role.permissions[1].to_f % 2 == 0 && (@role.permissions[1].to_f / 2) % 2 != 1%>
+          <% if @role.permissions[1].to_i > 0 && @role.permissions[1].to_i % 2 == 0 && (@role.permissions[1].to_i / 2) % 2 != 1%>
             <div class='col-xs-3'>
             <h5 class='pull-right'><%= link_to 'Show', task_path(task) %></h5>
             </div>
           <% end %>
-          <% if @role.permissions[1].to_f % 2 == 1 %>
+          <% if @role.permissions[1].to_i % 2 == 1 %>
             <div class='col-xs-3'>
               <div class='row' style="white-space: nowrap">
                 <div class='col-xs-3'>

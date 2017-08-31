@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170830112124) do
+ActiveRecord::Schema.define(version: 20170831073904) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(version: 20170830112124) do
     t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "transID"
+    t.date "due_date"
     t.index ["subscription_id"], name: "index_payments_on_subscription_id"
   end
 

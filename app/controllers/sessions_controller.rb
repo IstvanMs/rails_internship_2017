@@ -8,9 +8,11 @@ class SessionsController < ApplicationController
 
   def sign_up
     @values = {}
+    @values_trial = {}
   end
 
   def create_company
+    @values_trial = {}
     @errors = Hash.new
     if params[:company_name].blank?
       @errors['Company name'] = " can't be blank!"
@@ -55,9 +57,9 @@ class SessionsController < ApplicationController
         @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
 
         if @user.save
-          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-veryfied'})
+          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-verified'})
           if @subscription.save
-            @payment = Payment.new({:subscription_id => @subscription.id, :amount => 0})
+            @payment = Payment.new({:subscription_id => @subscription.id, :amount => 0, :due_date => DateTime.now.next_month, :transID => nil})
             if @payment.save
               pay_request = PaypalAdaptive::Request.new
 
@@ -104,6 +106,80 @@ class SessionsController < ApplicationController
     end
   end
 
+  def trial
+    @values = {}
+    @errors_trial = Hash.new
+    if params[:company_name].blank?
+      @errors_trial['Company name'] = " can't be blank!"
+    end
+    if Company.exists?(:name => params[:company_name])
+      @errors_trial['Company name'] = ' already taken!'
+    end
+    if params[:username].blank?
+      @errors_trial['Username'] = " can't be blank!"
+    end
+    if User.exists?(:username => params[:username])
+      @errors_trial['Username'] = ' already taken!'
+    end
+    if params[:password].blank?
+      @errors_trial['Password'] = " can't be blank!"
+    end
+    if params[:password2].blank?
+      @errors_trial['Password confimartion'] = " can't be blank!"
+    end
+    if params[:email].blank?
+      @errors_trial['Email'] = " can't be blank!"
+    end
+    if params[:password] != params[:password2]
+      @errors_trial['Password'] = " confirmation doesn't match!"
+    end
+    if params[:email].present?
+      if !params[:email].match(/\A.+@.+\.+.+\z/)
+        @errors_trial['Email'] = " invalid format!"
+      end
+    end
+  
+    @values_trial = params 
+
+    if @errors_trial.length > 0
+      render 'sign_up'
+    else
+     @company = Company.new({:name => params[:company_name]})
+
+      if @company.save
+        @role = Role.new({:role_name => 'admin', :company_id => @company.id, :dashboard => 'admin', :permissions => '00233'})
+        @role.save
+        @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
+
+        if @user.save
+          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-verified'})
+          if @subscription.save
+            @payment = Payment.new({:subscription_id => @subscription.id, :amount => 0, :due_date => DateTime.now.next_day, :transID => nil})
+            if @payment.save
+              render 'trial'
+            else
+              @company.destroy
+              @errors['Payment'] = ' error in save!'
+              render sign_up
+            end
+          else
+            @company.destroy
+            @errors['Subscription'] = ' error in save!'
+            render sign_up
+          end
+        else
+          @company.destroy
+          @errors['User'] = ' error in save!'
+          render sign_up
+        end
+      else
+        @company.destroy
+        @errors['Company'] = ' error in save!'
+        render sign_up
+      end
+    end
+  end
+
   def return
     @company = Company.find(params[:company_id])
   end
@@ -114,15 +190,40 @@ class SessionsController < ApplicationController
   end
 
   def ipn_notification
-    if params[:status] == 'COMPLETED'
-      if Company.exists?(:id => params[:company_id])
-        @company = Company.find(params[:company_id])
-        @subscription = Subscription.find_by(:company_id => @company.id)
-        @subscription.update_attribute(:status, 'veryfied')
-        @payments = Payment.where(:subscription_id => @subscription.id).order(:created_at => 'desc').first
-        @payments.update_attribute(:amount, 99)
-      end
+    par = params
+    response = validate_IPN(request.raw_post)
+    case response
+      when "VERIFIED"
+        if params[:status] == 'COMPLETED' && Company.exists?(:id => par[:company_id])
+          company = Company.find(par[:company_id])
+          subscription = Subscription.find_by(:company_id => company.id)
+          if Payment.exists?(:subscription_id => subscription.id, :transID => nil)
+            payment = Payment.find_by(:subscription_id => subscription.id, :transID => nil)
+            payment.update_attribute(:amount, 99)
+            payment.update_attribute(:transID, params[:transaction]['0']['.id'])
+            subscription.update_attribute(:status, 'verified')
+          end
+        end
+      when "INVALID"
+        puts 'Invalid IPN!'
+      else
+        puts 'Validation error!'
     end
+    head :no_content
+
+  end
+
+  def validate_IPN(raw)
+    uri = URI.parse('https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_notify-validate')
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.open_timeout = 60
+    http.read_timeout = 60
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.use_ssl = true
+    response = http.post(uri.request_uri, raw,
+                         'Content-Length' => "#{raw.size}",
+                         'User-Agent' => "My custom user agent"
+                       ).body
   end
 
   def reset
@@ -192,32 +293,47 @@ class SessionsController < ApplicationController
       if authorized_user.type != 'Superuser'
         role = Role.find(authorized_user.role_id)
         subscription = Subscription.find_by(:company_id => authorized_user.company_id)
-        payments = Payment.where(:subscription_id => subscription.id).order(:created_at => 'desc').first
+        if subscription
+          payments = Payment.where(:subscription_id => subscription.id).order(:due_date => 'desc').first
 
-        if subscription.status != 'suspended'
-          if DateTime.now > payments.created_at.next_month && subscription.status == 'not-veryfied'
-            subscription.update_attribute(:status, 'suspended')
-            flash[:notice] = "Your company has been suspended!"
-            flash[:color] = "invalid"
-            redirect_to :action => 'logout'
-          else 
-            if role.role_name == 'admin'
-              if subscription
-                if subscription.status == 'not-veryfied'
-                  superuser = User.find_by(:type => 'Superuser')
-                  message = Message.new({:sender_id => superuser.id, :recipient_id => authorized_user.id, :subject => 'Payment validation', :content => 'Please verify your payment transaction!', :status => 'sent'})
-                  message.save
+          if subscription.status != 'suspended'
+            if DateTime.now > payments.due_date 
+              if subscription.status == 'not-verified'
+                subscription.update_attribute(:status, 'suspended')
+                flash[:notice] = "Your company has been suspended!"
+                flash[:color] = "invalid"
+                redirect_to :action => 'logout'
+                return
+              end
+              if subscription.status == 'verified'
+                subscription.update_attribute(:status, 'not-verified')
+                superuser = User.find_by(:type => 'Superuser')
+                message = Message.new({:sender_id => superuser.id, :recipient_id => authorized_user.id, :subject => 'Payment validation', :content => 'Please verify your payment transaction!', :status => 'sent'})
+                message.save
+              end
+            else 
+              if role.role_name == 'admin'
+                if subscription
+                  if subscription.status == 'not-verified'
+                    superuser = User.find_by(:type => 'Superuser')
+                    message = Message.new({:sender_id => superuser.id, :recipient_id => authorized_user.id, :subject => 'Payment validation', :content => 'Please verify your payment transaction!', :status => 'sent'})
+                    message.save
+                  end
                 end
               end
             end
+          else
+            flash[:notice] = "Your company has been suspended!"
+            flash[:color] = "invalid"
+            redirect_to :action => 'logout'
+            return
           end
-        else
-          flash[:notice] = "Your company has been suspended!"
-          flash[:color] = "invalid"
-          redirect_to :action => 'logout'
         end
+        redirect_to(:action => 'home')
+        return
       else
   		  redirect_to(:action => 'home')
+        return
       end
   	else
   		flash[:notice] = "Invalid username or password!"
