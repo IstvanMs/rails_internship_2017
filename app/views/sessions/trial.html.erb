@@ -1,0 +1,16 @@
+<div class='container'>
+	<div class='boxShaderedCont'>
+		<div class='row'>
+			<center><h1><font style='font-style: oblique;'>ArtsoftPM</font></h1></center>
+		</div>
+		<div class='row' align='center'>
+			<h4>Welcome in our application!</h4>
+			<h4><%= @company.name %> has been created for one day test period.</h4>
+			<h4>Now you can login with your account.</h4><br>
+			<h4>Trial time due date: <%= @company.created_at.next_month %></h4>
+		</div>
+		<span class="bottomleft">
+			<%= link_to "<button class='backButton'><i class='glyphicon glyphicon-chevron-left backButton-addon'>Login page</i></button>".html_safe, root_path%>
+		</span>
+	</div>
+</div>
