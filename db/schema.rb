@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170831073904) do
+ActiveRecord::Schema.define(version: 20170901131849) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 20170831073904) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "profile_id"
     t.index ["company_id"], name: "index_subscriptions_on_company_id"
   end
 

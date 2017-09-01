@@ -57,33 +57,29 @@ class SessionsController < ApplicationController
         @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
 
         if @user.save
-          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-verified'})
+          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-verified', :profile_id => nil})
           if @subscription.save
             @payment = Payment.new({:subscription_id => @subscription.id, :amount => 0, :due_date => DateTime.now.next_month, :transID => nil})
             if @payment.save
-              pay_request = PaypalAdaptive::Request.new
+                
+              ppr = PayPal::Recurring.new({
+                :return_url   => request.base_url + '/payments/return/' + @company.id.to_s,
+                :cancel_url   => request.base_url + '/payments/cancel/' + @company.id.to_s,
+                :ipn_url      => request.base_url + '/payments/ipn_notification/' + @company.id.to_s,
+                :description  => "Awesome - Monthly Subscription",
+                :amount       => "99.00",
+                :currency     => "USD"
+              })
 
-              data = {
-              "returnUrl" => request.base_url + '/payments/return/' + @company.id.to_s,
-              "requestEnvelope" => {"errorLanguage" => "en_US"},
-              "currencyCode"=>"USD",  
-              "receiverList"=>{"receiver"=>[{"email"=>"artsoftPm@business.com", "amount"=>"99.00"}]},
-              "cancelUrl"=>request.base_url + '/payments/cancel/' + @company.id.to_s,
-              "actionType"=>"PAY",
-              "ipnNotificationUrl" => request.base_url + "/payments/ipn_notification/" + @company.id.to_s
-              }
+              response = ppr.checkout
 
-              pay_response = pay_request.pay(data)
-              if pay_response.success?
-                if pay_response['paymentExecStatus'] == 'CREATED'
-                  paykey = pay_response['payKey']
-                  redirect_to 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=' + paykey
-                else
-                  puts 'create error!'
-                end
+              if response.valid?
+                redirect_to response.checkout_url
               else
-                puts 'success error!'
+                @company.destroy
+                @errors['Paypal'] = 'recurring error!'
               end
+
             else
               @company.destroy
               @errors['Payment'] = ' error in save!'
@@ -152,7 +148,7 @@ class SessionsController < ApplicationController
         @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
 
         if @user.save
-          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-verified'})
+          @subscription = Subscription.new({:company_id => @company.id, :status => 'not-verified', :profile_id => nil})
           if @subscription.save
             @payment = Payment.new({:subscription_id => @subscription.id, :amount => 0, :due_date => DateTime.now.next_day, :transID => nil})
             if @payment.save
@@ -182,6 +178,48 @@ class SessionsController < ApplicationController
 
   def return
     @company = Company.find(params[:company_id])
+    ppr = PayPal::Recurring.new({
+      :token       => params[:token],
+      :payer_id    => params[:PayerID],
+      :amount      => "99.00",
+      :description => "Awesome - Monthly Subscription"
+    })
+    response = ppr.request_payment
+    if response.approved?
+     if response.completed?
+      ppr = PayPal::Recurring.new({
+        :amount      => "99.00",
+        :currency    => "USD",
+        :description => "Awesome - Monthly Subscription",
+        :ipn_url     => request.base_url + '/payments/ipn_notification/' + @company.id.to_s,
+        :frequency   => 1,
+        :token       => params[:token],
+        :period      => :monthly,
+        :reference   => "1234",
+        :payer_id    => params[:PayerID],
+        :start_at    => Time.now,
+        :failed      => 1,
+        :outstanding => :next_billing
+      })
+
+      response = ppr.create_recurring_profile
+      subscription = Subscription.find_by(:company_id => params[:company_id])
+      subscription.update_attribute(:profile_id, response.profile_id)
+      if Payment.exists?(:subscription_id => subscription.id, :transID => nil)
+        payment = Payment.find_by(:subscription_id => subscription.id, :transID => nil)
+        payment.update_attribute(:amount, 99)
+        payment.update_attribute(:transID, 'first_trans')
+        subscription.update_attribute(:status, 'verified')
+      end
+    else
+      @company.destroy
+      render 'cancel'
+    end
+  else
+    @company.destroy
+    render 'cancel'
+  end
+    
   end
 
   def cancel

@@ -35,7 +35,7 @@ gem 'bootstrap-datepicker-rails'
 
 gem 'jquery-rails'
 
-gem 'paypal_adaptive'
+gem 'paypal-recurring'
 
 gem 'will_paginate'
 
