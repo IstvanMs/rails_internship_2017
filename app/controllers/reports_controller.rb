@@ -1,6 +1,5 @@
  class ReportsController < ApplicationController
-  	before_action :authenticate_user
-	before_action :manager_user, :only => [:index, :by_user, :by_project, :get_gantt]
+  	before_action :authenticate_user 
 
 	def index
 	    role = Role.find(@current_user.role_id)
@@ -25,7 +24,7 @@
 		if params[:year] != nil && params[:month] != nil && params[:user] != nil
 			@current_filter = {'year' => params[:year], 'month' => params[:month], 'user' => User.find(params[:user]), 'len' => Time.days_in_month(Date::MONTHNAMES.index(params[:month]))}
 		else
-			@current_filter = {'year' => @years[20], 'month' => Date::MONTHNAMES[Time.now.month] , 'user' => @users.first, 'len' => Time.days_in_month(Date::MONTHNAMES.index(@months[0]))}
+			@current_filter = {'year' => @years[20], 'month' => Date::MONTHNAMES[Time.now.month] , 'user' => @users.first, 'len' => Time.days_in_month(Time.now.month)}
 		end
 		@data = Report.generate_data(@current_filter)
 
