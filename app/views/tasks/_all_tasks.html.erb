@@ -149,9 +149,11 @@
           <% if @role.permissions[1].to_i % 2 == 1 %>
             <div class='col-xs-3'>
               <div class='row' style="white-space: nowrap">
+                <% if (@role.permissions[1].to_i / 2) % 2 != 1 %>
                 <div class='col-xs-3'>
                   <h5><%= link_to 'Show', task_path(task) %></h5>
                 </div>
+                <% end %>
                 <div class='col-xs-3'>
                   <%= button_to tasks_start_task_path(:task => task), {:class => 'btn btn-md btn-success', :disabled => (@work_day && @work_day.status != 'Started') || !@work_day || task.status == 'Started' || task.status == 'Finished' } do%>
                    <i class="glyphicon glyphicon-play"></i>
@@ -163,7 +165,7 @@
                   <% end %>
                 </div>
                 <div class='col-xs-3'>
-                  <%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => task.status == 'Finished' || !@work_day || task.status == 'Not-started'} do%>
+                  <%= button_to tasks_finish_task_path(:task => task), {:class => 'btn btn-md btn-danger',  :disabled => (@work_day && @work_day.status != 'Started') || task.status == 'Finished' || !@work_day || task.status == 'Not-started'} do%>
                   <i class="glyphicon glyphicon-stop"></i>
                   <% end %>
                 </div>
