@@ -1,4 +1,5 @@
 class AdvancedSearchesController < ApplicationController
+  before_action :authenticate_user
 
   def new
     @advanced_search = AdvancedSearch.new

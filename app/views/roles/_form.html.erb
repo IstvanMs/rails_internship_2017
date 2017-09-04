@@ -77,6 +77,16 @@
 							</td>
 							<td></td>
 			            </tr>
+			            <tr>
+			                <td>Calendar</td>
+			                <td align='center'>
+									<input type="checkbox" id="calendar1" name="calendar1">
+							</td>
+							<td align='center'>
+									<input type="checkbox" id="calendar2" name="calendar2">
+							</td>
+							<td></td>
+			            </tr>
 			        </tbody>
 			    </table>
 			</div>
@@ -107,6 +117,7 @@
 			var n = parseInt(perm[2]);
 			var u = parseInt(perm[3]);
 			var r = parseInt(perm[4]);
+			var c = parseInt(perm[5]);
 			if( p % 2 == 1)
 				$('#project2').prop('checked', true);
 			if( p > 1)
@@ -123,6 +134,10 @@
 				$('#report2').prop('checked', true);
 			if( r > 1)
 				$('#report1').prop('checked', true);
+			if( c % 2 == 1)
+				$('#calendar2').prop('checked', true);
+			if( c > 1)
+				$('#calendar1').prop('checked', true);
 			if( t % 2 == 1)
 				$('#task3').prop('checked', true);
 			if( t == 2 || t == 3 || t == 6 || t == 7)
@@ -138,6 +153,7 @@
 		var n = 0;
 		var u = 0;
 		var r = 0;
+		var c = 0;
 		if($("#project1").is(':checked'))
 		    p += 2;
 		if($("#project2").is(':checked'))
@@ -158,6 +174,11 @@
 		    	t = 5;
 		    }
 
+		if($("#calendar1").is(':checked'))
+		    c += 2;
+		if($("#calendar2").is(':checked'))
+		    c = 3;
+
 		if($("#user1").is(':checked'))
 		    u += 2;
 		if($("#user2").is(':checked'))
@@ -172,7 +193,7 @@
 		    r += 2;
 		if($("#report2").is(':checked'))
 		    r = 3;
-		var perm = p.toString()+t.toString()+n.toString()+u.toString()+r.toString();
+		var perm = p.toString()+t.toString()+n.toString()+u.toString()+r.toString()+c.toString();
 		$('#role_permissions').val(perm);
 		if( perm ){
 			if( p % 2 == 1)
@@ -191,6 +212,10 @@
 				$('#report2').prop('checked', true);
 			if( r > 1)
 				$('#report1').prop('checked', true);
+			if( c % 2 == 1)
+				$('#calendar2').prop('checked', true);
+			if( c > 1)
+				$('#calendar1').prop('checked', true);
 			if( t % 2 == 1)
 				$('#task3').prop('checked', true);
 			if( t == 2 || t == 3 || t == 6 || t == 7)

@@ -18,7 +18,7 @@ class CompaniesController < ApplicationController
       @role = Role.new do |r|
         r.role_name = 'admin'
         r.dashboard = 'admin'
-        r.permissions = '00233'
+        r.permissions = '002332'
         r.company_id = @company.id
       end
       

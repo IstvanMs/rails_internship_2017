@@ -28,7 +28,10 @@
                     <li <% if current_page?(:controller => 'notes') %> class='active' <% end %>><%= link_to 'Notes', :controller => 'notes', :action => 'index' %></li>
                 <% end %>
                  <% if role.permissions[4] != '0' %>
-                    <li <% if current_page?(:controller => 'reports') %> class='active' <% end %>><%= link_to 'Reports', :controller => 'reports'%></li>
+                    <li <% if current_page?(:controller => 'reports') %> class='active' <% end %>><%= link_to 'Reports', :controller => 'reports', :action => 'index'%></li>
+                <% end %>
+                 <% if role.permissions[5] != '0' %>
+                    <li <% if current_page?(:controller => 'calendars') %> class='active' <% end %>><%= link_to 'Calendar', :controller => 'calendars', :action => 'index'%></li>
                 <% end %>
 
                 <% if role.permissions[3].to_f % 2 != 0 && %>

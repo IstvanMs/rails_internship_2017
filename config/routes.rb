@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
+  match 'calendars/get_more_info', :to => 'calendars#get_more_info', :via => [:get, :post]
+
   match 'payments/return/(*company_id)', :to => 'sessions#return', :via => [:get, :post]
 
   match 'payments/cancel/(*company_id)', :to => 'sessions#cancel', :via => [:get, :post]

@@ -52,7 +52,7 @@ class SessionsController < ApplicationController
       @company = Company.new({:name => params[:company_name]})
 
       if @company.save
-        @role = Role.new({:role_name => 'admin', :company_id => @company.id, :dashboard => 'admin', :permissions => '00233'})
+        @role = Role.new({:role_name => 'admin', :company_id => @company.id, :dashboard => 'admin', :permissions => '002332'})
         @role.save
         @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
 
@@ -143,7 +143,7 @@ class SessionsController < ApplicationController
      @company = Company.new({:name => params[:company_name]})
 
       if @company.save
-        @role = Role.new({:role_name => 'admin', :company_id => @company.id, :dashboard => 'admin', :permissions => '00233'})
+        @role = Role.new({:role_name => 'admin', :company_id => @company.id, :dashboard => 'admin', :permissions => '002332'})
         @role.save
         @user = User.new({:username => params[:username], :password => params[:password], :password_confirmation => params[:password2], :email => params[:email], :role => @role.dashboard.capitalize, :company_id => @company.id, :role_id => @role.id})
 
@@ -229,17 +229,33 @@ class SessionsController < ApplicationController
 
   def ipn_notification
     par = params
+
+    out_file = File.new("ipnNot.txt", "w")
+    out_file.puts(params.to_s)
+    out_file.close
+
     response = validate_IPN(request.raw_post)
     case response
       when "VERIFIED"
         if params[:status] == 'COMPLETED' && Company.exists?(:id => par[:company_id])
           company = Company.find(par[:company_id])
           subscription = Subscription.find_by(:company_id => company.id)
-          if Payment.exists?(:subscription_id => subscription.id, :transID => nil)
-            payment = Payment.find_by(:subscription_id => subscription.id, :transID => nil)
-            payment.update_attribute(:amount, 99)
-            payment.update_attribute(:transID, params[:transaction]['0']['.id'])
-            subscription.update_attribute(:status, 'verified')
+          if subscription
+            if Payment.exists?(:subscription_id => subscription.id)
+              payment = Payment.where(:subscription_id => subscription.id).order(:due_date => 'desc').first
+              if payment.transID
+                pay = Payment.new({:subscription_id => @subscription.id, :amount => 99, :due_date => payment.due_date.next_month, :transID => params[:transaction]['0']['.id']})
+                pay.save
+              else
+                payment.update_attribute(:amount, 99)
+                payment.update_attribute(:transID, params[:transaction]['0']['.id'])
+              end
+              subscription.update_attribute(:status, 'verified')
+            else
+              pay = Payment.new({:subscription_id => @subscription.id, :amount => 99, :due_date => DateTime.now.next_month, :transID => params[:transaction]['0']['.id']})
+              pay.save
+              subscription.update_attribute(:status, 'verified')
+            end
           end
         end
       when "INVALID"

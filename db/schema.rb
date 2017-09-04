@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170901131849) do
+ActiveRecord::Schema.define(version: 20170904134000) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -39,6 +39,18 @@ ActiveRecord::Schema.define(version: 20170901131849) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string "name"
+    t.text "contet"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.boolean "is_conference"
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_events_on_company_id"
   end
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -182,6 +194,7 @@ ActiveRecord::Schema.define(version: 20170901131849) do
 
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
+  add_foreign_key "events", "companies"
   add_foreign_key "milestones", "projects"
   add_foreign_key "payments", "subscriptions"
   add_foreign_key "role_fields", "roles"
