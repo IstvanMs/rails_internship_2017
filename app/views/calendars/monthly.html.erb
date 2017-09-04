@@ -1,0 +1,111 @@
+<div class='container'>
+	<div class='filter'>
+		<div class='row' style='margin: 0;'>
+			<%= form_tag :action => 'monthly' do%>
+				<div class='col-xs-2'>
+					<h4>Select the month:</h4>
+				</div>
+				<div class='col-xs-4'>
+					<div class='row'>
+						<div class='col-xs-4'>
+							<h4 class='pull-right'>Year:</h4>
+						</div>
+						<div class='col-xs-8'>
+							<%= select_tag 'year', options_for_select(@years, @current_filter['year']), :class => 'pull-left', :style => 'width: 100%; margin-top: 5px;' %>
+						</div>
+					</div>
+				</div>
+				<div class='col-xs-4'>
+					<div class='row'>
+						<div class='col-xs-4'>
+							<h4 class='pull-right'>Month:</h4>
+						</div>
+						<div class='col-xs-8'>
+							<%= select_tag 'month', options_for_select(@months, @current_filter['month']), :class => 'pull-left', :style => 'width: 100%; margin-top: 5px;' %>
+						</div>
+					</div>
+				</div>
+				<div class='col-xs-2 pull-left'>
+					<%= button_tag(type: "submit", class: "btn btn-success", :style => 'margin-top: 3px;') do %>
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    <% end %>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; min-width: 800px;">
+		<div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+			<div class='row'><font color='white'>
+				<center><h3> Monthly calendar </h3>
+			</div>
+			<div class='row'>
+				<div class='col-xs-3'>
+					<h4>Year: <%= @current_filter['year'] %> </h4>
+				</div>
+				<div class='col-xs-3'>
+					<h4>Month: <%= @current_filter['month'] %> </h4>
+				</div>
+			</div></font>
+		</div>
+
+		<div class='container' style='width: 100%; background-color: #f9f9f5;'>
+			<div class='row'>
+				<% for i in 1..@current_filter['days'] %>
+					<div class='col-xs-2 days'>
+						<div class='row day-header' align='center'>
+							<div class='col-xs-6'>
+								<%= Date.new(@current_filter['year'].to_i, Date::MONTHNAMES.index(@current_filter['month']), i).strftime("%A") %>
+							</div>
+							<div class='col-xs-6'>
+								<%= i.to_s + '.' %>
+							</div>
+						</div>
+						<% st = Time.new(@current_filter['year'].to_i, Date::MONTHNAMES.index(@current_filter['month']), i, 0, 0, 0) %>
+						<% events = Event.where('start_time > ? and start_time < ? and company_id = ?', st, st.next_day, @current_user.company_id).order(:start_time) %>
+						<% events.first(5).each do |event| %>
+							<% if event.is_conference %>
+								<div class='event-conference' align='center'>
+									<%= event.name %>
+								</div>
+							<% else %>
+								<div class='event-simple' align='center'>
+									<%= event.name %>
+								</div>
+							<% end %>
+						<% end %>
+						<% if events.length > 5 %>
+							<h6 class='more-info' onclick='moreInfo(<%= @current_filter['year'] %>,<%= Date::MONTHNAMES.index(@current_filter['month']) %>,<%= i %>)' align='center'>(click for more)</h6>
+						<% end %>
+
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id='modal_id'></div>
+
+<script type="text/javascript">
+	function moreInfo(year,month,day){
+		$.getJSON('get_more_info',{ year: year, month: month, day: day}, function(data) {
+			document.getElementById('modal_id').innerHTML = '';
+			var newDiv = document.createElement('div');
+	    	var html = '<div id="myModal" class="modal fade"><div class="modal-dialog"><div class="modal-content"> <div class="modal-header">';
+	    	html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" align="center">All events</h4>';
+	    	html += '</div><div class="modal-body">';
+	    	for(var i = 0; i < data.len; ++ i){
+	    		if(data.events[i].is_conference){
+	    			html += '<div class="event-conference" align="center" style="height: 30px; margin-top: 5px;">' + data.events[i].name + '</div>';
+	    		}else{
+	    			html += '<div class="event-simple" align="center" style="height: 30px; margin-top: 5px;">' + data.events[i].name + '</div>';
+	    		}
+	    	}
+	    	html += '</div></div></div></div>';
+	    	newDiv.innerHTML = html;
+			document.getElementById('modal_id').appendChild(newDiv);
+			$("#myModal").modal('show');
+		});
+	}
+</script>

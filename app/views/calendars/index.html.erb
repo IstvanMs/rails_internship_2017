@@ -1,0 +1,43 @@
+<div class='container'>
+	<div class='row' style="height: 50vh; min-height: 200px; min-width: 400px;">
+		<%= link_to :controller => 'calendars', :action => 'monthly' do%>
+			<div class='col-xs-6' style='height: 100%;' onmouseover='changeColorBlue("monthly","title_month","first")' onmouseout='changeColorWhite("monthly","title_month","first")'>
+				<div id='monthly' class='container' style='box-shadow: 0px 0px 5px rgba(0, 0, 0, .9); height: 100%; background-color: #ffffff;'>
+					<div class='row' style='margin-top: 8%; margin-bottom: 20px; height: 50%;' align='center'>
+						<%= image_tag("weekly.png", :id => 'first', :size => '130x130', :alt => "Logo1") %>
+					</div>
+					<div class='row' style='height: 40%;' align='center'>
+						<font id='title_month' color='#165f87'><h3>Monthly</h3></font>
+					</div>
+				</div>
+			</div>
+		<% end %>
+
+		<%= link_to :controller => 'calendars', :action => 'weekly' do%>
+			<div class='col-xs-6' style='height: 100%;' onmouseover='changeColorBlue("weekly","title_week","second")' onmouseout='changeColorWhite("weekly","title_week","second")'>
+				<div id='weekly' class='container' style='box-shadow: 0px 0px 5px rgba(0, 0, 0, .9);  height: 100%; background-color: #ffffff;'>
+					<div class='row' style='margin-top: 8%; margin-bottom: 20px; height: 50%;' align='center'>
+						<%= image_tag("weekly.png", :id => 'second' ,:size => '130x130', :alt => "Logo2") %>
+					</div>
+					<div class='row' style='height: 40%;' align='center'>
+						<font id='title_week' color='#165f87'><h3>Weekly</h3></font>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function changeColorBlue(name1, name2, name3){
+		document.getElementById(name1).style.backgroundColor = "#29ad46";
+		document.getElementById(name2).style.color = "#ffffff";
+		document.getElementById(name3).style.filter = "brightness(0) invert(1)";
+	}
+
+	function changeColorWhite(name1, name2, name3){
+		document.getElementById(name1).style.backgroundColor = "#ffffff";
+		document.getElementById(name2).style.color = "#165f87";
+		document.getElementById(name3).style.filter = "brightness(1) invert(0)";
+	}
+</script>

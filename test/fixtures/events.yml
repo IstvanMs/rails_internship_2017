@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  contet: MyText
+  start_time: 2017-09-04 16:40:00
+  end_time: 2017-09-04 16:40:00
+  is_conference: false
+  company: one
+
+two:
+  name: MyString
+  contet: MyText
+  start_time: 2017-09-04 16:40:00
+  end_time: 2017-09-04 16:40:00
+  is_conference: false
+  company: two
