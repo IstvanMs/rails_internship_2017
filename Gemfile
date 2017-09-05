@@ -33,6 +33,9 @@ gem 'bcrypt-ruby', :require => 'bcrypt'
 
 gem 'bootstrap-datepicker-rails'
 
+gem 'momentjs-rails'
+gem 'bootstrap3-datetimepicker-rails'
+
 gem 'jquery-rails'
 
 gem 'paypal-recurring'

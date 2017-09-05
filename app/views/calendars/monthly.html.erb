@@ -1,4 +1,13 @@
 <div class='container'>
+	<% if @errors.present? %>
+		<% if @errors.length > 0 %>
+			<div class="alert alert-warning" class="Signup_Errors">
+			    <% @errors.each do |error| %>
+			      <font color="red"><div class="notice"><li><%= error[0] + ' ' + error[1] %></li></div></font>
+			    <% end %>
+		    </div>
+		<% end %>
+	<% end %>
 	<div class='filter'>
 		<div class='row' style='margin: 0;'>
 			<%= form_tag :action => 'monthly' do%>
@@ -46,66 +55,111 @@
 				<div class='col-xs-3'>
 					<h4>Month: <%= @current_filter['month'] %> </h4>
 				</div>
+			</div>
+			<div class='row'>
+				<div class='col-xs-2 pull-right'>
+					<% if @role.permissions[5].to_i % 2 == 1 %><button href="#new_event_modal" class="ourButton" style='color: black' data-toggle="modal"><i class="glyphicon glyphicon-plus"></i>New Event</button><% end %>
+				</div>
 			</div></font>
 		</div>
 
-		<div class='container' style='width: 100%; background-color: #f9f9f5;'>
-			<div class='row'>
-				<% for i in 1..@current_filter['days'] %>
-					<div class='col-xs-2 days'>
-						<div class='row day-header' align='center'>
-							<div class='col-xs-6'>
-								<%= Date.new(@current_filter['year'].to_i, Date::MONTHNAMES.index(@current_filter['month']), i).strftime("%A") %>
-							</div>
-							<div class='col-xs-6'>
-								<%= i.to_s + '.' %>
-							</div>
-						</div>
-						<% st = Time.new(@current_filter['year'].to_i, Date::MONTHNAMES.index(@current_filter['month']), i, 0, 0, 0) %>
-						<% events = Event.where('start_time > ? and start_time < ? and company_id = ?', st, st.next_day, @current_user.company_id).order(:start_time) %>
-						<% events.first(5).each do |event| %>
-							<% if event.is_conference %>
-								<div class='event-conference' align='center'>
-									<%= event.name %>
-								</div>
-							<% else %>
-								<div class='event-simple' align='center'>
-									<%= event.name %>
-								</div>
-							<% end %>
-						<% end %>
-						<% if events.length > 5 %>
-							<h6 class='more-info' onclick='moreInfo(<%= @current_filter['year'] %>,<%= Date::MONTHNAMES.index(@current_filter['month']) %>,<%= i %>)' align='center'>(click for more)</h6>
-						<% end %>
+		<% if @current_filter['days'] < 31
+			n = 4
+		   else
+		   	n = 5
+		   end %>
 
-					</div>
-				<% end %>
-			</div>
+		<div class='calendar-container'>
+			<% for i in 0..n %>
+				<div class='nowrap-row'>
+					<% for j in 1..6 %>
+						<div class='box box-<%= j %>'>
+							<% if i * 6 + j <= @current_filter['days'] %>
+							<% dayname = Date.new(@current_filter['year'].to_i, Date::MONTHNAMES.index(@current_filter['month']), i * 6 + j).strftime("%A") %>
+							<div class='row' align='center' style="<% if dayname == 'Saturday' %>background-color: #80ad56; border-bottom: 1px solid #6f9949;<% elsif dayname == 'Sunday'%>background-color: #5ba04b; border-bottom: 1px solid #4b843e;<% else %>background-color: #c7f29f; border-bottom: 1px solid #b4db90;<% end %>">
+								<div class='col-xs-6'>
+									<%= dayname %>
+								</div>
+								<div class='col-xs-6'>
+									<%= (i * 6 + j).to_s + '.' %>
+								</div>
+							</div>
+							<% st = Time.new(@current_filter['year'].to_i, Date::MONTHNAMES.index(@current_filter['month']), i * 6 + j, 0, 0, 0) %>
+							<% events = Event.where('start_time > ? and start_time < ? and company_id = ?', st, st.next_day, @current_user.company_id).order(:start_time) %>
+							<% events.each do |event| %>
+								<% if event.is_conference %>
+									<div class='event-conference' align='center' onclick='eventModal(<%= event.id %>)'>
+										<%= event.name %>
+									</div>
+								<% else %>
+									<div class='event-simple' align='center' onclick='eventModal(<%= event.id %>)'>
+										<%= event.name %>
+									</div>
+								<% end %>
+							<% end %>
+							<% end %>
+						</div>
+					<% end %>
+				</div>
+			<% end %>
 		</div>
 	</div>
 </div>
-
 <div id='modal_id'></div>
 
+<div id='new_event_modal' class="modal fade">
+        <div class="modal-dialog" style='width: 400px;'>
+            <div class="modal-content">
+                <div class="modal-header" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" align='center' style='color: white;'>New Event</h3>
+                </div>
+                <div class="modal-body">
+                	<% if @role.permissions[5].to_i % 2 == 1 %><%= render 'form', :@event => Event.new %><% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <script type="text/javascript">
-	function moreInfo(year,month,day){
-		$.getJSON('get_more_info',{ year: year, month: month, day: day}, function(data) {
+	function eventModal(id){
+		$.getJSON('get_event_info',{ id: id}, function(data) {
 			document.getElementById('modal_id').innerHTML = '';
 			var newDiv = document.createElement('div');
-	    	var html = '<div id="myModal" class="modal fade"><div class="modal-dialog"><div class="modal-content"> <div class="modal-header">';
-	    	html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" align="center">All events</h4>';
+	    	var html = '<div id="myModal" class="modal fade"><div class="modal-dialog"><div class="modal-content">';
+	    	if (data.is_conference)
+	    		html += '<div class="modal-header" style="background-color: #3847b7; color: white;">';
+	    	else
+	    		html += '<div class="modal-header" style="background-color: #82b23a;">';
+	    	html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" align="center">' + capitalize(data.name) +'</h4>';
+	    	html += '<% if @role.permissions[5].to_i % 2 == 1 %><div class="row"><button onclick="destroyAjax(' + id +')" class="ourButton">Destroy</button></div> <% end %>'
 	    	html += '</div><div class="modal-body">';
-	    	for(var i = 0; i < data.len; ++ i){
-	    		if(data.events[i].is_conference){
-	    			html += '<div class="event-conference" align="center" style="height: 30px; margin-top: 5px;">' + data.events[i].name + '</div>';
-	    		}else{
-	    			html += '<div class="event-simple" align="center" style="height: 30px; margin-top: 5px;">' + data.events[i].name + '</div>';
-	    		}
-	    	}
-	    	html += '</div></div></div></div>';
+	    	html += '<div class="container">';
+	    	html += '<div class="row"><h4>Name: ' + data.name +'</h4></div>';
+	    	html += '<div class="row"><h4>Content: ' + data.content +'</h4></div>';
+	    	if (data.is_conference)
+	    		html += '<div class="row"><h4>Conference: <i class="glyphicon glyphicon-ok"></i></h4></div>';
+	    	else
+	    		html += '<div class="row"><h4>Conference: <i class="glyphicon glyphicon-remove"></i></h4></div>';
+	    	html += '<div class="row"><h4>Start time: ' + data.start_time +'</h4></div>';
+	    	html += '<div class="row"><h4>End time: ' + data.end_time +'</h4></div>';
+	    	html += '</div></div></div></div></div>';
 	    	newDiv.innerHTML = html;
 			document.getElementById('modal_id').appendChild(newDiv);
 			$("#myModal").modal('show');
 		});
+	}
+
+	function destroyAjax(id){
+		if (confirm('Are you sure?')) {
+			$.post('destroy', { id: id}, 
+			    function(returnedData){
+			         console.log(returnedData);
+			});
+		} else {
+			return false;
+		}
 	}
 </script>

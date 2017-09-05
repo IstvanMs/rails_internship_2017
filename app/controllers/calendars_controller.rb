@@ -13,15 +13,16 @@ class CalendarsController < ApplicationController
 		end
 	end
 
-	def get_more_info
-		st = Time.new(params[:year], params[:month], params[:day], 0, 0, 0)
-		events = Event.where('start_time > ? and start_time < ? and company_id = ?', st, st.next_day, @current_user.company_id)
+	def get_event_info
+		event = Event.find(params[:id])
 		respond_to do |format|
-			format.json { render json:  {'events': events, 'len': events.length}}
+			format.json { render json:  event}
 		end
 	end
 
 	def monthly
+		@company = Company.find(@current_user.company_id)
+		@role = Role.find(@current_user.role_id)
 		@current_filter = Hash.new
 		if params[:year] && params[:month]
 			@current_filter = {'year' => params[:year], 'month' => params[:month], 'days' => Time.days_in_month(Date::MONTHNAMES.index(params[:month])) }
@@ -36,5 +37,33 @@ class CalendarsController < ApplicationController
 	end
 
 	def weekly
+		@company = Company.find(@current_user.company_id)
+		@role = Role.find(@current_user.role_id)
+		@current_filter = nil
+		if params[:week]
+			if params[:week] != ''
+				week = params[:week].split(' - ')
+				@current_filter = params[:week]
+				st = Date.parse(week[0].strip) 
+				et = Date.parse(week[1].strip)
+				@current_filter = {'start' => st, 'end' => et}
+				@events = Event.getEvents(st, et, @company)
+				puts @events
+			else
+				d = Date.today
+				st = d.at_beginning_of_week
+				et = d.at_beginning_of_week + 6.days
+				@current_filter = {'start' => st, 'end' => et}
+				@events = Event.getEvents(st, et, @company)
+				puts @events
+			end
+		else
+			d = Date.today
+			st = d.at_beginning_of_week
+			et = d.at_beginning_of_week + 6.days
+			@current_filter = {'start' => st, 'end' => et}
+			@events = Event.getEvents(st, et, @company)
+			puts @events
+		end
 	end
 end

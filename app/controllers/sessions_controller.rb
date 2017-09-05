@@ -229,11 +229,6 @@ class SessionsController < ApplicationController
 
   def ipn_notification
     par = params
-
-    out_file = File.new("ipnNot.txt", "w")
-    out_file.puts(params.to_s)
-    out_file.close
-
     response = validate_IPN(request.raw_post)
     case response
       when "VERIFIED"

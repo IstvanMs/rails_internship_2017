@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170904134000) do
+ActiveRecord::Schema.define(version: 20170905074430) do
 
   create_table "advanced_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "keywords"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20170904134000) do
 
   create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "name"
-    t.text "contet"
+    t.text "content"
     t.datetime "start_time"
     t.datetime "end_time"
     t.boolean "is_conference"

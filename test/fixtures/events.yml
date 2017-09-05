@@ -2,16 +2,16 @@
 
 one:
   name: MyString
-  contet: MyText
-  start_time: 2017-09-04 16:40:00
-  end_time: 2017-09-04 16:40:00
+  content: MyText
+  start_time: 2017-09-05 10:44:30
+  end_time: 2017-09-05 10:44:30
   is_conference: false
   company: one
 
 two:
   name: MyString
-  contet: MyText
-  start_time: 2017-09-04 16:40:00
-  end_time: 2017-09-04 16:40:00
+  content: MyText
+  start_time: 2017-09-05 10:44:30
+  end_time: 2017-09-05 10:44:30
   is_conference: false
   company: two

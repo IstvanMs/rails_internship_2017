@@ -16,6 +16,8 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootstrap-datepicker
+//= require moment
+//= require bootstrap-datetimepicker
 //= require_tree .
 
 function getRndColor() {

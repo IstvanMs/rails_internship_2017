@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'
 
-  match 'calendars/get_more_info', :to => 'calendars#get_more_info', :via => [:get, :post]
+  match 'calendars/destroy', :to => 'events#destroy', :via => [:get, :post]
+
+  match 'calendars/get_event_info', :to => 'calendars#get_event_info', :via => [:get, :post]
 
   match 'payments/return/(*company_id)', :to => 'sessions#return', :via => [:get, :post]
 
@@ -100,6 +102,8 @@ Rails.application.routes.draw do
   resources :roles
 
   resources :messages
+
+  resources :events
 
 
   resources :tasks do

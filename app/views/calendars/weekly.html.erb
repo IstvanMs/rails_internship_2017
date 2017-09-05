@@ -1,0 +1,76 @@
+<div class='container'>
+	<div class='filter'>
+		<div class="container"> 
+			<div class='row' style='margin: 0; margin-top: 12px;'>
+				<%= form_tag :action => 'weekly' do%>
+					<div class="col-xs-2"><h4>Select the week:</h4></div>  
+					<div class="col-xs-3 form-group">
+			            <div class="input-group">                
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+							<input type='text' id='week' name='week' placeholder="Select Week" style='width: 200px;'>
+			            </div>
+			        </div>
+			        <div class='col-xs-7'>
+					<%= button_tag(type: "submit", class: "btn btn-success pull-right", :style => 'margin-top: 3px;') do %>
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    <% end %>
+				</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+
+<div class="panel panel-success" style="margin: 1cm 1cm 1cm 1cm;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); border: 2px solid darkgreen; border-radius: 7px; min-width: 800px;">
+		<div class="panel-heading" style='border-bottom: 1px solid darkgreen; background-image: url(<%= asset_path 'table_head.jpg' %>); background-size: cover; background-repeat: no-repeat;'>
+			<div class='row'><font color='white'>
+				<center><h3> Weekly calendar </h3>
+			</div>
+			<div class='row'>
+				<div class='col-xs-3'>
+					<h4>From: <%= @current_filter['start'] %> </h4>
+				</div>
+				<div class='col-xs-3'>
+					<h4>To: <%= @current_filter['end'] %> </h4>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-xs-2 pull-right'>
+					<% if @role.permissions[5].to_i % 2 == 1 %><button href="#new_event_modal" class="ourButton" style='color: black' data-toggle="modal"><i class="glyphicon glyphicon-plus"></i>New Event</button><% end %>
+				</div>
+			</div></font>
+		</div>
+
+		<div class='container' style='min-height: 200px;'>
+				
+		</div>
+	</div>
+</div>
+
+<div id='new_event_modal' class="modal fade">
+        <div class="modal-dialog" style='width: 400px;'>
+            <div class="modal-content">
+                <div class="modal-header" style='background-image: url(<%= asset_path 'add_panel.jpg' %>); background-size: cover; background-repeat: no-repeat; border-bottom: 1px solid darkblue;'>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" align='center' style='color: white;'>New Event</h3>
+                </div>
+                <div class="modal-body">
+                	<% if @role.permissions[5].to_i % 2 == 1 %><%= render 'form', :@event => Event.new %><% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+	$("#week").datetimepicker({
+	    format: 'DD-MM-YYYY'
+	});
+
+	$('#week').on('dp.change', function (e) {
+	    value = $("#week").val();
+	    firstDate = moment(value, "DD-MM-YYYY").day(0).format("DD-MM-YYYY");
+	    lastDate =  moment(value, "DD-MM-YYYY").day(6).format("DD-MM-YYYY");
+	    $("#week").val(firstDate + "  -  " + lastDate);
+	});
+</script>
