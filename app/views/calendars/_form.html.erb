@@ -1,0 +1,53 @@
+<center><div class="panel panel-default">
+  <%= form_for @event do |f| %>
+    <div class="panel-body">
+      <h4>
+        <%= f.label :name %><br>
+        <%= f.text_field :name %>
+      </h4>
+
+      <h4>
+        <%= f.label :text %><br>
+        <%= f.text_area :content, :style => 'resize: none; width: 280px; height: 150px;' %>
+      </h4>
+
+      <h4>
+          <%= f.label "Conference:" %><br>
+          <%= f.check_box :is_conference %>
+      </h4>
+
+      <h4>
+        <%= f.label "Day" %><br>
+        <input  type="text" id="datepicker" name="day" class='datepicker' >
+      </h4>
+
+      <h4>
+          <%= f.label "Start time:" %><br>
+          <%= f.text_field :start_time, :class => 'datetimepicker'%>
+      </h4>
+
+      <h4>
+          <%= f.label "End time:" %><br>
+          <%= f.text_field :end_time, :class => 'datetimepicker' %>
+      </h4>
+
+
+        <%= f.hidden_field :company_id, :value => @company.id %>
+    </div>
+
+    <div class="panel-footer clearfix ">
+        <button type="submit" class="submitButton">
+          <i class="glyphicon glyphicon-save submitButton-addon">Save</i> 
+        </button>
+      </div>
+  <% end %>
+</div></center>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('.datetimepicker').datetimepicker({
+        format: 'HH:mm'
+      });
+      $('.datepicker').datepicker();
+  });
+</script>

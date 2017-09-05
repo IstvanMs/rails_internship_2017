@@ -1,0 +1,14 @@
+class CreateEvents < ActiveRecord::Migration[5.1]
+  def change
+    create_table :events do |t|
+      t.string :name
+      t.text :content
+      t.datetime :start_time
+      t.datetime :end_time
+      t.boolean :is_conference
+      t.references :company, foreign_key: true
+
+      t.timestamps
+    end
+  end
+end
